@@ -48,9 +48,10 @@ class AddProjectCommand extends ContainerAwareCommand
             }
         });
 
+
         $em->persist($project);
         $em->flush();
 
-        $output->writeln(strtr("Project <info>%project%</info> created", array('%project%' => $project->getName())));
+        $output->writeln(strtr("Project <info>%project%</info> created... make sure you run a sync!", array('%project%' => $project->getName())));
     }
 }

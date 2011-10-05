@@ -17,6 +17,9 @@ use Symfony\Component\Process\Process;
  */
 class Builder
 {
+    /**
+     * @var \Opensoft\Bundle\GversationBundle\Entity\Project
+     */
     private $project;
     private $buildDir;
     private $baseBuildDir;
@@ -28,7 +31,8 @@ class Builder
         'prepare'  => 'submodule update --init --recursive',
         'checkout' => 'checkout origin/%branch%',
         'reset'    => 'reset --hard %revision%',
-        'show'     => 'show -s --pretty=format:%format% %revision%',
+        'log'     => 'log --pretty=format:%format% %revision% -n %limit%',
+        'show'     => 'show --pretty=format:%format% %revision%',
         'branch-list' => 'branch -r'
     );
 
@@ -53,6 +57,7 @@ class Builder
 //            $this->prepare();
             mkdir($this->buildDir, 0777, true);
             $this->execute(strtr($this->gitPath.' '.$this->gitCmds['clone'], array('%repo%' => escapeshellarg($project->getUrl()), '%dir%' => escapeshellarg($this->buildDir))), sprintf('Unable to clone repository for project "%s".', $project->getName()));
+            
         }
     }
 
@@ -63,6 +68,85 @@ class Builder
         $process = $this->execute($this->gitPath.' '.$this->gitCmds['branch-list'], sprintf('Unable to fetch branch list for project "%s".', $this->project->getName()));
 
         return array_map('trim', explode("\n", trim($process->getOutput())));
+    }
+
+    public function fetchRecentCommits($revision = null, $limit = 10)
+    {
+        if (null === $revision || 'HEAD' === $revision) {
+            $revision = $this->fetchHeadCommit($revision);
+        }
+
+        $format = '%H%n%h%n%s%n%ci%n%an%n';
+        $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['log'], array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($revision), '%limit%' => escapeshellarg($limit))), sprintf('Unable to get logs for project "%s".', $this->project->getName()));
+
+//        print_r($process->getOutput());
+//        die();
+
+        $commits = array();
+        $output = explode("\n", trim($process->getOutput()));
+        $i = 0;
+        do {
+            if (!empty($output[$i])) {
+                $commit = array();
+                $commit['hash'] = $output[$i];
+                $commit['short_hash'] = $output[$i+1];
+                $commit['message'] = $output[$i+2];
+                $commit['timestamp'] = $output[$i+3];
+                $commit['author'] = $output[$i+4];
+
+                $commits[] = $commit;
+                $i += 5;
+            } else {
+                $i++;
+            }
+        } while ($i <= count($output));
+
+        return $commits;
+    }
+
+    public function fetchCommit($object)
+    {
+        $format = '%H%n%h%n%s%n%ci%n%an%n';
+        $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['show'], array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($object))), sprintf('Unable to show commit for project "%s".', $this->project->getName()));
+
+        $output = explode("\n", trim($process->getOutput()));
+
+        $commit = array();
+        $commit['hash'] = $output[0];
+        $commit['short_hash'] = $output[1];
+        $commit['message'] = $output[2];
+        $commit['timestamp'] = $output[3];
+        $commit['author'] = $output[4];
+
+        $format = '%b';
+        $diffProcess = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['show'], array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($object))), sprintf('Unable to show commit for project "%s".', $this->project->getName()));
+        $commit['diff'] = trim($diffProcess->getOutput());
+//        print_r($commit);
+
+        return $commit;
+    }
+
+    public function fetchHeadCommit($revision = null)
+    {
+        if (null === $revision || 'HEAD' === $revision) {
+            $revision = null;
+            if (file_exists($file = $this->buildDir.'/.git/HEAD')) {
+                $revision = trim(file_get_contents($file));
+                if (0 === strpos($revision, 'ref: ')) {
+                    if (file_exists($file = $this->buildDir.'/.git/'.substr($revision, 5))) {
+                        $revision = trim(file_get_contents($file));
+                    } else {
+                        $revision = null;
+                    }
+                }
+            }
+
+            if (null === $revision) {
+                throw new BuildException(sprintf('Unable to get HEAD for branch "%s" for project "%s".', $this->project->getHeadBranch(), $this->project));
+            }
+        }
+
+        return $revision;
     }
 
 //    private function prepare($revision = null, $sync = true)
@@ -113,6 +197,7 @@ class Builder
         if (null !== $this->callback) {
             call_user_func($this->callback, 'out', sprintf("Running \"%s\"\n", $command));
         }
+//        print_r($command);
         $process = new Process($command, $this->buildDir);
         $process->setTimeout(3600);
         $process->run($this->callback);

@@ -56,6 +56,13 @@ class Project
     protected $password;
 
     /**
+     * @var Branch
+     *
+     * @ORM\ManyToOne(targetEntity="Branch")
+     */
+    protected $headBranch;
+
+    /**
      * @var Branch[]
      *
      * @ORM\OneToMany(targetEntity="Branch", mappedBy="project")
@@ -163,4 +170,22 @@ class Project
     {
         return $this->username;
     }
+
+    /**
+     * @param \Opensoft\Bundle\GversationBundle\Entity\Branch $headBranch
+     */
+    public function setHeadBranch(Branch $headBranch)
+    {
+        $this->headBranch = $headBranch;
+    }
+
+    /**
+     * @return \Opensoft\Bundle\GversationBundle\Entity\Branch
+     */
+    public function getHeadBranch()
+    {
+        return $this->headBranch;
+    }
+
+
 }
