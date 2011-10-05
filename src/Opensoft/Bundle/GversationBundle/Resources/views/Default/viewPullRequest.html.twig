@@ -15,7 +15,7 @@
 
     <h3>{{ pullRequest.title }}</h3>
 
-    <textarea class="span16" disabled="true">{{ pullRequest.description }}</textarea>
+    <p>{{ pullRequest.description | markdown }}</p>
 
     {% if pullRequest.comments %}
 

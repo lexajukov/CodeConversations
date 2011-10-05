@@ -94,7 +94,7 @@ class DefaultController extends Controller
                 $em->persist($pullRequest);
                 $em->flush();
 
-                $this->redirect($this->generateUrl('opensoft_gversation_default_viewpullrequest', array('pullId' => $pullRequest->getId(), 'projectId' => $project->getId())));
+                return $this->redirect($this->generateUrl('opensoft_gversation_default_viewpullrequest', array('pullId' => $pullRequest->getId(), 'projectId' => $project->getId())));
             }
         }
 
@@ -130,5 +130,14 @@ class DefaultController extends Controller
     public function indexAction($name)
     {
         return array('name' => $name);
+    }
+
+    /**
+     * @Route("/about")
+     * @Template()
+     */
+    public function aboutAction()
+    {
+        return array();
     }
 }

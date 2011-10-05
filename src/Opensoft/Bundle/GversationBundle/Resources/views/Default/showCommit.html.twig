@@ -15,6 +15,6 @@
     {% if commit.diff %}
         <h3>Diff</h3>
 
-        <textarea class="xxlarge" rows="40">{{ commit.diff }}</textarea>
+        <pre class="prettyprint">{{ commit.diff }}</pre>
     {% endif %}
 {% endblock %}

@@ -10,7 +10,7 @@
 
     <services>
         <service id="opensoft_gversation.git.builder" class="%opensoft_gversation.git.builder.class%">
-            <argument>%kernel.cache_dir%/opensoft_repos</argument>
+            <argument>%kernel.root_dir%/GitRepositories</argument>
             <argument>/usr/bin/git</argument>
         </service>
     </services>
