@@ -35,6 +35,27 @@ class Project
     protected $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(type="text")
+     */
+    protected $url;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $password;
+
+    /**
      * @var Branch[]
      *
      * @ORM\OneToMany(targetEntity="Branch", mappedBy="project")
