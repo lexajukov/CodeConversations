@@ -14,7 +14,24 @@ class DefaultController extends Controller
      */
     public function homepageAction()
     {
-        return array();
+        $projects = $this->get('doctrine')->getEntityManager()->getRepository('OpensoftGversationBundle:Project')->findAll();
+
+        return array('projects' => $projects);
+    }
+
+    /**
+     * @Route("/project/{id}/pulls/create")
+     * @Template()
+     */
+    public function createPullRequestAction($id)
+    {
+        $project = $this->get('doctrine')->getEntityManager()->getRepository('OpensoftGversationBundle:Project')->find($id);
+
+        if (!$project) {
+            throw $this->createNotFoundException("Project '$id' does not exist");
+        }
+
+        return array('project' => $project);
     }
 
     /**

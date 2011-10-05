@@ -1,5 +1,17 @@
 {% extends 'OpensoftGversationBundle::layout.html.twig' %}
 
+{% block page_title %}Known Projects{% endblock %}
+
 {% block content %}
-    Content here
+    <div>
+        {% for project in projects %}
+            <div class="project well">
+                <h3>{{ project.name }}</h3>
+
+                <div class="actions">
+                    <a href="{{ path('opensoft_gversation_default_createpullrequest', {'id': project.id }) }}" class="btn">Create Pull Request</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

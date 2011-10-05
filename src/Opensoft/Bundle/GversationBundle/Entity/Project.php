@@ -69,12 +69,6 @@ class Project
      */
     protected $pullRequests;
 
-
-    public function setBranches($branches)
-    {
-        $this->branches = $branches;
-    }
-
     public function getBranches()
     {
         return $this->branches;

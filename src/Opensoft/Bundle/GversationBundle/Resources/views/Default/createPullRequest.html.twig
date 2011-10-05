@@ -1,0 +1,31 @@
+{% extends 'OpensoftGversationBundle::layout.html.twig' %}
+
+{% block page_title %}Create Pull Request{% endblock %}
+
+{% block content %}
+    <h2>Send a pull request</h2>
+
+    <p>You're asking someone to pull {{ 'commit count' }} commits into {{ 'destination branch' }} from {{ 'source branch' }}</p>
+
+    <div>
+        <form>
+            <fieldset>
+                <div class="clearfix">
+                    <label for="title">Title</label>
+                    <div class="input">
+                        <input id="title" type="text" />
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <label for="description">Description</label>
+                    <div class="input">
+                        <textarea id="description" rows="4"></textarea>
+                        <span class="help-block">
+                            Pull request description here
+                        </span>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+{% endblock %}

@@ -38,14 +38,19 @@ class AddProjectCommand extends ContainerAwareCommand
         $project->setName($input->getArgument('name'));
         $project->setUrl($input->getArgument('url'));
 
+        /** @var \Opensoft\Bundle\GversationBundle\Git\Builder $builder  */
+        $builder = $this->getContainer()->get('opensoft_gversation.git.builder');
+        $builder->init($project, function ($type, $buffer) use ($output) {
+            if ('err' === $type) {
+                $output->write(str_replace("\n", "\nERR| ", $buffer));
+            } else {
+                $output->write(str_replace("\n", "\nOUT| ", $buffer));
+            }
+        });
+
         $em->persist($project);
         $em->flush();
 
-        /** @var \Opensoft\Bundle\GversationBundle\Git\Builder $builder  */
-        $builder = $this->getContainer()->get('opensoft_gversation.git.builder');
-        $builder->init($project);
-        
-
-        $output->writeln("Project created");
+        $output->writeln(strtr("Project <info>%project%</info> created", array('%project%' => $project->getName())));
     }
 }
