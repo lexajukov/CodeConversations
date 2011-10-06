@@ -1,14 +1,20 @@
-<div class="commit commit-tease js-details-container well">
-  <p class="commit-title ">
-      <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.hash }) }}">{{ commit.message }}</a>
-  </p>
-  
-  <div class="commit-meta">
-    <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.hash }) }}" class="sha-block">commit <span class="sha">{{ commit.short_hash}}</span></a>
-
-    <div class="authorship">
-      <span class="author-name"><a href="/beberlei">{{ commit.author }}</a></span>
-      authored <time class="js-relative-date" datetime="2011-02-12T11:36:13-08:00" title="2011-02-12 11:36:13">{{ commit.timestamp|date("M/d/y G:i:s")}}</time>
-    </div>
-  </div>
-</div>
+<table>
+    <thead>
+        <tr>
+            <th style="background-color: #E0EDFF;" colspan="2">
+                <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.sha1 }) }}">{{ commit.message }}</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+            <span class="author-name"><a href="/beberlei">{{ commit.author }}</a></span>
+            authored <time class="js-relative-date" datetime="{{ commit.timestamp|date("Y-m-d\TG:i:sO") }}" title="{{ commit.timestamp|date("Y-m-d G:i:s") }}">{{ commit.timestamp|date("F j, Y") }}</time>
+            </td>
+            <td align="right">
+                <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.sha1 }) }}" class="sha-block">commit <span class="sha">{{ commit.sha1|truncate(6) }}</span></a>
+            </td>
+        </tr>
+    </tbody>
+</table>

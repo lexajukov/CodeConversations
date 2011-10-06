@@ -4,6 +4,8 @@
 
 {% block content %}
 
+    {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': commit, 'project': project} %}
+
     <h3>{{ commit.message }}</h3>
 
     <dl>
@@ -14,7 +16,7 @@
         <dd>{{ commit.author }}</dd>
 
         <dt>Commited</dt>
-        <dd>{{ commit.timestamp|date("M/d/Y G:i:s") }}</dd>
+        <dd>{{ commit.timestamp|date("F j, Y G:i:s") }}</dd>
 
         <dt>Parent</dt>
         <dd><a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.parent }) }}">{{ commit.parent }}</a></dd>

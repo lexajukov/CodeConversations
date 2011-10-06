@@ -75,13 +75,13 @@ class Builder
         return array_map('trim', explode("\n", trim($process->getOutput())));
     }
 
-    public function fetchRecentCommits($revision = null, $limit = 10)
+    public function fetchRecentCommits($revision = null, $limit = 15)
     {
         if (null === $revision || 'HEAD' === $revision) {
             $revision = $this->fetchHeadCommit($revision);
         }
 
-        $format = '%H%n%h%n%s%n%ci%n%an%n%P%n';
+        $format = '%H%n%s%n%cn%n%ai%n%P%n';
         $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['log'], array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($revision), '%limit%' => escapeshellarg($limit))), sprintf('Unable to get logs for project "%s".', $this->project->getName()));
 
 //        print_r($process->getOutput());
@@ -92,13 +92,20 @@ class Builder
         $i = 0;
         do {
             if (!empty($output[$i])) {
-                $commit = array();
-                $commit['hash'] = $output[$i];
-                $commit['short_hash'] = $output[$i+1];
-                $commit['message'] = $output[$i+2];
-                $commit['timestamp'] = $output[$i+3];
-                $commit['author'] = $output[$i+4];
-                $commit['parent'] = $output[$i+5];
+                $commit = new Commit();
+                $commit->setSha1($output[$i]);
+                $commit->setMessage($output[$i+1]);
+                $commit->setAuthor($output[$i+2]);
+                $commit->setTimestamp(new \DateTime($output[$i+3]));
+
+                // Detect merge parent
+                if (strpos($output[$i+4], " ") > 0) {
+                    $merge = explode(" ", $output[$i+4]);
+                    $commit->setParent($merge[0]);
+                    $commit->setMergeParent($merge[1]);
+                } else {
+                    $commit->setParent($output[$i+4]);
+                }
 
                 $commits[] = $commit;
                 $i += 6;
@@ -112,7 +119,7 @@ class Builder
 
     public function fetchCommit($object)
     {
-        $format = '%H%n%s%n%ci%n%at%n%P%n%b';
+        $format = '%H%n%s%n%cn%n%ai%n%P%n%b';
         $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['show'], array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($object))), sprintf('Unable to show commit for project "%s".', $this->project->getName()));
 
         $output = explode("\n", trim($process->getOutput()));
@@ -121,7 +128,7 @@ class Builder
         $commit->setSha1($output[0]);
         $commit->setMessage($output[1]);
         $commit->setAuthor($output[2]);
-        $commit->setTimestamp(new \DateTime(strtotime($output[3])));
+        $commit->setTimestamp(new \DateTime($output[3]));
 
         // Detect merge parent
         if (strpos($output[4], " ") > 0) {

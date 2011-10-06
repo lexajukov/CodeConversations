@@ -23,11 +23,13 @@ class DefaultController extends Controller
 
     /**
      * @Route("/project/{id}")
+     * @Route("/project/{id}/branch/{branchId}")
      * @Template()
      */
-    public function showProjectAction($id)
+    public function showProjectAction($id, $branchId = null)
     {
-        $project = $this->get('doctrine')->getEntityManager()->getRepository('OpensoftCodeConversationBundle:Project')->find($id);
+        $em = $this->get('doctrine')->getEntityManager();
+        $project = $em->getRepository('OpensoftCodeConversationBundle:Project')->find($id);
 
         if (!$project) {
             throw $this->createNotFoundException("Project '$id' does not exist");
@@ -37,10 +39,20 @@ class DefaultController extends Controller
         $builder = $this->get('opensoft_codeconversation.git.builder');
         $builder->init($project);
 
-        $recentCommits = $builder->fetchRecentCommits();
-//        print_r($recentCommits);
+        if ($branchId != null) {
+            /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
+            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->find($branchId);
+        } else {
+            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName('origin/master');
+        }
 
-        return array('project' => $project, 'recentCommits' => $recentCommits);
+        if (!$branch) {
+            throw $this->createNotFoundException("Branch '$branchId' does not exist");
+        }
+
+        $recentCommits = $builder->fetchRecentCommits($branch->getName());
+
+        return array('project' => $project, 'recentCommits' => $recentCommits, 'branch' => $branch);
     }
 
     /**

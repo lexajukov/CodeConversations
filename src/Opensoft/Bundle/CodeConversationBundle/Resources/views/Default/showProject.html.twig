@@ -1,30 +1,68 @@
 {% extends 'OpensoftCodeConversationBundle::layout.html.twig' %}
 
-{% block page_title %}Project {{ project.name|title }}{% endblock %}
+{% block page_title %}{{ project.name }}{% endblock %}
 
 {% block content %}
-    <h2>Recent Commits</h2>
-    {% for commit in recentCommits %}
-        {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': commit, 'project': project} %}
-    {% endfor %}
 
-    {% if project.pullRequests %}
-        <h2>Pull Requests</h2>
+    <ul class="tabs" data-tabs="tabs" >
+        <li class="active"><a href="#recent-commits">Recent Commits</a></li>
+        <li><a href="#pull-requests">Pull Requests ({{ project.pullRequests|length|default(0) }})</a></li>
+        <li><a href="#branches">Branches ({{ project.branches|length|default(0) }})</a></li>
+    </ul>
 
-        {% for pullRequest in project.pullRequests %}
-            <div class="well">
-                <h3>{{ pullRequest.title }}</h3>
-                <a class="btn" href="{{ path('opensoft_codeconversation_default_viewpullrequest', {'pullId': pullRequest.id, 'projectId': project.id}) }}">View pull request</a>
-            </div>
-        {% endfor %}
-    {% endif %}
-
-
-    <h2>Branches</h2>
-
-    {% for branch in project.branches %}
-        <div class="well">
-            <h3>{{ branch.name }}</h3>
+    <div class="pill-content">
+        <div class="active" id="recent-commits">
+            <h2>Recent Commits to <span class="label">{{ branch.name }}</span></h2>
+            <table class="zebra-striped">
+                <tbody>
+                    {% for commit in recentCommits %}
+                        {##}
+                        <tr>
+                            <td>
+                                <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.sha1 }) }}">
+                                    {{ commit.sha1|truncate(6) }}
+                                </a>
+                            </td>
+                            <td>{{ commit.author }}</td>
+                            <td>
+                                <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.sha1 }) }}">
+                                    {{ commit.message|truncate(80) }}
+                                </a>
+                            </td>
+                            <td>{{ commit.timestamp|date("F j, Y") }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-    {% endfor %}
+
+        <div id="pull-requests">
+            <h2>Pull Requests</h2>
+            {% if project.pullRequests %}
+                {% for pullRequest in project.pullRequests %}
+                    <div class="well">
+                        <h3>{{ pullRequest.title }}</h3>
+                        <a class="btn" href="{{ path('opensoft_codeconversation_default_viewpullrequest', {'pullId': pullRequest.id, 'projectId': project.id}) }}">View pull request</a>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div id="branches">
+            <h2>Branches</h2>
+
+            {% for branch in project.branches %}
+                <div class="well">
+                    <h3>{{ branch.name }}</h3>
+                    <a class="btn" href="{{ path('opensoft_codeconversation_default_showproject_1', {'id': project.id, 'branchId': branch.id}) }}">Switch to branch</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('bundles/opensoftcodeconversation/js/bootstrap-tabs.1.3.0.js')}}"></script>
 {% endblock %}
