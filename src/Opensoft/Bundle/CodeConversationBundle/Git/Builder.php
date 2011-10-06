@@ -135,6 +135,10 @@ class Builder
             $file[] = $line;
         }
 
+        if (!empty($file)) {
+            $diffs[] = $file;
+        }
+
 //        print_r($diffs);
 
         $commit['diffs'] = $diffs;
