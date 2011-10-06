@@ -63,7 +63,7 @@ class DefaultController extends Controller
 
 //        $diff = $builder->diff($commitHash);
 
-        return array('commit' => $commit);
+        return array('commit' => $commit, 'project' => $project);
     }
 
     /**
