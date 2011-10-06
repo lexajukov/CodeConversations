@@ -1,0 +1,39 @@
+{% extends 'OpensoftCodeConversationBundle::layout.html.twig' %}
+
+{% block page_title %}Create Pull Request{% endblock %}
+
+{% block content %}
+    <h2>Open a pull request on {{ project.name }}</h2>
+    <hr />
+
+
+    <div>
+      <form action="{{ path('opensoft_codeconversation_default_createpullrequest', {'id': project.id }) }}" {{ form_enctype(form) }} method="POST">
+        <fieldset>
+            {{ form_errors(form) }}
+
+            <div class="clearfix">
+                <p><strong>You're asking someone to pull commits from {{ form_widget(form.sourceBranch) }} into {{ form_widget(form.destinationBranch) }}</strong></p>
+            </div>
+
+            <div class="clearfix">
+                {{ form_label(form.title) }}
+                <div class="input">{{ form_widget(form.title, { 'attr': {'class': 'xxlarge'} }) }}</div>
+            </div>
+
+            <div class="clearfix">
+                {{ form_label(form.description) }}
+                <div class="input">{{ form_widget(form.description, { 'attr': {'class': 'xxlarge', 'rows': 30} }) }}</div>
+            </div>
+            
+            <div class="actions">
+                <input class="btn primary" type="submit" value="Make it so" />
+                <input class="btn" type="submit" value="Cancel" />
+            </div>
+
+            {{ form_rest(form) }}
+        </fieldset>
+      </form>
+
+    </div>
+{% endblock %}

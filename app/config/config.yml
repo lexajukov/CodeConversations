@@ -61,4 +61,4 @@ jms_security_extra:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb'
     firewall_name: main
-    user_class: Opensoft\Bundle\GversationBundle\Entity\User
+    user_class: Opensoft\Bundle\CodeConversationBundle\Entity\User

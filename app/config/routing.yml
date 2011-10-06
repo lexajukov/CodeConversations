@@ -1,5 +1,5 @@
-OpensoftGversationBundle:
-    resource: "@OpensoftGversationBundle/Controller/"
+OpensoftCodeConversationBundle:
+    resource: "@OpensoftCodeConversationBundle/Controller/"
     type:     annotation
     prefix:   /
 
