@@ -7,6 +7,7 @@ namespace Opensoft\Bundle\CodeConversationBundle\Git;
 
 use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
 use Opensoft\Bundle\CodeConversationBundle\Entity\Branch;
+use Opensoft\Bundle\CodeConversationBundle\Model\Diff;
 use Opensoft\Bundle\CodeConversationBundle\Exception\BuildException;
 use Symfony\Component\Process\Process;
 
@@ -33,6 +34,8 @@ class Builder
         'reset'    => 'reset --hard %revision%',
         'log'     => 'log --pretty=format:%format% %revision% -n %limit%',
         'show'     => 'show --pretty=format:%format% %revision%',
+        'diff'     => 'diff -M -C %commit1% %commit2% %path%',
+        'diff-name-status'     => 'diff -M -C --raw %commit1% %commit2% %path%',
         'branch-list' => 'branch -r'
     );
 
@@ -76,7 +79,7 @@ class Builder
             $revision = $this->fetchHeadCommit($revision);
         }
 
-        $format = '%H%n%h%n%s%n%ci%n%an%n';
+        $format = '%H%n%h%n%s%n%ci%n%an%n%P%n';
         $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['log'], array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($revision), '%limit%' => escapeshellarg($limit))), sprintf('Unable to get logs for project "%s".', $this->project->getName()));
 
 //        print_r($process->getOutput());
@@ -93,9 +96,10 @@ class Builder
                 $commit['message'] = $output[$i+2];
                 $commit['timestamp'] = $output[$i+3];
                 $commit['author'] = $output[$i+4];
+                $commit['parent'] = $output[$i+5];
 
                 $commits[] = $commit;
-                $i += 5;
+                $i += 6;
             } else {
                 $i++;
             }
@@ -106,7 +110,7 @@ class Builder
 
     public function fetchCommit($object)
     {
-        $format = '%H%n%h%n%s%n%ci%n%an%n';
+        $format = '%H%n%h%n%s%n%ci%n%an%n%P%n%b';
         $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['show'], array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($object))), sprintf('Unable to show commit for project "%s".', $this->project->getName()));
 
         $output = explode("\n", trim($process->getOutput()));
@@ -117,10 +121,29 @@ class Builder
         $commit['message'] = $output[2];
         $commit['timestamp'] = $output[3];
         $commit['author'] = $output[4];
+        $commit['parent'] = $output[5];
 
-        $format = '%b';
-        $diffProcess = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['show'], array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($object))), sprintf('Unable to show commit for project "%s".', $this->project->getName()));
-        $commit['diff'] = trim($diffProcess->getOutput());
+        $diffs = array();
+        $file = array();
+        foreach (array_slice($output, 7) as $line) {
+            if (strpos($line, 'diff --git') === 0) {
+                if (!empty($file)) {
+                    $diffs[] = $file;
+                }
+                $file = array();
+            }
+            $file[] = $line;
+        }
+
+//        print_r($diffs);
+
+        $commit['diffs'] = $diffs;
+
+//        $format .= '%N%n%b';
+//        $diffProcess = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['show'], array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($object))), sprintf('Unable to show commit for project "%s".', $this->project->getName()));
+//        $commit['diff'] = trim($diffProcess->getOutput());
+
+
 //        print_r($commit);
 
         return $commit;
@@ -147,6 +170,48 @@ class Builder
         }
 
         return $revision;
+    }
+
+    public function diff($object1, $object2 = null, $path = null)
+    {
+        $args = array('%commit1%' => escapeshellarg($object1), '%commit2%' => null, '%path%' => null);
+
+        if (null !== $object2) {
+            $args['%commit2%'] = $object2;
+        }
+        if (null !== $path) {
+            $args['%path%'] = $path;
+        }
+        $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['diff-name-status'], $args), strtr("Could not find diff for %object1%", array('%object1%' => $object1)));
+
+        $files = explode("\n", trim($process->getOutput()));
+        print_r($files);
+
+
+        $diffs = array();
+        foreach ($files as $file) {
+            $fileDef = explode("\t", $file);
+            $fileDef[0] = explode(" ", substr($fileDef[0], 1));
+
+            $diff = new Diff();
+            $diff->srcMode = $fileDef[0][0];
+            $diff->dstMode = $fileDef[0][1];
+            $diff->srcSha1 = $fileDef[0][2];
+            $diff->dstSha1 = $fileDef[0][3];
+            $diff->status  = substr($fileDef[0][4], 0, 1);
+            $diff->statusScore = substr($fileDef[0][4], 1);
+            $diff->srcPath = $fileDef[1];
+
+            if (isset($fileDef[2])) {
+                $diff->dstPath = $fileDef[2];
+            }
+
+            print_r($diff);
+
+            $diffs[] = $diff;
+        }
+
+        return $diffs;
     }
 
 //    private function prepare($revision = null, $sync = true)

@@ -61,6 +61,8 @@ class DefaultController extends Controller
 
         $commit = $builder->fetchCommit($commitHash);
 
+//        $diff = $builder->diff($commitHash);
+
         return array('commit' => $commit);
     }
 
