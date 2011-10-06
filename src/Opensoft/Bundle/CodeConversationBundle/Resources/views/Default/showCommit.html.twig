@@ -18,21 +18,48 @@
         {% for diff in commit.diffs %}
 
 
-            <table width="100%">
+            <table cellpadding="0" cellspacing="0" width="100%">
+                <thead>
+                    <th colspan="3">{{ diff.0 }}</th>
+                </thead>
                 <tbody>
 
+                    {% set srcLineCount = 0 %}
+                    {% set dstLineCount = 0 %}
+
                     {% for line in diff %}
+                        {% if "%.2s"|format(line) == '@@' %}
+                            {% set srcLineCount = 0 %}
+                            {% set dstLineCount = 0 %}
+                        {% endif %}
+
+                        {% set srcAddition = "%.1s"|format(line) == '+' %}
+                        {% set srcDeletion = "%.1s"|format(line) == '-' %}
+
                         <tr>
+                            <td style="color: #AAA; padding: 0px 3px; border: none; border-right: 1px solid #DDD; text-align: center; background-color: #f5f5f5;">
+                                {% if srcDeletion or (not srcAddition and not srcDeletion) %}
+                                    {{ srcLineCount != 0 ? srcLineCount : " "}}
+                                    {% set srcLineCount = srcLineCount + 1 %}
+                                {% endif %}
+                            </td>
+                            <td style="color: #AAA; padding: 0px 3px; border: none; border-right: 1px solid #DDD; text-align: center; background-color: #f5f5f5;">
+                                {% if srcAddition or (not srcAddition and not srcDeletion) %}
+                                    {{ dstLineCount != 0 ? dstLineCount : " "}}
+                                    {% set dstLineCount = dstLineCount + 1 %}
+                                {% endif %}
+                            </td>
                             <td style="padding: 0px; border: none;" width="100%">
-                                {% if "%.1s"|format(line) == '+' %}
-                                    <pre style="padding: 0px; margin: 0px; border: none; background-color: #DFD;">{{ line }}</pre>
-                                {% elseif "%.1s"|format(line) == '-' %}
-                                    <pre style="padding: 0px; margin: 0px; border: none; background-color: #FDD;">{{ line }}</pre>
+                                {% if srcAddition %}
+                                    <pre style="padding: 0px; margin: 0px; border: none; background-color: #DFD; border-radius: 0px;">{{ line }}</pre>
+                                {% elseif srcDeletion %}
+                                    <pre style="padding: 0px; margin: 0px; border: none; background-color: #FDD; border-radius: 0px;">{{ line }}</pre>
                                 {% else %}
-                                    <pre style="padding: 0px; margin: 0px; border: none; background-color: #f5f5f5;">{{ line }}</pre>
+                                    <pre style="padding: 0px; margin: 0px; border: none; background-color: #f5f5f5; border-radius: 0px;">{{ line }}</pre>
                                 {% endif %}
                             </td>
                         </tr>
+
                     {% endfor %}
                 </tbody>
             </table>
