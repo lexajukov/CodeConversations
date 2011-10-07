@@ -10,8 +10,10 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Form\Type;
 
+use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Doctrine\ORM\EntityRepository;
 
 /**
  *
@@ -21,13 +23,29 @@ use Symfony\Component\Form\FormBuilder;
 class PullRequestFormType extends AbstractType
 {
 
+    private $project;
+
+    public function __construct(Project $project)
+    {
+        $this->project = $project;
+    }
+
     public function buildForm(FormBuilder $builder, array $options)
     {
+        $project = $this->project;
         $builder
             ->add('title')
             ->add('description')
-            ->add('sourceBranch', null, array('property' => 'name'))
-            ->add('destinationBranch', null, array('property' => 'name'))
+            ->add('sourceBranch', 'entity', array(
+                'property' => 'name',
+                'class' => 'OpensoftCodeConversationBundle:Branch',
+                'query_builder' => function(EntityRepository $repo) use ($project) { return $repo->createQueryBuilder('b')->where('b.project = :project')->setParameter('project', $project)->orderBy('b.name'); }
+            ))
+            ->add('destinationBranch', 'entity', array(
+                'property' => 'name',
+                'class' => 'OpensoftCodeConversationBundle:Branch',
+                'query_builder' => function(EntityRepository $repo) use ($project) { return $repo->createQueryBuilder('b')->where('b.project = :project')->setParameter('project', $project)->orderBy('b.name'); }
+            ))
         ;
     }
 

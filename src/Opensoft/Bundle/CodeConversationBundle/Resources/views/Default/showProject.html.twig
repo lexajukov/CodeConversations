@@ -37,17 +37,26 @@
         </div>
 
         <div id="pull-requests">
+            <span class="pull-request-title title">Pull Requests</span>
             <a href="{{ path('opensoft_codeconversation_default_createpullrequest', {'id': project.id }) }}" class="btn primary pull-right">Open Pull Request</a>
             
             {% if project.pullRequests|length > 0 %}
-                <br />
                 <table>
                     <tbody>
                         {% for pullRequest in project.pullRequests %}
                             <tr>
                                 <td>
                                     <div>
-                                        <a class="xlarge" href="{{ path('opensoft_codeconversation_default_viewpullrequest', {'pullId': pullRequest.id, 'projectId': project.id}) }}">{{ pullRequest.title|truncate(80) }}</a>
+                                        {% if pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_OPEN") %}
+                                            <span class="label success">Open</span>
+                                        {% elseif pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_CLOSED") %}
+                                            <span class="label important">Closed</span>
+                                        {% endif %}
+
+                                        <a href="{{ path('opensoft_codeconversation_default_viewpullrequest', {'pullId': pullRequest.id, 'projectId': project.id}) }}">{{ pullRequest.title|truncate(80) }}</a>
+
+                                        <span class="pull-right">opened {{ time_diff(pullRequest.createdAt) }}</span>
+
                                         <span class="help-block">{{ pullRequest.description|truncate(120) }}</span>
                                     </div>
                                     <span class="pull-right">{{ pullRequest.comments|length }} comments</span>

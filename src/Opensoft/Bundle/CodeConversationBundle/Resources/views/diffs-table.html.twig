@@ -17,7 +17,7 @@
                     {% endif %}
                 </span>
                 <span class="pull-right">
-                    {% if diff.insertions != 0 %}+{{ diff.insertions }}{% endif %}
+                    {% if diff.insertions != 0 %}+{{ diff.insertions }}{% endif %}{% if diff.insertions != 0 and diff.deletions != 0 %},{% endif %}
                     {% if diff.deletions != 0 %}-{{ diff.deletions }}{% endif %}
                 </span>
             </td>

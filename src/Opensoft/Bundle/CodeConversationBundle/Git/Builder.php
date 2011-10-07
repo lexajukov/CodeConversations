@@ -34,7 +34,8 @@ class Builder
         'prepare'  => 'submodule update --init --recursive',
         'checkout' => 'checkout origin/%branch%',
         'reset'    => 'reset --hard %revision%',
-        'log'     => 'log --pretty=format:%format% %revision% -n %limit%',
+        'log'     => 'log --pretty=format:%format% %revision% %revision2% -n %limit%',
+        'log-since' => 'log --pretty=format:%format% %revision%..%revision2%',
         'show'     => 'show --pretty=format:%format% %revision%',
         'diff'     => 'diff %commit1%..%commit2% %path%',
         'diff-name-status'     => 'diff -M -C --raw %commit1% %commit2% %path%',
@@ -76,14 +77,58 @@ class Builder
         return array_map('trim', explode("\n", trim($process->getOutput())));
     }
 
-    public function fetchRecentCommits($revision = null, $limit = 15)
+    public function fetchRecentCommits($revision = null, $limit = null)
     {
         if (null === $revision || 'HEAD' === $revision) {
             $revision = $this->fetchHeadCommit($revision);
         }
 
         $format = '%H%n%s%n%cn%n%ai%n%P%n';
-        $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['log'], array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($revision), '%limit%' => escapeshellarg($limit))), sprintf('Unable to get logs for project "%s".', $this->project->getName()));
+        $args = array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($revision), '%limit%' => escapeshellarg($limit), '%revision2%' => null);
+        $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['log'], $args), sprintf('Unable to get logs for project "%s".', $this->project->getName()));
+
+//        print_r($process->getOutput());
+//        die();
+
+        $commits = array();
+        $output = explode("\n", trim($process->getOutput()));
+        $i = 0;
+        do {
+            if (!empty($output[$i])) {
+                $commit = new Commit();
+                $commit->setSha1($output[$i]);
+                $commit->setMessage($output[$i+1]);
+                $commit->setAuthor($output[$i+2]);
+                $commit->setTimestamp(new \DateTime($output[$i+3]));
+
+                // Detect merge parent
+                if (strpos($output[$i+4], " ") > 0) {
+                    $merge = explode(" ", $output[$i+4]);
+                    $commit->setParent($merge[0]);
+                    $commit->setMergeParent($merge[1]);
+                } else {
+                    $commit->setParent($output[$i+4]);
+                }
+
+                $commits[] = $commit;
+                $i += 6;
+            } else {
+                $i++;
+            }
+        } while ($i <= count($output));
+
+        return $commits;
+    }
+
+    public function fetchCommits($revision = null, $revision2 = null, $limit = null)
+    {
+        if (null === $revision || 'HEAD' === $revision) {
+            $revision = $this->fetchHeadCommit($revision);
+        }
+
+        $format = '%H%n%s%n%cn%n%ai%n%P%n';
+        $args = array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($revision), '%revision2%' => escapeshellarg($revision2));
+        $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['log-since'], $args), sprintf('Unable to get logs between "%s" and "%s".', $revision, $revision2));
 
 //        print_r($process->getOutput());
 //        die();

@@ -16,6 +16,7 @@
 
     <ul class="tabs" data-tabs="tabs" >
         <li class="active"><a href="#code-conversation">Code Conversation</a></li>
+        <li><a href="#commits">Commits ({{ commits|length|default(0) }})</a></li>
         <li><a href="#full-diff">Full Diff ({{ diffs|length|default(0) }} files)</a></li>
     </ul>
 
@@ -38,8 +39,6 @@
                 </tbody>
             </table>
 
-            {% include 'OpensoftCodeConversationBundle::diffs-table.html.twig' with {'diffs': diffs} %}
-            
             {% if pullRequest.comments|length > 0 %}
                 <h3>Comments?</h3>
                 {% for comment in pullRequest.comments %}
@@ -48,7 +47,7 @@
                         <thead>
                             <tr style="background-color: #F5F5F5;">
                                 <th>
-                                    <span>{{ comment.author }} made some comments...</span>
+                                    <span>{{ comment.author }} commented</span>
                                     <span class="pull-right">{{ comment.createdAt|date("F j, Y") }}</span>
                                 </th>
                             </tr>
@@ -78,9 +77,14 @@
                     </div>
 
                     <div class="actions">
-                        <input class="btn" type="submit" value="Preview" />
-                        <input class="btn primary" type="submit" value="Add comment" />
-                        <input class="btn danger pull-right" type="submit" value="Close Pull Request" />
+                        <input name="preview" class="btn" type="submit" value="Preview" />
+                        <input name="add-comment" class="btn primary" type="submit" value="Add comment" />
+
+                        {% if pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_OPEN") %}
+                            <input name="close" class="btn danger pull-right" type="submit" value="Close Pull Request" />
+                        {% elseif pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_CLOSED") %}
+                            <input name="reopen" class="btn danger pull-right" type="submit" value="Reopen Pull Request" />
+                        {% endif %}
                     </div>
 
                     {{ form_rest(form) }}
@@ -89,6 +93,32 @@
 
 
         </div>
+
+        <div id="commits">
+            <table class="zebra-striped">
+                <tbody>
+                    {% for commit in commits %}
+                        {##}
+                        <tr>
+                            <td>
+                                <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.sha1 }) }}">
+                                    {{ commit.sha1|truncate(6) }}
+                                </a>
+                            </td>
+                            <td>{{ commit.author }}</td>
+                            <td>
+                                <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.sha1 }) }}">
+                                    {{ commit.message|truncate(80) }}
+                                </a>
+                            </td>
+                            <td>{{ time_diff(commit.timestamp) }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
         <div id="full-diff">
 
             {% if diffs %}

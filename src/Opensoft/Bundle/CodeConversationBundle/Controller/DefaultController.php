@@ -53,7 +53,7 @@ class DefaultController extends Controller
             throw $this->createNotFoundException("Branch '$branchId' does not exist");
         }
 
-        $recentCommits = $builder->fetchRecentCommits($branch->getName());
+        $recentCommits = $builder->fetchRecentCommits($branch->getName(), 15);
 
         return array('project' => $project, 'recentCommits' => $recentCommits, 'branch' => $branch);
     }
@@ -87,7 +87,7 @@ class DefaultController extends Controller
      */
     public function createPullRequestAction($id)
     {
-        $em = $this->get('doctrine')->getEntityManager();
+        $em = $this->getDoctrine()->getEntityManager();
         $project = $em->getRepository('OpensoftCodeConversationBundle:Project')->find($id);
 
         if (!$project) {
@@ -100,7 +100,7 @@ class DefaultController extends Controller
         $pullRequest->setInitiatedBy($this->container->get('security.context')->getToken()->getUser());
         $pullRequest->setStatus(PullRequest::STATUS_OPEN);
 
-        $form = $this->createForm(new PullRequestFormType(), $pullRequest);
+        $form = $this->createForm(new PullRequestFormType($project), $pullRequest);
 
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
@@ -146,10 +146,11 @@ class DefaultController extends Controller
 //        print_r($mergeBase);
 //        die();
         $diffs = $builder->unifiedDiff($mergeBase, $pullRequest->getSourceBranch()->getName());
+        $commits = $builder->fetchCommits($mergeBase, $pullRequest->getSourceBranch()->getName());
 
         $form = $this->createForm(new CommentFormType(), new Comment());
 
-        return array('project' => $project, 'pullRequest' => $pullRequest, 'form' => $form->createView(), 'diffs' => $diffs);
+        return array('project' => $project, 'pullRequest' => $pullRequest, 'form' => $form->createView(), 'diffs' => $diffs, 'commits' => $commits);
     }
 
     /**
@@ -166,6 +167,7 @@ class DefaultController extends Controller
             throw $this->createNotFoundException("Project '$projectId' does not exist");
         }
 
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest $pullRequest  */
         $pullRequest = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->find($pullId);
 
         if (!$pullRequest) {
@@ -177,6 +179,7 @@ class DefaultController extends Controller
         $comment->setCreatedAt(new \DateTime());
         $comment->setAuthor($this->container->get('security.context')->getToken()->getUser());
 
+        /** @var \Symfony\Component\Form\Form $form  */
         $form = $this->createForm(new CommentFormType(), $comment);
 
         $request = $this->getRequest();
@@ -184,6 +187,15 @@ class DefaultController extends Controller
             $form->bindRequest($request);
 
             if ($form->isValid()) {
+
+                if ($request->get('close')) {
+                    $pullRequest->setStatus(PullRequest::STATUS_CLOSED);
+                    $em->persist($pullRequest);
+                }
+                if ($request->get('reopen')) {
+                    $pullRequest->setStatus(PullRequest::STATUS_OPEN);
+                    $em->persist($pullRequest);
+                }
 
                 $em->persist($comment);
                 $em->flush();
