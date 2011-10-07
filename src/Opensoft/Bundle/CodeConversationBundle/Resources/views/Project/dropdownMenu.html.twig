@@ -1,0 +1,3 @@
+{% for project in projects %}
+<li><a href="{{ path('opensoft_codeconversation_default_showproject', {'id': project.id}) }}">{{ project.name }}</a></li>
+{% endfor %}

@@ -75,15 +75,21 @@
           <a class="brand" href="{{ path('opensoft_codeconversation_default_homepage') }}">Opensoft Code Conversations</a>
           <ul class="nav">
             <li class="active"><a href="{{ path('opensoft_codeconversation_default_homepage') }}">Home</a></li>
+            <li class="dropdown" data-dropdown="dropdown">
+                <a class="dropdown-toggle" href="#">Projects</a>
+                <ul class="dropdown-menu">
+                    {% render "OpensoftCodeConversationBundle:Project:dropdownMenu" %}
+                </ul>
+            </li>
             <li><a href="{{ path('opensoft_codeconversation_default_about') }}">About</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
 
           {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-              <ul class="nav">
-                <li>{{ app.user.username }}</li>
-                <li><a href="{{ path('fos_user_security_logout') }}" class="btn">Sign out</a></li>
-              </ul>
+              <div class="pull-right">
+                <span class="brand">{{ app.user.username }}</span>
+                <a style="margin-top: 5px;" href="{{ path('fos_user_security_logout') }}" class="btn primary">Sign out</a>
+              </div>
           {% else %}
             <form action="{{ path("fos_user_security_check") }}" method="post" class="pull-right">
               <input class="input-small" id="username" name="_username" type="text" placeholder="Username">
@@ -117,7 +123,8 @@
     <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/libs/jquery-1.6.4.min.js"><\/script>')</script>
-    
+
+    <script src="{{ asset('bundles/opensoftcodeconversation/js/bootstrap-dropdown.1.3.0.js')}}"></script>
     {% block javascripts %}{% endblock %}
 
   </body>

@@ -4,9 +4,12 @@ namespace Opensoft\Bundle\CodeConversationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
+use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommentFormType;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
+use Opensoft\Bundle\CodeConversationBundle\Entity\Comment;
 
 class DefaultController extends Controller
 {
@@ -134,7 +137,52 @@ class DefaultController extends Controller
             throw $this->createNotFoundException("Pull request '$pullRequest' does not exist");
         }
 
-        return array('project' => $project, 'pullRequest' => $pullRequest);
+        $form = $this->createForm(new CommentFormType(), new Comment());
+
+        return array('project' => $project, 'pullRequest' => $pullRequest, 'form' => $form->createView());
+    }
+
+    /**
+     * @Route("/project/{projectId}/pulls/{pullId}/comment/new")
+     * @Method("POST")
+     * @Template("OpensoftCodeConversationsBundle:Default:viewPullRequest")
+     */
+    public function postPrCommentAction($projectId, $pullId)
+    {
+        $em = $this->get('doctrine')->getEntityManager();
+        $project = $em->getRepository('OpensoftCodeConversationBundle:Project')->find($projectId);
+
+        if (!$project) {
+            throw $this->createNotFoundException("Project '$projectId' does not exist");
+        }
+
+        $pullRequest = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->find($pullId);
+
+        if (!$pullRequest) {
+            throw $this->createNotFoundException("Pull request '$pullRequest' does not exist");
+        }
+
+        $comment = new Comment();
+        $comment->setPullRequest($pullRequest);
+        $comment->setCreatedAt(new \DateTime());
+        $comment->setAuthor($this->container->get('security.context')->getToken()->getUser());
+
+        $form = $this->createForm(new CommentFormType(), $comment);
+
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+
+            if ($form->isValid()) {
+
+                $em->persist($comment);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('opensoft_codeconversation_default_viewpullrequest', array('pullId' => $pullRequest->getId(), 'projectId' => $project->getId())));
+            }
+        }
+
+        return array('project' => $project, 'pullRequest' => $pullRequest, 'form' => $form->createView());
     }
 
     /**

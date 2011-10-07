@@ -12,8 +12,12 @@
             <span class="author-name"><a href="/beberlei">{{ commit.author }}</a></span>
             authored <time class="js-relative-date" datetime="{{ commit.timestamp|date("Y-m-d\TG:i:sO") }}" title="{{ commit.timestamp|date("Y-m-d G:i:s") }}">{{ commit.timestamp|date("F j, Y") }}</time>
             </td>
-            <td align="right">
-                <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.sha1 }) }}" class="sha-block">commit <span class="sha">{{ commit.sha1|truncate(6) }}</span></a>
+            <td style="text-align: right;" align="right">
+                commit <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.sha1 }) }}" class="sha-block"><span class="sha">{{ commit.sha1 }}</span></a>
+                {% if commit.parent %}
+                    <div class="clear-fix" />
+                    1 parent <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.parent }) }}" class="sha-block"><span class="sha">{{ commit.parent }}</span></a>
+                {% endif %}
             </td>
         </tr>
     </tbody>

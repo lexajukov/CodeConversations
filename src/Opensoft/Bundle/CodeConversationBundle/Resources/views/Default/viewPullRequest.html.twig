@@ -9,51 +9,72 @@
         {% elseif pullRequest.status == 0 %}
             <span style="font-size: large;" class="label important">Closed</span>
         {% endif %}
-        {{ pullRequest.initiatedBy.username }} wants someone to merge code from {{ pullRequest.sourceBranch.name }} to {{ pullRequest.destinationBranch.name}} ASAP!
+        {{ pullRequest.initiatedBy.username }} wants someone to merge code from <span class="label">{{ pullRequest.sourceBranch.name }}</span>
+         to <span class="label">{{ pullRequest.destinationBranch.name}}</span> ASAP!
     </p>
     <hr />
 
-    <h3>{{ pullRequest.title }}</h3>
-
-    <p>{{ pullRequest.description | markdown }}</p>
+    <table>
+        <thead>
+            <tr style="background-color: #FFF0E0;">
+                <th>
+                    <span>{{ pullRequest.title }}</span>
+                    <span class="pull-right">opened on {{ pullRequest.createdAt|date("F j, Y") }} at {{ pullRequest.createdAt|date("G:i:s") }}</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ pullRequest.description|markdown }}</td>
+            </tr>
+        </tbody>
+    </table>
 
     {% if pullRequest.comments %}
+        <h3>Comments?</h3>
+        {% for comment in pullRequest.comments %}
 
+            <table>
+                <thead>
+                    <tr style="background-color: #F5F5F5;">
+                        <th>
+                            <span>{{ comment.author }} made some comments...</span>
+                            <span class="pull-right">{{ comment.createdAt|date("F j, Y") }}</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ comment.content | markdown}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endfor %}
     {% endif %}
 
     <hr />
     <h4>Comment on this pull request</h4>
-    <form action="" method="POST">
+
+    <form action="{{ path('opensoft_codeconversation_default_postprcomment', {'projectId': project.id, 'pullId': pullRequest.id }) }}" {{ form_enctype(form) }} method="POST">
         <fieldset>
+            {{ form_errors(form) }}
+
             <div class="clearfix">
-                <label for="comment">Comment</label>
+                {{ form_label(form.content) }}
                 <div class="input">
-                    <textarea class="span12" rows="3"></textarea>
+                    {{ form_widget(form.content, { 'attr': {'class': 'span13', 'rows': 5} }) }}
+                    <span class="help-block">Comments are parsed with everyone's favorite <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> language.</span>
                 </div>
             </div>
 
             <div class="actions">
+                <input class="btn" type="submit" value="Preview" />
                 <input class="btn primary" type="submit" value="Add comment" />
+                <input class="btn danger pull-right" type="submit" value="Close Pull Request" />
             </div>
+
+            {{ form_rest(form) }}
         </fieldset>
-      </form>
-
-
-    <hr />
-    <h4>Close this pull request</h4>
-    <form action="" method="POST">
-        <fieldset>
-            <div class="clearfix">
-                <label for="comment">Comment</label>
-                <div class="input">
-                    <textarea class="span12" rows="3"></textarea>
-                </div>
-            </div>
-
-            <div class="actions">
-                <input class="btn primary" type="submit" value="Close" />
-            </div>
-        </fieldset>
-      </form>
+    </form>
 
 {% endblock %}

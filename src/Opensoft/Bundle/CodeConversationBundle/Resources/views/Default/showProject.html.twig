@@ -49,14 +49,32 @@
         </div>
 
         <div id="branches">
-            <h2>Branches</h2>
+            <h2>{{ project.name }} branches</h2>
 
-            {% for branch in project.branches %}
-                <div class="well">
-                    <h3>{{ branch.name }}</h3>
-                    <a class="btn" href="{{ path('opensoft_codeconversation_default_showproject_1', {'id': project.id, 'branchId': branch.id}) }}">Switch to branch</a>
-                </div>
-            {% endfor %}
+            <table class="zebra-striped">
+                <thead>
+                    <tr>
+                        <th>Branch name</th>
+                        <th>Enabled</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for branch in project.branches %}
+                        <tr>
+                            <td>{{ branch.name }}</td>
+                            <td>{{ branch.enabled ? 'Yes' : 'No' }}</td>
+                            <td>
+                                {% if branch.enabled %}
+                                <a class="btn" href="{{ path('opensoft_codeconversation_default_showproject_1', {'id': project.id, 'branchId': branch.id}) }}">Switch to branch</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
         </div>
     </div>
 
