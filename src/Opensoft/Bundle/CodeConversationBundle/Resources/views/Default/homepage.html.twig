@@ -14,8 +14,8 @@
                 </ul>
 
                 <div class="actions">
-                    <a href="{{ path('opensoft_codeconversation_default_showproject', {'id': project.id }) }}" class="btn">Show Branches</a>
-                    <a href="{{ path('opensoft_codeconversation_default_createpullrequest', {'id': project.id }) }}" class="btn">Create Pull Request</a>
+                    <a href="{{ path('opensoft_codeconversation_project_show', {'slug': project.slug }) }}" class="btn">Show Branches</a>
+                    <a href="{{ path('opensoft_codeconversation_project_createpullrequest', {'slug': project.slug }) }}" class="btn">Create Pull Request</a>
                 </div>
             </div>
         {% endfor %}

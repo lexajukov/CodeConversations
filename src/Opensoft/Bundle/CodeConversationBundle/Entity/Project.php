@@ -7,6 +7,7 @@
 namespace Opensoft\Bundle\CodeConversationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  *
@@ -33,6 +34,14 @@ class Project
      * @ORM\Column(type="string", unique=true)
      */
     protected $name;
+
+    /**
+     * @var string
+     *
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(type="string")
+     */
+    protected $slug;
 
     /**
      * @var string
@@ -76,6 +85,7 @@ class Project
      */
     protected $pullRequests;
 
+    
     public function getBranches()
     {
         return $this->branches;
@@ -185,6 +195,22 @@ class Project
     public function getHeadBranch()
     {
         return $this->headBranch;
+    }
+
+    /**
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
 

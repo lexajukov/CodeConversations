@@ -5,7 +5,9 @@ namespace Opensoft\Bundle\CodeConversationBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommentFormType;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
@@ -23,5 +25,110 @@ class ProjectController extends Controller
         $projects = $em->getRepository('OpensoftCodeConversationBundle:Project')->findAll();
 
         return array('projects' => $projects);
+    }
+
+    /**
+     * @Route("/project/{slug}")
+     * @Route("/project/{slug}/branch/{branchId}")
+     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
+     * @Template()
+     */
+    public function showAction(Project $project, $branchId = null)
+    {
+        $em = $this->get('doctrine')->getEntityManager();
+
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
+        $builder = $this->get('opensoft_codeconversation.git.builder');
+        $builder->init($project);
+
+        if ($branchId != null) {
+            /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
+            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->find($branchId);
+        } else {
+            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName('origin/master');
+        }
+
+        if (!$branch) {
+            throw $this->createNotFoundException("Branch '$branchId' does not exist");
+        }
+
+        $recentCommits = $builder->fetchRecentCommits($branch->getName(), 15);
+
+        return array('project' => $project, 'recentCommits' => $recentCommits, 'branch' => $branch);
+    }
+
+    /**
+     * @Route("/project/{slug}/commit/{sha1}")
+     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
+     * @Template()
+     */
+    public function viewCommitAction(Project $project, $sha1)
+    {
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
+        $builder = $this->get('opensoft_codeconversation.git.builder');
+        $builder->init($project);
+
+        $commit = $builder->fetchCommit($sha1);
+
+//        $diff = $builder->diff($commitHash);
+
+        return array('commit' => $commit, 'project' => $project);
+    }
+
+
+    /**
+     * @Route("/project/{slug}/pulls_create")
+     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
+     * @Template()
+     */
+    public function createPullRequestAction(Project $project)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $pullRequest = new PullRequest();
+        $pullRequest->setProject($project);
+        $pullRequest->setCreatedAt(new \DateTime());
+        $pullRequest->setInitiatedBy($this->container->get('security.context')->getToken()->getUser());
+        $pullRequest->setStatus(PullRequest::STATUS_OPEN);
+
+        $form = $this->createForm(new PullRequestFormType($project), $pullRequest);
+
+        $request = $this->getRequest();
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+
+            if ($form->isValid()) {
+
+                $em->persist($pullRequest);
+                $em->flush();
+
+                return $this->redirect($this->generateUrl('opensoft_codeconversation_project_viewpullrequest', array('id' => $pullRequest->getId(), 'slug' => $project->getSlug())));
+            }
+        }
+
+        return array('project' => $project, 'form' => $form->createView());
+    }
+
+    /**
+     * @Route("/project/{slug}/pull/{id}")
+     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
+     * @ParamConverter("pullRequest", class="OpensoftCodeConversationBundle:PullRequest")
+     * @Template()
+     */
+    public function viewPullRequestAction(Project $project, PullRequest $pullRequest)
+    {
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
+        $builder = $this->get('opensoft_codeconversation.git.builder');
+        $builder->init($project);
+
+        $mergeBase = $builder->mergeBase($pullRequest->getSourceBranch()->getName(), $pullRequest->getDestinationBranch()->getName());
+//        print_r($mergeBase);
+//        die();
+        $diffs = $builder->unifiedDiff($mergeBase, $pullRequest->getSourceBranch()->getName());
+        $commits = $builder->fetchCommits($mergeBase, $pullRequest->getSourceBranch()->getName());
+
+        $form = $this->createForm(new CommentFormType(), new Comment());
+
+        return array('project' => $project, 'pullRequest' => $pullRequest, 'form' => $form->createView(), 'diffs' => $diffs, 'commits' => $commits);
     }
 }

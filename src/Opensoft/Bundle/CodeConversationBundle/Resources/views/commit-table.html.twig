@@ -1,0 +1,21 @@
+<table style="border-left: none; border-right: none; border-radius: 0px;">
+    <tbody>
+        {% for commit in commits %}
+            {##}
+            <tr>
+                <td style="border-left: none;">
+                    <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': commit.sha1 }) }}">
+                        {{ commit.sha1|truncate(6) }}
+                    </a>
+                </td>
+                <td style="border-left: none;">{{ commit.author }}</td>
+                <td style="border-left: none;">
+                    <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': commit.sha1 }) }}">
+                        {{ commit.message|truncate(80) }}
+                    </a>
+                </td>
+                <td style="border-left: none; text-align: right;">{{ time_diff(commit.timestamp) }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

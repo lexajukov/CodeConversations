@@ -46,6 +46,8 @@ doctrine:
     orm:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
+        mappings:
+            StofDoctrineExtensionsBundle: false # done need translatable or loggable
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -64,6 +66,12 @@ fos_user:
     user_class: Opensoft\Bundle\CodeConversationBundle\Entity\User
 
 knp_time: ~      # Enable the helper for use in templates
+
+stof_doctrine_extensions:
+    default_locale: en_US
+    orm:
+        default:
+            sluggable: true
 
 services:
  twig.extension.text:

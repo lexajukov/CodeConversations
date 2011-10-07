@@ -64,7 +64,7 @@
             <hr />
             <h4>Comment on this pull request</h4>
 
-            <form action="{{ path('opensoft_codeconversation_default_postprcomment', {'projectId': project.id, 'pullId': pullRequest.id }) }}" {{ form_enctype(form) }} method="POST">
+            <form action="{{ path('opensoft_codeconversation_comment_postprcomment', {'slug': project.slug, 'id': pullRequest.id }) }}" {{ form_enctype(form) }} method="POST">
                 <fieldset>
                     {{ form_errors(form) }}
 
@@ -95,27 +95,7 @@
         </div>
 
         <div id="commits">
-            <table class="zebra-striped">
-                <tbody>
-                    {% for commit in commits %}
-                        {##}
-                        <tr>
-                            <td>
-                                <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.sha1 }) }}">
-                                    {{ commit.sha1|truncate(6) }}
-                                </a>
-                            </td>
-                            <td>{{ commit.author }}</td>
-                            <td>
-                                <a href="{{ path('opensoft_codeconversation_default_showcommit', {'projectId': project.id, 'commitHash': commit.sha1 }) }}">
-                                    {{ commit.message|truncate(80) }}
-                                </a>
-                            </td>
-                            <td>{{ time_diff(commit.timestamp) }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': commits} %}
         </div>
 
 

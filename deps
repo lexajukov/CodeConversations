@@ -71,3 +71,10 @@
 [KnpTimeBundle]
     git=http://github.com/knplabs/KnpTimeBundle.git
     target=/bundles/Knp/Bundle/TimeBundle
+
+[gedmo-doctrine-extensions]
+    git=http://github.com/l3pp4rd/DoctrineExtensions.git
+
+[DoctrineExtensionsBundle]
+    git=http://github.com/stof/StofDoctrineExtensionsBundle.git
+    target=/bundles/Stof/DoctrineExtensionsBundle
