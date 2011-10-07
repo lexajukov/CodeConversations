@@ -17,21 +17,21 @@
                     </th>
                 </tr>
             </thead>
-            <tbody style="overflow: scroll;">
+            <tbody style="overflow: auto; display:block; width: 938px;">
 
                 {% for diffChunk in diff.diffChunks %}
                     {% set srcLineCount = diffChunk.srcStartLineNumber %}
                     {% set dstLineCount = diffChunk.dstStartLineNumber %}
 
                     <tr>
-                        <td style="color: #AAA; padding: 0px 3px; border: none; border-right: 1px solid #DDD; text-align: center; background-color: #F0F0F0;">
+                        <td style="white-space: nowrap; color: #AAA; padding: 0px 3px; border: none; border-right: 1px solid #DDD; text-align: center; background-color: #F0F0F0;">
                             ...
                         </td>
-                        <td style="color: #AAA; padding: 0px 3px; border: none; border-right: 1px solid #DDD; text-align: center; background-color: #F0F0F0;">
+                        <td style="white-space: nowrap; color: #AAA; padding: 0px 3px; border: none; border-right: 1px solid #DDD; text-align: center; background-color: #F0F0F0;">
                             ...
                         </td>
                         <td style="padding: 0px; border: none;" width="100%">
-                             <pre style="color: #AAA; padding: 0px; margin: 0px; border: none; background-color: #F0F0F0; border-radius: 0px;">{{ diffChunk.description }}</pre>
+                             <pre style="white-space: nowrap; color: #AAA; padding: 0px; margin: 0px; border: none; background-color: #F0F0F0; border-radius: 0px;">{{ diffChunk.description }}</pre>
                         </td>
                     </tr>
 
@@ -54,13 +54,13 @@
                                     {% set dstLineCount = dstLineCount + 1 %}
                                 {% endif %}
                             </td>
-                            <td style="padding: 0px; border: none;">
+                            <td style="padding: 0px; border: none; background-color: #f5f5f5; ">
                                 {% if srcAddition %}
-                                    <pre style="padding: 0px; margin: 0px; border: none; background-color: #DFD; border-radius: 0px;">{{ line }}</pre>
+                                    <pre style="white-space: pre; padding: 0px; margin: 0px; border: none; background-color: #DFD; border-radius: 0px;">{{ line|default(" ") }}</pre>
                                 {% elseif srcDeletion %}
-                                    <pre style="padding: 0px; margin: 0px; border: none; background-color: #FDD; border-radius: 0px;">{{ line }}</pre>
+                                    <pre style="white-space: pre; padding: 0px; margin: 0px; border: none; background-color: #FDD; border-radius: 0px;">{{ line|default(" ") }}</pre>
                                 {% else %}
-                                    <pre style="padding: 0px; margin: 0px; border: none; background-color: #f5f5f5; border-radius: 0px;">{{ line }}</pre>
+                                    <pre style="white-space: pre; padding: 0px; margin: 0px; border: none; border-radius: 0px;">{{ line|default(" ") }}</pre>
                                 {% endif %}
                             </td>
                         </tr>
