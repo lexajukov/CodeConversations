@@ -1,20 +1,28 @@
 <table>
     <tbody>
+        {% set i = 0 %}
         {% for diff in diffs %}
         <tr>
             <td>
                 <span class="label">{{ diff.status }}</span>
             </td>
             <td>
-                {% if diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_MODIFICATION") %}
-                    {{ diff.dstPath }}
-                {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_ADDITION") %}
-                    {{ diff.dstPath }}
-                {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_DELETION") %}
-                    {{ diff.srcPath }}
-                {% endif %}
+                <span>
+                    {% if diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_MODIFICATION") %}
+                        <a href="#diff-{{ i }}">{{ diff.dstPath }}</a>
+                    {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_ADDITION") %}
+                        <a href="#diff-{{ i }}">{{ diff.dstPath }}</a>
+                    {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_DELETION") %}
+                        <a href="#diff-{{ i }}">{{ diff.srcPath }}</a>
+                    {% endif %}
+                </span>
+                <span class="pull-right">
+                    {% if diff.insertions != 0 %}+{{ diff.insertions }}{% endif %}
+                    {% if diff.deletions != 0 %}-{{ diff.deletions }}{% endif %}
+                </span>
             </td>
         </tr>
+        {% set i = i + 1 %}
         {% endfor  %}
     </tbody>
 </table>

@@ -7,6 +7,8 @@
     {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': commit, 'project': project} %}
 
     {% if commit.fileDiffs %}
+
+        <p>Showing {{ commit.fileDiffs|length|default(0) }} files changed</p>
     
         {% include 'OpensoftCodeConversationBundle::diffs-table.html.twig' with {'diffs': commit.fileDiffs} %}
 

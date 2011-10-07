@@ -20,6 +20,9 @@ class DiffChunk
     private $srcStartLineNumber;
     private $dstStartLineNumber;
 
+    private $insertions = 0;
+    private $deletions = 0;
+
     private $description;
     private $content;
 
@@ -63,4 +66,46 @@ class DiffChunk
     {
         return $this->description;
     }
+
+    public function setDeletions($deletions)
+    {
+        $this->deletions = $deletions;
+    }
+
+    public function incrementDeletions($count = 1)
+    {
+        $this->deletions += $count;
+    }
+
+    public function decrementDeletions($count = 1)
+    {
+        $this->deletions -= $count;
+    }
+
+    public function getDeletions()
+    {
+        return $this->deletions;
+    }
+
+    public function setInsertions($insertions)
+    {
+        $this->insertions = $insertions;
+    }
+
+    public function incrementInsertions($count = 1)
+    {
+        $this->insertions += $count;
+    }
+
+    public function decrementInsertions($count = 1)
+    {
+        $this->insertions -= $count;
+    }
+
+    public function getInsertions()
+    {
+        return $this->insertions;
+    }
+
+
 }

@@ -29,6 +29,9 @@ class Diff
     public $status;
     public $statusScore;
 
+    public $insertions = 0;
+    public $deletions = 0;
+
     public $srcPath;
     public $dstPath;
     
@@ -125,6 +128,9 @@ class Diff
     public function addDiffChunk(DiffChunk $diffChunk)
     {
         $this->diffChunks[] = $diffChunk;
+
+        $this->insertions += $diffChunk->getInsertions();
+        $this->deletions += $diffChunk->getDeletions();
     }
 
     public function getDiffChunks()
