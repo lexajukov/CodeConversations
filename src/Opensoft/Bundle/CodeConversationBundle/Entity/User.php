@@ -28,10 +28,34 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $gitAlias;
+
     public function __construct()
     {
         parent::__construct();
         // your own logic
     }
-    
+
+    /**
+     * @param string $gitAlias
+     */
+    public function setGitAlias($gitAlias)
+    {
+        $this->gitAlias = $gitAlias;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGitAlias()
+    {
+        return $this->gitAlias;
+    }
+
+
 }
