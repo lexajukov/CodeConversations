@@ -1,0 +1,20 @@
+<table>
+    <tbody>
+        {% for diff in diffs %}
+        <tr>
+            <td>
+                <span class="label">{{ diff.status }}</span>
+            </td>
+            <td>
+                {% if diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_MODIFICATION") %}
+                    {{ diff.dstPath }}
+                {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_ADDITION") %}
+                    {{ diff.dstPath }}
+                {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_DELETION") %}
+                    {{ diff.srcPath }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor  %}
+    </tbody>
+</table>

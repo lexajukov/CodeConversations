@@ -14,67 +14,94 @@
     </p>
     <hr />
 
-    <table>
-        <thead>
-            <tr style="background-color: #FFF0E0;">
-                <th>
-                    <span>{{ pullRequest.title }}</span>
-                    <span class="pull-right">opened on {{ pullRequest.createdAt|date("F j, Y") }} at {{ pullRequest.createdAt|date("G:i:s") }}</span>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ pullRequest.description|markdown }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <ul class="tabs" data-tabs="tabs" >
+        <li class="active"><a href="#code-conversation">Code Conversation</a></li>
+        <li><a href="#full-diff">Full Diff ({{ diffs|length|default(0) }} files)</a></li>
+    </ul>
 
-    {% if pullRequest.comments %}
-        <h3>Comments?</h3>
-        {% for comment in pullRequest.comments %}
+    <div class="pill-content">
+        <div class="active" id="code-conversation">
 
             <table>
                 <thead>
-                    <tr style="background-color: #F5F5F5;">
+                    <tr style="background-color: #FFF0E0;">
                         <th>
-                            <span>{{ comment.author }} made some comments...</span>
-                            <span class="pull-right">{{ comment.createdAt|date("F j, Y") }}</span>
+                            <span>{{ pullRequest.title }}</span>
+                            <span class="pull-right">opened on {{ pullRequest.createdAt|date("F j, Y") }} at {{ pullRequest.createdAt|date("G:i:s") }}</span>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{ comment.content | markdown}}</td>
+                        <td>{{ pullRequest.description|markdown }}</td>
                     </tr>
                 </tbody>
             </table>
-        {% endfor %}
-    {% endif %}
 
-    <hr />
-    <h4>Comment on this pull request</h4>
+            {% include 'OpensoftCodeConversationBundle::diffs-table.html.twig' with {'diffs': diffs} %}
+            
+            {% if pullRequest.comments|length > 0 %}
+                <h3>Comments?</h3>
+                {% for comment in pullRequest.comments %}
 
-    <form action="{{ path('opensoft_codeconversation_default_postprcomment', {'projectId': project.id, 'pullId': pullRequest.id }) }}" {{ form_enctype(form) }} method="POST">
-        <fieldset>
-            {{ form_errors(form) }}
+                    <table>
+                        <thead>
+                            <tr style="background-color: #F5F5F5;">
+                                <th>
+                                    <span>{{ comment.author }} made some comments...</span>
+                                    <span class="pull-right">{{ comment.createdAt|date("F j, Y") }}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ comment.content | markdown}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                {% endfor %}
+            {% endif %}
 
-            <div class="clearfix">
-                {{ form_label(form.content) }}
-                <div class="input">
-                    {{ form_widget(form.content, { 'attr': {'class': 'span13', 'rows': 5} }) }}
-                    <span class="help-block">Comments are parsed with everyone's favorite <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> language.</span>
-                </div>
-            </div>
+            <hr />
+            <h4>Comment on this pull request</h4>
 
-            <div class="actions">
-                <input class="btn" type="submit" value="Preview" />
-                <input class="btn primary" type="submit" value="Add comment" />
-                <input class="btn danger pull-right" type="submit" value="Close Pull Request" />
-            </div>
+            <form action="{{ path('opensoft_codeconversation_default_postprcomment', {'projectId': project.id, 'pullId': pullRequest.id }) }}" {{ form_enctype(form) }} method="POST">
+                <fieldset>
+                    {{ form_errors(form) }}
 
-            {{ form_rest(form) }}
-        </fieldset>
-    </form>
+                    <div class="clearfix">
+                        {{ form_label(form.content) }}
+                        <div class="input">
+                            {{ form_widget(form.content, { 'attr': {'class': 'span13', 'rows': 5} }) }}
+                            <span class="help-block">Comments are parsed with everyone's favorite <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> language.</span>
+                        </div>
+                    </div>
 
+                    <div class="actions">
+                        <input class="btn" type="submit" value="Preview" />
+                        <input class="btn primary" type="submit" value="Add comment" />
+                        <input class="btn danger pull-right" type="submit" value="Close Pull Request" />
+                    </div>
+
+                    {{ form_rest(form) }}
+                </fieldset>
+            </form>
+
+
+        </div>
+        <div id="full-diff">
+
+            {% if diffs %}
+                {% include 'OpensoftCodeConversationBundle::diffs-table.html.twig' with {'diffs': diffs} %}
+                {% include 'OpensoftCodeConversationBundle::diffs-full.html.twig' with {'diffs': diffs} %}
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('bundles/opensoftcodeconversation/js/bootstrap-tabs.1.3.0.js')}}"></script>
 {% endblock %}

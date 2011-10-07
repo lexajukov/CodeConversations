@@ -131,15 +131,25 @@ class DefaultController extends Controller
             throw $this->createNotFoundException("Project '$projectId' does not exist");
         }
 
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest $pullRequest  */
         $pullRequest = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->find($pullId);
 
         if (!$pullRequest) {
             throw $this->createNotFoundException("Pull request '$pullRequest' does not exist");
         }
 
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
+        $builder = $this->get('opensoft_codeconversation.git.builder');
+        $builder->init($project);
+
+        $mergeBase = $builder->mergeBase($pullRequest->getSourceBranch()->getName(), $pullRequest->getDestinationBranch()->getName());
+//        print_r($mergeBase);
+//        die();
+        $diffs = $builder->unifiedDiff($mergeBase, $pullRequest->getSourceBranch()->getName());
+
         $form = $this->createForm(new CommentFormType(), new Comment());
 
-        return array('project' => $project, 'pullRequest' => $pullRequest, 'form' => $form->createView());
+        return array('project' => $project, 'pullRequest' => $pullRequest, 'form' => $form->createView(), 'diffs' => $diffs);
     }
 
     /**

@@ -7,98 +7,11 @@
     {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': commit, 'project': project} %}
 
     {% if commit.fileDiffs %}
-        <table>
-            <tbody>
-                {% for diff in commit.fileDiffs %}
-                <tr>
-                    <td>
-                        <span class="label">{{ diff.status }}</span>
-                    </td>
-                    <td>
-                        {% if diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_MODIFICATION") %}
-                            {{ diff.dstPath }}
-                        {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_ADDITION") %}
-                            {{ diff.dstPath }}
-                        {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_DELETION") %}
-                            {{ diff.srcPath }}
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor  %}
-            </tbody>
-        </table>
+    
+        {% include 'OpensoftCodeConversationBundle::diffs-table.html.twig' with {'diffs': commit.fileDiffs} %}
 
         <div>
-            {% for diff in commit.fileDiffs %}
-                <table cellpadding="0" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th colspan="3" style="background-color: #E0EDFF;">
-                                <span class="label">{{ diff.status }}</span>
-                                {% if diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_MODIFICATION") %}
-                                    {{ diff.dstPath }}
-                                {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_ADDITION") %}
-                                    {{ diff.dstPath }}
-                                {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_DELETION") %}
-                                    {{ diff.srcPath }}
-                                {% endif %}
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody style="overflow: scroll;">
-
-                        {% for diffChunk in diff.diffChunks %}
-                            {% set srcLineCount = diffChunk.srcStartLineNumber %}
-                            {% set dstLineCount = diffChunk.dstStartLineNumber %}
-
-                            <tr>
-                                <td style="color: #AAA; padding: 0px 3px; border: none; border-right: 1px solid #DDD; text-align: center; background-color: #F0F0F0;">
-                                    ...
-                                </td>
-                                <td style="color: #AAA; padding: 0px 3px; border: none; border-right: 1px solid #DDD; text-align: center; background-color: #F0F0F0;">
-                                    ...
-                                </td>
-                                <td style="padding: 0px; border: none;" width="100%">
-                                     <pre style="color: #AAA; padding: 0px; margin: 0px; border: none; background-color: #F0F0F0; border-radius: 0px;">{{ diffChunk.description }}</pre>
-                                </td>
-                            </tr>
-
-
-                            {% for line in diffChunk.content %}
-
-                                {% set srcAddition = "%.1s"|format(line) == '+' %}
-                                {% set srcDeletion = "%.1s"|format(line) == '-' %}
-
-                                <tr>
-                                    <td style="color: #AAA; padding: 0px 3px; border: none; border-right: 1px solid #DDD; text-align: center; background-color: #f5f5f5;">
-                                        {% if srcDeletion or (not srcAddition and not srcDeletion) %}
-                                            {{ srcLineCount != 0 ? srcLineCount : " "}}
-                                            {% set srcLineCount = srcLineCount + 1 %}
-                                        {% endif %}
-                                    </td>
-                                    <td style="color: #AAA; padding: 0px 3px; border: none; border-right: 1px solid #DDD; text-align: center; background-color: #f5f5f5;">
-                                        {% if srcAddition or (not srcAddition and not srcDeletion) %}
-                                            {{ dstLineCount != 0 ? dstLineCount : " "}}
-                                            {% set dstLineCount = dstLineCount + 1 %}
-                                        {% endif %}
-                                    </td>
-                                    <td style="padding: 0px; border: none;">
-                                        {% if srcAddition %}
-                                            <pre style="padding: 0px; margin: 0px; border: none; background-color: #DFD; border-radius: 0px;">{{ line }}</pre>
-                                        {% elseif srcDeletion %}
-                                            <pre style="padding: 0px; margin: 0px; border: none; background-color: #FDD; border-radius: 0px;">{{ line }}</pre>
-                                        {% else %}
-                                            <pre style="padding: 0px; margin: 0px; border: none; background-color: #f5f5f5; border-radius: 0px;">{{ line }}</pre>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-
-                            {% endfor %}
-
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% endfor %}
+            {% include 'OpensoftCodeConversationBundle::diffs-full.html.twig' with {'diffs': commit.fileDiffs} %}
         </div>
     {% endif %}
 {% endblock %}
