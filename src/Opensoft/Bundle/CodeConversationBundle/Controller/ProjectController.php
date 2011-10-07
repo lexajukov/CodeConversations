@@ -75,9 +75,8 @@ class ProjectController extends Controller
         return array('commit' => $commit, 'project' => $project);
     }
 
-
     /**
-     * @Route("/project/{slug}/pulls_create")
+     * @Route("/project/{slug}/pulls/new")
      * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
      * @Template()
      */
@@ -130,5 +129,20 @@ class ProjectController extends Controller
         $form = $this->createForm(new CommentFormType(), new Comment());
 
         return array('project' => $project, 'pullRequest' => $pullRequest, 'form' => $form->createView(), 'diffs' => $diffs, 'commits' => $commits);
+    }
+
+    /**
+     * @Route("/project/{slug}/blob/{blob}")
+     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
+     * @Template()
+     */
+    public function blobAction(Project $project, $blob)
+    {/** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
+        $builder = $this->get('opensoft_codeconversation.git.builder');
+        $builder->init($project);
+
+        $file = $builder->blob($blob);
+
+        return array();
     }
 }
