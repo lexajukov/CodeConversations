@@ -37,14 +37,31 @@
         </div>
 
         <div id="pull-requests">
-            <h2>Pull Requests</h2>
-            {% if project.pullRequests %}
-                {% for pullRequest in project.pullRequests %}
-                    <div class="well">
-                        <h3>{{ pullRequest.title }}</h3>
-                        <a class="btn" href="{{ path('opensoft_codeconversation_default_viewpullrequest', {'pullId': pullRequest.id, 'projectId': project.id}) }}">View pull request</a>
-                    </div>
-                {% endfor %}
+            <a href="{{ path('opensoft_codeconversation_default_createpullrequest', {'id': project.id }) }}" class="btn primary pull-right">Open Pull Request</a>
+            
+            {% if project.pullRequests|length > 0 %}
+                <br />
+                <table>
+                    <tbody>
+                        {% for pullRequest in project.pullRequests %}
+                            <tr>
+                                <td>
+                                    <div>
+                                        <a class="xlarge" href="{{ path('opensoft_codeconversation_default_viewpullrequest', {'pullId': pullRequest.id, 'projectId': project.id}) }}">{{ pullRequest.title|truncate(80) }}</a>
+                                        <span class="help-block">{{ pullRequest.description|truncate(120) }}</span>
+                                    </div>
+                                    <span class="pull-right">{{ pullRequest.comments|length }} comments</span>
+                                    <span class="pull-left">{{ pullRequest.initiatedBy.username }} wants someone to merge commits from <span class="label">{{ pullRequest.sourceBranch.name }}</span> into <span class="label">{{ pullRequest.destinationBranch.name }}</span></span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            {% else %}
+                <p>
+                    There are no open pull requests for {{ project.name }}.
+                </p>
             {% endif %}
         </div>
 
@@ -68,6 +85,7 @@
                             <td>
                                 {% if branch.enabled %}
                                 <a class="btn" href="{{ path('opensoft_codeconversation_default_showproject_1', {'id': project.id, 'branchId': branch.id}) }}">Switch to branch</a>
+                                <a href="{{ path('opensoft_codeconversation_default_createpullrequest', {'id': project.id }) }}" class="btn primary">Open Pull Request</a>
                                 {% endif %}
                             </td>
                         </tr>
