@@ -29,7 +29,7 @@
                                     {{ commit.message|truncate(80) }}
                                 </a>
                             </td>
-                            <td>{{ commit.timestamp|date("F j, Y") }}</td>
+                            <td>{{ time_diff(commit.timestamp) }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

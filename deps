@@ -67,3 +67,7 @@
 [KnpMarkdownBundle]
     git=http://github.com/knplabs/KnpMarkdownBundle.git
     target=/bundles/Knp/Bundle/MarkdownBundle
+
+[KnpTimeBundle]
+    git=http://github.com/knplabs/KnpTimeBundle.git
+    target=/bundles/Knp/Bundle/TimeBundle
