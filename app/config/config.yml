@@ -70,6 +70,8 @@ fos_user:
             handler:            fos_user.profile.form.handler.default
             name:               fos_user_profile_form
             validation_groups:  [Profile]
+    template:
+        theme:  OpensoftCodeConversationBundle:Form:fields.html.twig
 
 knp_time: ~      # Enable the helper for use in templates
 
