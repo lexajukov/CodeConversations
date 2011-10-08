@@ -8,7 +8,15 @@
                         {{ commit.sha1|truncate(6) }}
                     </a>
                 </td>
-                <td style="border-left: none;">{{ commit.author }}</td>
+                <td style="border-left: none;">
+
+                    {% if git_author_exists(commit.author) %}
+                        {% set user = git_author(commit.author) %}
+                        {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': user} %}
+                    {% else %}
+                        {{ commit.author }}
+                    {% endif %}
+                </td>
                 <td style="border-left: none;">
                     <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': commit.sha1 }) }}">
                         {{ commit.message|truncate(80) }}

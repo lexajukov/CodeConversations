@@ -8,6 +8,7 @@
         <parameter key="opensoft_codeconversation.git.builder.class">Opensoft\Bundle\CodeConversationBundle\Git\Builder</parameter>
         <parameter key="opensoft_codeconversation.profile.form.type.class">Opensoft\Bundle\CodeConversationBundle\Form\Type\ProfileFormType</parameter>
         <parameter key="opensoft_codeconversation.validator.branch_point.class">Opensoft\Bundle\CodeConversationBundle\Validator\BranchPointValidator</parameter>
+        <parameter key="opensoft_conversation.twig.extension.git_author_alias.class">Opensoft\Bundle\CodeConversationBundle\Twig\GitAuthorAliasExtension</parameter>
     </parameters>
 
     <services>
@@ -28,5 +29,10 @@
             <argument type="service" id="opensoft_codeconversation.git.builder" />
         </service>
 
+        <!-- Twig extensions -->
+        <service id="opensoft_conversation.twig.extension.git_author_alias" class="%opensoft_conversation.twig.extension.git_author_alias.class%">
+            <tag name="twig.extension" alias="git_author_alias" />
+            <argument type="service" id="doctrine" />
+        </service>
     </services>
 </container>

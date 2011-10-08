@@ -16,7 +16,14 @@
     <tbody>
         <tr>
             <td>
-            <span class="author-name"><a href="/beberlei">{{ commit.author }}</a></span>
+            <span class="author-name">
+                {% if git_author_exists(commit.author) %}
+                    {% set user = git_author(commit.author) %}
+                    {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': user} %}
+                {% else %}
+                    {{ commit.author }}
+                {% endif %}
+            </span>
             authored <time class="js-relative-date" datetime="{{ commit.timestamp|date("Y-m-d\TG:i:sO") }}" title="{{ commit.timestamp|date("Y-m-d G:i:s") }}">{{ time_diff(commit.timestamp) }}</time>
             </td>
             <td style="text-align: right;" align="right">
