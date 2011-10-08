@@ -1,0 +1,43 @@
+{#{% form_theme form theme %}#}
+
+{% form_theme form 'OpensoftCodeConversationBundle:Form:fields.html.twig' %}
+
+<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit">
+    <fieldset>
+        <legend>Profile</legend>
+        {{ form_errors(form) }}
+        
+        {#{{ form_widget(form.user) }}#}
+
+        <div class="clearfix">
+            {{ form_label(form.user.username)}}
+            <div class="input">{{ form_widget(form.user.username) }}</div>
+        </div>
+
+        <div class="clearfix">
+            {{ form_label(form.user.email)}}
+            <div class="input">{{ form_widget(form.user.email) }}</div>
+        </div>
+
+        <div class="clearfix">
+            {{ form_label(form.user.gitAlias)}}
+            <div class="input">
+                {{ form_widget(form.user.gitAlias) }}
+                <span class="help-block">The git author name to map to</span>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <label for="fos_user_profile_form_current">Current password</label>
+            <div class="input">
+                {{ form_widget(form.current) }}
+                <span class="help-block">Confirm your password to make changes</span>
+            </div>
+        </div>
+
+        {{ form_rest(form) }}
+        <div class="actions">
+            <input class="btn primary" type="submit" value="{{ 'profile.edit.submit'|trans({}, 'FOSUserBundle') }}" />
+        </div>
+    </fieldset>
+</form>

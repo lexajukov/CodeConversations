@@ -64,6 +64,12 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb'
     firewall_name: main
     user_class: Opensoft\Bundle\CodeConversationBundle\Entity\User
+    profile:
+        form:
+            type:               opensoft_codeconversation_profile
+            handler:            fos_user.profile.form.handler.default
+            name:               fos_user_profile_form
+            validation_groups:  [Profile]
 
 knp_time: ~      # Enable the helper for use in templates
 

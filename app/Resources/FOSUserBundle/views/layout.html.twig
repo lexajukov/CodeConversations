@@ -1,5 +1,14 @@
 {% extends '::base.html.twig' %}
 
+{% block session_messages %}
+{% for key, message in app.session.getFlashes() %}
+    <div class="alert-message {{ key }} fade in" data-alert="alert">
+        <a class="close" href="#">×</a>
+        <p>{{ message|trans({}, 'FOSUserBundle') }}</p>
+    </div>
+{% endfor %}
+{% endblock %}
+
 {% block body %}
     {% block fos_user_content %}{% endblock %}
 {% endblock %}

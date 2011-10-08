@@ -1,0 +1,14 @@
+{% form_theme form theme %}
+
+<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+    <fieldset>
+        <legend>Registration</legend>
+        {{ form_widget(form) }}
+
+
+        <div class="actions">
+            <input class="btn primary" type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
+        </div>
+
+    </fieldset>
+</form>
