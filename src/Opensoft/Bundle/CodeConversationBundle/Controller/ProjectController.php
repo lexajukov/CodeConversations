@@ -104,7 +104,9 @@ class ProjectController extends Controller
                 $em->persist($pullRequest);
                 $em->flush();
 
-                return $this->redirect($this->generateUrl('opensoft_codeconversation_project_viewpullrequest', array('id' => $pullRequest->getId(), 'slug' => $project->getSlug())));
+                $this->get('session')->setFlash('success', 'Pull request engaged.');
+
+                return $this->redirect($this->generateUrl('opensoft_codeconversation_project_viewpullrequest', array('pullId' => $pullRequest->getId(), 'slug' => $project->getSlug())));
             }
         }
 

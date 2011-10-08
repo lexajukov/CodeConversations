@@ -55,7 +55,7 @@ class CommentController extends Controller
                 $em->persist($comment);
                 $em->flush();
 
-                return $this->redirect($this->generateUrl('opensoft_codeconversation_project_viewpullrequest', array('id' => $pullRequest->getId(), 'slug' => $project->getSlug())));
+                return $this->redirect($this->generateUrl('opensoft_codeconversation_project_viewpullrequest', array('pullId' => $pullRequest->getId(), 'slug' => $project->getSlug())));
             }
         }
 

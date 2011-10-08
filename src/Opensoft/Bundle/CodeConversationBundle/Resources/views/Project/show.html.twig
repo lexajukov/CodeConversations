@@ -34,7 +34,7 @@
                                             <span class="label important">Closed</span>
                                         {% endif %}
 
-                                        <a href="{{ path('opensoft_codeconversation_project_viewpullrequest', {'id': pullRequest.id, 'slug': project.slug}) }}">{{ pullRequest.title|truncate(80) }}</a>
+                                        <a href="{{ path('opensoft_codeconversation_project_viewpullrequest', {'pullId': pullRequest.id, 'slug': project.slug}) }}">{{ pullRequest.title|truncate(80) }}</a>
 
                                         <span class="pull-right">opened {{ time_diff(pullRequest.createdAt) }}</span>
 
@@ -42,7 +42,9 @@
                                     </div>
                                     <span class="pull-right">{{ pullRequest.comments|length }} comments</span>
                                     <span class="pull-left">
-                                        <a href="{{ path('opensoft_codeconversation_user_show', {'usernameCanonical': pullRequest.initiatedBy.usernameCanonical }) }}">@{{ pullRequest.initiatedBy.username }}</a>
+                                        {#<a href="{{ path('opensoft_codeconversation_user_show', {'usernameCanonical': pullRequest.initiatedBy.usernameCanonical }) }}">@{{ pullRequest.initiatedBy.username }}</a>#}
+                                        
+                                        {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': pullRequest.initiatedBy} %}
                                         wants someone to merge commits from <span class="label">{{ pullRequest.sourceBranch.name }}</span> into <span class="label">{{ pullRequest.destinationBranch.name }}</span>
                                     </span>
                                 </td>
