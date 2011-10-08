@@ -41,7 +41,10 @@
                                         <span class="help-block">{{ pullRequest.description|truncate(120) }}</span>
                                     </div>
                                     <span class="pull-right">{{ pullRequest.comments|length }} comments</span>
-                                    <span class="pull-left">{{ pullRequest.initiatedBy.username }} wants someone to merge commits from <span class="label">{{ pullRequest.sourceBranch.name }}</span> into <span class="label">{{ pullRequest.destinationBranch.name }}</span></span>
+                                    <span class="pull-left">
+                                        <a href="{{ path('opensoft_codeconversation_user_show', {'usernameCanonical': pullRequest.initiatedBy.usernameCanonical }) }}">@{{ pullRequest.initiatedBy.username }}</a>
+                                        wants someone to merge commits from <span class="label">{{ pullRequest.sourceBranch.name }}</span> into <span class="label">{{ pullRequest.destinationBranch.name }}</span>
+                                    </span>
                                 </td>
                             </tr>
                         {% endfor %}

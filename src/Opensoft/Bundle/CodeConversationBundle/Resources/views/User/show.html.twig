@@ -1,0 +1,10 @@
+{% extends 'OpensoftCodeConversationBundle::layout.html.twig' %}
+
+{% block page_title %}@{{ user.username }}{% endblock %}
+
+{% block content %}
+    <p>{{ user.gitAlias }}</p>
+
+    <p>Show more user data here that other people should see...</p>
+
+{% endblock %}

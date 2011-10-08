@@ -47,7 +47,7 @@
                         <thead>
                             <tr style="background-color: #F5F5F5;">
                                 <th>
-                                    <span>{{ comment.author }} commented</span>
+                                    <span><a href="{{ path('opensoft_codeconversation_user_show', {'usernameCanonical': comment.author.usernameCanonical }) }}">@{{ comment.author }}</a> commented</span>
                                     <span class="pull-right">{{ comment.createdAt|date("F j, Y") }}</span>
                                 </th>
                             </tr>
