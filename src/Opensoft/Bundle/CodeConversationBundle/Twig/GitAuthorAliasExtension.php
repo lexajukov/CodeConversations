@@ -19,7 +19,7 @@ class GitAuthorAliasExtension extends \Twig_Extension
      */
     private $em;
 
-    private static $cachedUserLookup;
+    private static $cachedUserLookup = array();
 
     public function __construct(Registry $doctrineRegistry)
     {
@@ -36,13 +36,9 @@ class GitAuthorAliasExtension extends \Twig_Extension
 
     public function exists($authorName)
     {
-        if (!isset(self::$cachedUserLookup[$authorName])) {
+        if (!array_key_exists($authorName, self::$cachedUserLookup)) {
             self::$cachedUserLookup[$authorName] = $this->em->getRepository('OpensoftCodeConversationBundle:User')->findOneBy(array('gitAlias' => $authorName));
-//            print_r(" checking exists");
         }
-        
-//        print_r(self::$cachedUserLookup);
-//        die();
 
         return null !== self::$cachedUserLookup[$authorName];
     }
