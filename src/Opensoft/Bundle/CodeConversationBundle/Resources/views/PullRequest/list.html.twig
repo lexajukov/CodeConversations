@@ -1,0 +1,14 @@
+{% extends 'OpensoftCodeConversationBundle::layout.html.twig' %}
+
+{% block page_title %}Pull requests for {{ project.name }}{% endblock %}
+
+{% block content %}
+    <h2>Pull Requests</h2>
+    {% if pullRequests|length > 0 %}
+        {% include 'OpensoftCodeConversationBundle:PullRequest:table-list.html.twig' with {'pullRequests': pullRequests} %}
+    {% else %}
+        <p>
+            There are no pull requests for {{ project.name }}.
+        </p>
+    {% endif %}
+{% endblock %}

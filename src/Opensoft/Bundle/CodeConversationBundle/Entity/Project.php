@@ -82,10 +82,10 @@ class Project
      * @var PullRequest[]
      *
      * @ORM\OneToMany(targetEntity="PullRequest", mappedBy="project")
+     * @ORM\OrderBy({"createdAt" = "DESC"})
      */
     protected $pullRequests;
 
-    
     public function getBranches()
     {
         return $this->branches;

@@ -6,7 +6,7 @@
 
     <ul class="tabs" data-tabs="tabs" >
         <li class="active"><a href="#recent-commits">Recent Commits</a></li>
-        <li><a href="#pull-requests">Pull Requests ({{ project.pullRequests|length|default(0) }})</a></li>
+        <li><a href="#pull-requests">Active Pull Requests ({{ openPullRequests|length|default(0) }})</a></li>
         <li><a href="#branches">Branches ({{ project.branches|length|default(0) }})</a></li>
     </ul>
 
@@ -21,38 +21,11 @@
             <span class="pull-request-title title" style="font-size: larger; font-weight: bold;">Pull Requests</span>
             <a href="{{ path('opensoft_codeconversation_pullrequest_create', {'slug': project.slug }) }}" class="btn primary pull-right">Open Pull Request</a>
             <br />
-            {% if project.pullRequests|length > 0 %}
-                <table>
-                    <tbody>
-                        {% for pullRequest in project.pullRequests %}
-                            <tr>
-                                <td>
-                                    <div>
-                                        {% if pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_OPEN") %}
-                                            <span class="label success">Open</span>
-                                        {% elseif pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_CLOSED") %}
-                                            <span class="label important">Closed</span>
-                                        {% endif %}
-
-                                        <a href="{{ path('opensoft_codeconversation_pullrequest_view', {'pullId': pullRequest.id, 'slug': project.slug}) }}">{{ pullRequest.title|truncate(80) }}</a>
-
-                                        <span class="pull-right">opened {{ time_diff(pullRequest.createdAt) }}</span>
-
-                                        <span class="help-block">{{ pullRequest.description|truncate(120) }}</span>
-                                    </div>
-                                    <span class="pull-right">{{ pullRequest.comments|length }} comments</span>
-                                    <span class="pull-left">
-                                        {#<a href="{{ path('opensoft_codeconversation_user_show', {'usernameCanonical': pullRequest.initiatedBy.usernameCanonical }) }}">@{{ pullRequest.initiatedBy.username }}</a>#}
-                                        
-                                        {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': pullRequest.initiatedBy} %}
-                                        wants someone to merge commits from <span class="label">{{ pullRequest.sourceBranch.name }}</span> into <span class="label">{{ pullRequest.destinationBranch.name }}</span>
-                                    </span>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-
-                </table>
+            {% if openPullRequests|length > 0 %}
+                {% include 'OpensoftCodeConversationBundle:PullRequest:table-list.html.twig' with {'pullRequests': openPullRequests} %}
+                <p>
+                    Want to see <a href="{{ path('opensoft_codeconversation_pullrequest_list', {'slug': project.slug}) }}">all pull requests</a> for {{ project.name }}?
+                </p>
             {% else %}
                 <p>
                     There are no open pull requests for {{ project.name }}.

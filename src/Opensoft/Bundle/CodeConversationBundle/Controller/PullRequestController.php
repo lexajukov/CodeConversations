@@ -52,6 +52,20 @@ class PullRequestController extends Controller
     }
 
     /**
+     * @Route("/project/{slug}/pulls")
+     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
+     * @Template()
+     */
+    public function listAction(Project $project)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        $pullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId()), array('createdAt' => 'DESC'));
+
+        return array('project' => $project, 'pullRequests' => $pullRequests);
+    }
+
+    /**
      * @Route("/project/{slug}/pull/{pullId}")
      * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
      * @Template()

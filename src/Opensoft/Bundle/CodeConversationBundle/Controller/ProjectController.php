@@ -55,7 +55,9 @@ class ProjectController extends Controller
 
         $recentCommits = $builder->fetchRecentCommits($branch->getName(), 15);
 
-        return array('project' => $project, 'recentCommits' => $recentCommits, 'branch' => $branch);
+        $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
+
+        return array('project' => $project, 'recentCommits' => $recentCommits, 'branch' => $branch, 'openPullRequests' => $openPullRequests);
     }
 
     /**
