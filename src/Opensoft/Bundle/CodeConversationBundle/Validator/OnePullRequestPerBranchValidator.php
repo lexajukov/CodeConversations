@@ -55,7 +55,7 @@ class OnePullRequestPerBranchValidator extends ConstraintValidator
             'sourceBranch' => $object->getSourceBranch()->getId(),
             'destinationBranch' => $object->getDestinationBranch()->getId()
         ));
-//        print_r($exists);
+        
         if (!empty($exists)) {
             $this->setMessage($constraint->message);
             return false;

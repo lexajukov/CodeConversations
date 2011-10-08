@@ -19,7 +19,7 @@
 
         <div id="pull-requests">
             <span class="pull-request-title title" style="font-size: larger; font-weight: bold;">Pull Requests</span>
-            <a href="{{ path('opensoft_codeconversation_project_createpullrequest', {'slug': project.slug }) }}" class="btn primary pull-right">Open Pull Request</a>
+            <a href="{{ path('opensoft_codeconversation_pullrequest_create', {'slug': project.slug }) }}" class="btn primary pull-right">Open Pull Request</a>
             <br />
             {% if project.pullRequests|length > 0 %}
                 <table>
@@ -34,7 +34,7 @@
                                             <span class="label important">Closed</span>
                                         {% endif %}
 
-                                        <a href="{{ path('opensoft_codeconversation_project_viewpullrequest', {'pullId': pullRequest.id, 'slug': project.slug}) }}">{{ pullRequest.title|truncate(80) }}</a>
+                                        <a href="{{ path('opensoft_codeconversation_pullrequest_view', {'pullId': pullRequest.id, 'slug': project.slug}) }}">{{ pullRequest.title|truncate(80) }}</a>
 
                                         <span class="pull-right">opened {{ time_diff(pullRequest.createdAt) }}</span>
 
@@ -80,7 +80,7 @@
                             <td>
                                 {% if branch.enabled %}
                                 <a class="btn" href="{{ path('opensoft_codeconversation_project_show_1', {'slug': project.slug, 'branchId': branch.id}) }}">Switch to branch</a>
-                                <a href="{{ path('opensoft_codeconversation_project_createpullrequest', {'slug': project.slug }) }}" class="btn primary">Open Pull Request</a>
+                                <a href="{{ path('opensoft_codeconversation_pullrequest_create', {'slug': project.slug }) }}" class="btn primary">Open Pull Request</a>
                                 {% endif %}
                             </td>
                         </tr>

@@ -10,7 +10,7 @@
 
 
     <div>
-      <form action="{{ path('opensoft_codeconversation_project_createpullrequest', {'slug': project.slug }) }}" {{ form_enctype(form) }} method="POST">
+      <form action="{{ path('opensoft_codeconversation_pullrequest_create', {'slug': project.slug }) }}" {{ form_enctype(form) }} method="POST">
         <fieldset>
             {{ form_errors(form) }}
 
