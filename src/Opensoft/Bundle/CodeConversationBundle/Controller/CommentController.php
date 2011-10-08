@@ -17,14 +17,21 @@ use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
 class CommentController extends Controller
 {
     /**
-     * @Route("/project/{slug}/pull/{id}/comment/new")
+     * @Route("/project/{slug}/pull/{pullId}/comment/new")
      * @Method("POST")
      * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
-     * @ParamConverter("pullRequest", class="OpensoftCodeConversationBundle:PullRequest")
      * @Template("OpensoftCodeConversationsBundle:Default:viewPullRequest")
      */
-    public function postPrCommentAction(Project $project, PullRequest $pullRequest)
+    public function postPrCommentAction(Project $project, $pullId)
     {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        // TODO - find a better way...
+        $pullRequest = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->find($pullId);
+        if (!$pullRequest || $pullRequest->getProject()->getId() != $project->getId()) {
+            throw $this->createNotFoundException("Could not find pull request '$pullId' for " . $project->getName());
+        }
+
         $comment = new PullRequestComment();
         $comment->setPullRequest($pullRequest);
         $comment->setCreatedAt(new \DateTime());
@@ -38,8 +45,6 @@ class CommentController extends Controller
             $form->bindRequest($request);
 
             if ($form->isValid()) {
-                $em = $this->getDoctrine()->getEntityManager();
-
                 if ($request->get('close')) {
                     $pullRequest->setStatus(PullRequest::STATUS_CLOSED);
                     $em->persist($pullRequest);

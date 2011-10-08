@@ -67,7 +67,7 @@
             <hr />
             <h4>Comment on this pull request</h4>
 
-            <form action="{{ path('opensoft_codeconversation_comment_postprcomment', {'slug': project.slug, 'id': pullRequest.id }) }}" {{ form_enctype(form) }} method="POST">
+            <form action="{{ path('opensoft_codeconversation_comment_postprcomment', {'slug': project.slug, 'pullId': pullRequest.id }) }}" {{ form_enctype(form) }} method="POST">
                 <fieldset>
                     {{ form_errors(form) }}
 
