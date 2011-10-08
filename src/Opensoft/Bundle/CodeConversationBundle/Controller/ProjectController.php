@@ -107,16 +107,26 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project/{slug}/pull/{id}")
+     * @Route("/project/{slug}/pull/{pullId}")
      * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
-     * @ParamConverter("pullRequest", class="OpensoftCodeConversationBundle:PullRequest")
      * @Template()
      */
-    public function viewPullRequestAction(Project $project, PullRequest $pullRequest)
+    public function viewPullRequestAction(Project $project, $pullId)
     {
+        $em = $this->getDoctrine()->getEntityManager();
+
+        // TODO - find a better way...
+        $pullRequest = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->find($pullId);
+        if (!$pullRequest || $pullRequest->getProject()->getId() != $project->getId()) {
+            throw $this->createNotFoundException("Could not find pull request '$pullId' for " . $project->getName());
+        }
+
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
         $builder = $this->get('opensoft_codeconversation.git.builder');
         $builder->init($project);
+//
+//        print_r($project->getName());
+//        die();
 
         $mergeBase = $builder->mergeBase($pullRequest->getSourceBranch()->getName(), $pullRequest->getDestinationBranch()->getName());
 //        print_r($mergeBase);

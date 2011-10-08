@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="opensoft_codeconversation.git.builder.class">Opensoft\Bundle\CodeConversationBundle\Git\Builder</parameter>
         <parameter key="opensoft_codeconversation.profile.form.type.class">Opensoft\Bundle\CodeConversationBundle\Form\Type\ProfileFormType</parameter>
+        <parameter key="opensoft_codeconversation.validator.branch_point.class">Opensoft\Bundle\CodeConversationBundle\Validator\BranchPointValidator</parameter>
     </parameters>
 
     <services>
@@ -19,6 +20,12 @@
         <service id="opensoft_codeconversation.profile.form.type" class="%opensoft_codeconversation.profile.form.type.class%">
             <tag name="form.type" alias="opensoft_codeconversation_profile" />
             <argument>%fos_user.model.user.class%</argument>
+        </service>
+
+        <!-- Validation -->
+        <service id="opensoft_codeconversation.validator.branch_point" class="%opensoft_codeconversation.validator.branch_point.class%">
+            <tag name="validator.constraint_validator" alias="opensoft_codeconversation.validator.branch_point" />
+            <argument type="service" id="opensoft_codeconversation.git.builder" />
         </service>
 
     </services>

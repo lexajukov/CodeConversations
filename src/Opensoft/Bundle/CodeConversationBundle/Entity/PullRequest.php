@@ -7,6 +7,7 @@
 namespace Opensoft\Bundle\CodeConversationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Opensoft\Bundle\CodeConversationBundle\Validator\BranchPoint as AssertBranchPoint;
 
 /**
  *
@@ -15,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="pull_requests")
+ *
+ * @AssertBranchPoint()
  */
 class PullRequest
 {
