@@ -17,7 +17,7 @@ use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class AddProjectCommand extends ContainerAwareCommand
+class AddProjectCommand extends BaseCommand
 {
 
     public function configure()
@@ -48,10 +48,11 @@ class AddProjectCommand extends ContainerAwareCommand
             }
         });
 
-
         $em->persist($project);
         $em->flush();
 
-        $output->writeln(strtr("Project <info>%project%</info> created... make sure you run a sync!", array('%project%' => $project->getName())));
+        $this->synchronizeBranches($em, $project, $builder);
+
+        $output->writeln(strtr("Project <info>%project%</info> created!", array('%project%' => $project->getName())));
     }
 }
