@@ -103,6 +103,12 @@ class PullRequestController extends Controller
             $timeline->add($comment->getCreatedAt(), $comment);
         }
 
+        /** @var \Gedmo\Loggable\Entity\LogEntry[] $logs  */
+        $logs = $em->getRepository('StofDoctrineExtensionsBundle:LogEntry')->findBy(array('objectClass' => get_class($pullRequest), 'objectId' => $pullRequest->getId()));
+        foreach ($logs as $logEntry) {
+            $timeline->add($logEntry->getLoggedAt(), $logEntry);
+        }
+
         $form = $this->createForm(new CommentFormType(), new Comment());
 
         return array(

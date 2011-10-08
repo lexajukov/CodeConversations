@@ -48,6 +48,8 @@
                         {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': item[item.class]} %}
                     {% elseif item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequestComment' %}
                         {% include 'OpensoftCodeConversationBundle::comment.html.twig' with {'comment': item[item.class] } %}
+                    {% else %}
+                        {% include 'OpensoftCodeConversationBundle:PullRequest:log-status-change.html.twig' with {'logEntry': item[item.class] } %}
                     {% endif %}
                 {% endfor %}
             {% endif %}
@@ -74,7 +76,7 @@
                         {% if pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_OPEN") %}
                             <input name="close" class="btn danger pull-right" type="submit" value="Close Pull Request" />
                         {% elseif pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_CLOSED") %}
-                            <input name="reopen" class="btn danger pull-right" type="submit" value="Reopen Pull Request" />
+                            <input name="reopen" class="btn success pull-right" type="submit" value="Reopen Pull Request" />
                         {% endif %}
                     </div>
 

@@ -1,0 +1,3 @@
+<div class="clearfix alert-message {{ logEntry.data.status == 0 ? 'error' : 'success' }}">
+    <p>{{ logEntry.username }} {{ logEntry.data.status == 0 ? 'closed' : 'reopened' }} this pull request {{ time_diff(logEntry.loggedAt) }}</p>
+</div>

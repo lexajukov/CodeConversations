@@ -48,7 +48,7 @@ class CommentController extends Controller
                 if ($request->get('close')) {
                     $pullRequest->setStatus(PullRequest::STATUS_CLOSED);
                     $em->persist($pullRequest);
-                    $this->get('session')->setFlash('success', 'This pull request was closed.');
+                    $this->get('session')->setFlash('error', 'This pull request was closed.');
                 } elseif ($request->get('reopen')) {
                     $pullRequest->setStatus(PullRequest::STATUS_OPEN);
                     $em->persist($pullRequest);
