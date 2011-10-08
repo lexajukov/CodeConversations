@@ -119,6 +119,12 @@ class Builder
         return $commits;
     }
 
+    /**
+     * @param string|null $revision
+     * @param string|null $revision2
+     * @param integer|null $limit
+     * @return \Opensoft\Bundle\CodeConversationBundle\Model\Commit[]
+     */
     public function fetchCommits($revision = null, $revision2 = null, $limit = null)
     {
         if (null === $revision || 'HEAD' === $revision) {

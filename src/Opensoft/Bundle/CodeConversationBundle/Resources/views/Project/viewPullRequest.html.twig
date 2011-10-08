@@ -42,10 +42,13 @@
                 </tbody>
             </table>
 
-            {% if pullRequest.comments|length > 0 %}
-                <h3>Comments?</h3>
-                {% for comment in pullRequest.comments %}
-                    {% include 'OpensoftCodeConversationBundle::comment.html.twig' with {'comment': comment} %}
+            {% if timeline %}
+                {% for item in timeline.timeline %}
+                    {% if item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Model\\Commit' %}
+                        {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': item[item.class]} %}
+                    {% elseif item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequestComment' %}
+                        {% include 'OpensoftCodeConversationBundle::comment.html.twig' with {'comment': item[item.class] } %}
+                    {% endif %}
                 {% endfor %}
             {% endif %}
 

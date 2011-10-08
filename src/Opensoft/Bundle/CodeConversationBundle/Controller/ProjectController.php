@@ -11,6 +11,7 @@ use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommentFormType;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
+use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestTimeline;
 use Opensoft\Bundle\CodeConversationBundle\Entity\Comment;
 
 class ProjectController extends Controller
@@ -123,6 +124,7 @@ class ProjectController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
 
         // TODO - find a better way...
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest $pullRequest  */
         $pullRequest = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->find($pullId);
         if (!$pullRequest || $pullRequest->getProject()->getId() != $project->getId()) {
             throw $this->createNotFoundException("Could not find pull request '$pullId' for " . $project->getName());
@@ -141,9 +143,25 @@ class ProjectController extends Controller
         $diffs = $builder->unifiedDiff($mergeBase, $pullRequest->getSourceBranch()->getName());
         $commits = $builder->fetchCommits($mergeBase, $pullRequest->getSourceBranch()->getName());
 
+        $timeline = new PullRequestTimeline();
+        foreach ($commits as $commit) {
+            $timeline->add($commit->getTimestamp(), $commit);
+        }
+        foreach ($pullRequest->getComments() as $comment)
+        {
+            $timeline->add($comment->getCreatedAt(), $comment);
+        }
+
         $form = $this->createForm(new CommentFormType(), new Comment());
 
-        return array('project' => $project, 'pullRequest' => $pullRequest, 'form' => $form->createView(), 'diffs' => $diffs, 'commits' => $commits);
+        return array(
+            'project' => $project,
+            'pullRequest' => $pullRequest,
+            'form' => $form->createView(),
+            'diffs' => $diffs,
+            'commits' => $commits,
+            'timeline' => $timeline
+        );
     }
 
     /**

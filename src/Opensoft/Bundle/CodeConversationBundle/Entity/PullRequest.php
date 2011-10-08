@@ -116,6 +116,9 @@ class PullRequest
         $this->comments = $comments;
     }
 
+    /**
+     * @return \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment[]
+     */
     public function getComments()
     {
         return $this->comments;

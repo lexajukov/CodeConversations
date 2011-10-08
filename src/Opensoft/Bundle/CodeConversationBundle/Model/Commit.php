@@ -92,11 +92,14 @@ class Commit
         return $this->sha1;
     }
 
-    public function setTimestamp($timestamp)
+    public function setTimestamp(\DateTime $timestamp)
     {
         $this->timestamp = $timestamp;
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getTimestamp()
     {
         return $this->timestamp;
