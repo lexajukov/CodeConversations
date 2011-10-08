@@ -11,7 +11,8 @@ use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommentFormType;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
-use Opensoft\Bundle\CodeConversationBundle\Entity\Comment;
+use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment;
+use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
 
 class CommentController extends Controller
 {
@@ -24,7 +25,7 @@ class CommentController extends Controller
      */
     public function postPrCommentAction(Project $project, PullRequest $pullRequest)
     {
-        $comment = new Comment();
+        $comment = new PullRequestComment();
         $comment->setPullRequest($pullRequest);
         $comment->setCreatedAt(new \DateTime());
         $comment->setAuthor($this->container->get('security.context')->getToken()->getUser());
@@ -42,9 +43,13 @@ class CommentController extends Controller
                 if ($request->get('close')) {
                     $pullRequest->setStatus(PullRequest::STATUS_CLOSED);
                     $em->persist($pullRequest);
+                    $this->get('session')->setFlash('success', 'This pull request was closed.');
                 } elseif ($request->get('reopen')) {
                     $pullRequest->setStatus(PullRequest::STATUS_OPEN);
                     $em->persist($pullRequest);
+                    $this->get('session')->setFlash('success', 'This pull request was reopened.');
+                } else {
+                    $this->get('session')->setFlash('success', 'Your comment was added to this pull request.');
                 }
 
                 $em->persist($comment);
@@ -56,4 +61,52 @@ class CommentController extends Controller
 
         return array('project' => $project, 'pullRequest' => $pullRequest, 'form' => $form->createView());
     }
+
+
+    /**
+     * @Route("/project/{slug}/commit/{sha1}/comment/new")
+     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
+     * @Method("POST")
+     * @Template("OpensoftCodeConversationsBundle:Default:viewComment")
+     */
+    public function postCommitCommentAction(Project $project, $sha1)
+    {
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
+        $builder = $this->get('opensoft_codeconversation.git.builder');
+        $builder->init($project);
+
+        $commit = $builder->fetchCommit($sha1);
+
+        if (!$commit) {
+            throw $this->createNotFoundException("Commit $sha1 could not be found");
+        }
+
+        $comment = new CommitComment();
+        $comment->setCommitSha1($sha1);
+        $comment->setCreatedAt(new \DateTime());
+        $comment->setAuthor($this->container->get('security.context')->getToken()->getUser());
+
+        /** @var \Symfony\Component\Form\Form $form  */
+        $form = $this->createForm(new CommentFormType(), $comment);
+
+        $request = $this->getRequest();
+        $em = $this->getDoctrine()->getEntityManager();
+        if ($request->getMethod() == 'POST') {
+            $form->bindRequest($request);
+
+            if ($form->isValid()) {
+
+                $em->persist($comment);
+                $em->flush();
+
+                $this->get('session')->setFlash('success', 'Your comment was added to commit '.$sha1.'.');
+
+                return $this->redirect($this->generateUrl('opensoft_codeconversation_project_viewcommit', array('sha1' => $sha1, 'slug' => $project->getSlug())));
+            }
+        }
+        $comments = $em->getRepository('OpensoftCodeConversationBundle:CommitComment')->findBy(array('commitSha1' => $sha1));
+
+        return array('commit' => $commit, 'project' => $project, 'form' => $form->createView(), 'comments' => $comments);
+    }
+
 }

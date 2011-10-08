@@ -64,13 +64,18 @@ class ProjectController extends Controller
      */
     public function viewCommitAction(Project $project, $sha1)
     {
+        $em = $this->get('doctrine')->getEntityManager();
+
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
         $builder = $this->get('opensoft_codeconversation.git.builder');
         $builder->init($project);
 
         $commit = $builder->fetchCommit($sha1);
+
+        $form = $this->createForm(new CommentFormType(), new Comment());
+        $comments = $em->getRepository('OpensoftCodeConversationBundle:CommitComment')->findBy(array('commitSha1' => $sha1));
         
-        return array('commit' => $commit, 'project' => $project);
+        return array('commit' => $commit, 'project' => $project, 'form' => $form->createView(), 'comments' => $comments);
     }
 
     /**

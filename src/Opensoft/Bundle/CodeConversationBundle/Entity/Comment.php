@@ -15,6 +15,9 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity
  * @ORM\Table(name="comments")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="type", type="integer")
+ * @ORM\DiscriminatorMap({1 = "PullRequestComment", 2 = "CommitComment"})
  */
 class Comment 
 {
@@ -33,13 +36,6 @@ class Comment
      * @ORM\Column(type="text")
      */
     protected $content;
-
-    /**
-     * @var PullRequest
-     *
-     * @ORM\ManyToOne(targetEntity="PullRequest")
-     */
-    protected $pullRequest;
 
     /**
      * @var User
@@ -118,21 +114,5 @@ class Comment
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest $pullRequest
-     */
-    public function setPullRequest($pullRequest)
-    {
-        $this->pullRequest = $pullRequest;
-    }
-
-    /**
-     * @return \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest
-     */
-    public function getPullRequest()
-    {
-        return $this->pullRequest;
     }
 }

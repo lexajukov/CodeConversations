@@ -85,7 +85,7 @@ class PullRequest
     /**
      * @var Comment[]
      *
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="pullRequest")
+     * @ORM\OneToMany(targetEntity="PullRequestComment", mappedBy="pullRequest")
      */
     protected $comments;
 
