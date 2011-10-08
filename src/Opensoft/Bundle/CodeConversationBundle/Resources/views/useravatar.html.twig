@@ -1,0 +1,4 @@
+<div style="display: inline;">
+    <img style="margin: 0px 0px -4px 0px;" src="{{ gravatar(user.email, 18) }}" />
+    <a style="text-decoration: none; color: #777" href="{{ path('opensoft_codeconversation_user_show', {'usernameCanonical': user.usernameCanonical}) }}">{{ user.username }}</a>
+</div>

@@ -5,6 +5,7 @@
 {% block content %}
     <p>{{ user.gitAlias }}</p>
 
+    <img src="{{ gravatar(user.email) }}" alt="My gravatar image" />
     <p>Show more user data here that other people should see...</p>
 
 {% endblock %}

@@ -3,15 +3,18 @@
 {% block page_title %}{{ pullRequest.initiatedBy.username }} opened a pull request on {{ project.name }}{% endblock %}
 
 {% block content %}
-    <p style="font-size: larger;">
+    <span style="font-size: larger;">
         {% if pullRequest.status == 1 %}
             <span style="font-size: large;" class="label success">Open</span>
         {% elseif pullRequest.status == 0 %}
             <span style="font-size: large;" class="label important">Closed</span>
         {% endif %}
-        {{ pullRequest.initiatedBy.username }} wants someone to merge code from <span class="label">{{ pullRequest.sourceBranch.name }}</span>
+    </span>
+    <span>
+        {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': pullRequest.initiatedBy} %}
+         wants someone to merge code from <span class="label">{{ pullRequest.sourceBranch.name }}</span>
          to <span class="label">{{ pullRequest.destinationBranch.name}}</span> ASAP!
-    </p>
+    </span>
     <hr />
 
     <ul class="tabs" data-tabs="tabs" >
@@ -47,7 +50,7 @@
                         <thead>
                             <tr style="background-color: #F5F5F5;">
                                 <th>
-                                    <span><a href="{{ path('opensoft_codeconversation_user_show', {'usernameCanonical': comment.author.usernameCanonical }) }}">@{{ comment.author }}</a> commented</span>
+                                    {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': comment.author} %}
                                     <span class="pull-right">{{ comment.createdAt|date("F j, Y") }}</span>
                                 </th>
                             </tr>

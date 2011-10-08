@@ -81,6 +81,8 @@ stof_doctrine_extensions:
         default:
             sluggable: true
 
+ornicar_gravatar: ~
+
 services:
  twig.extension.text:
      class: Twig_Extensions_Extension_Text

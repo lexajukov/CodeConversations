@@ -21,8 +21,6 @@ class DefaultController extends Controller
     {
         $projects = $this->get('doctrine')->getEntityManager()->getRepository('OpensoftCodeConversationBundle:Project')->findAll();
 
-        $this->get('session')->setFlash('notice', 'Your changes were saved!');
-
         return array('projects' => $projects);
     }
 
