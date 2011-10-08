@@ -21,22 +21,7 @@
     {% if comments|length > 0 %}
         <h3>Comments?</h3>
         {% for comment in comments %}
-
-            <table>
-                <thead>
-                    <tr style="background-color: #F5F5F5;">
-                        <th>
-                            {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': comment.author} %}
-                            <span class="pull-right">{{ comment.createdAt|date("F j, Y") }}</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ comment.content | markdown}}</td>
-                    </tr>
-                </tbody>
-            </table>
+            {% include 'OpensoftCodeConversationBundle::comment.html.twig' with {'comment': comment} %}
         {% endfor %}
     {% endif %}
 
