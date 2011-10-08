@@ -104,10 +104,9 @@ class Builder
                 // Detect merge parent
                 if (strpos($output[$i+4], " ") > 0) {
                     $merge = explode(" ", $output[$i+4]);
-                    $commit->setParent($merge[0]);
-                    $commit->setMergeParent($merge[1]);
+                    $commit->setParents($merge);
                 } else {
-                    $commit->setParent($output[$i+4]);
+                    $commit->addParent($output[$i+4]);
                 }
 
                 $commits[] = $commit;
@@ -147,10 +146,9 @@ class Builder
                 // Detect merge parent
                 if (strpos($output[$i+4], " ") > 0) {
                     $merge = explode(" ", $output[$i+4]);
-                    $commit->setParent($merge[0]);
-                    $commit->setMergeParent($merge[1]);
+                    $commit->setParents($merge);
                 } else {
-                    $commit->setParent($output[$i+4]);
+                    $commit->addParent($output[$i+4]);
                 }
 
                 $commits[] = $commit;
@@ -206,10 +204,9 @@ class Builder
         // Detect merge parent
         if (strpos($output[4], " ") > 0) {
             $merge = explode(" ", $output[4]);
-            $commit->setParent($merge[0]);
-            $commit->setMergeParent($merge[1]);
+            $commit->setParents($merge);
         } else {
-            $commit->setParent($output[4]);
+            $commit->addParent($output[4]);
         }
         
         if (isset($output[6])) {
@@ -281,8 +278,10 @@ class Builder
 
                     if (strpos($line, 'old mode ') === 0) {
                         $diff->setSrcMode(substr($line, 8));
+                        $diff->setStatus(Diff::STATUS_MODIFICATION);
                     } elseif (strpos($line, 'new mode ') === 0) {
                         $diff->setDstMode(substr($line, 8));
+                        $diff->setStatus(Diff::STATUS_MODIFICATION);
                     } elseif (strpos($line, 'deleted file mode') === 0) {
                         $diff->setDstMode(substr($line, 18));
                         $diff->setStatus(Diff::STATUS_DELETION);

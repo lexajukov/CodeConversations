@@ -69,9 +69,7 @@ class ProjectController extends Controller
         $builder->init($project);
 
         $commit = $builder->fetchCommit($sha1);
-
-//        $diff = $builder->diff($commitHash);
-
+        
         return array('commit' => $commit, 'project' => $project);
     }
 

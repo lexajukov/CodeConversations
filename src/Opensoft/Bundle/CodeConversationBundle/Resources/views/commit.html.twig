@@ -14,9 +14,15 @@
             </td>
             <td style="text-align: right;" align="right">
                 commit <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': commit.sha1 }) }}" class="sha-block"><span class="sha">{{ commit.sha1 }}</span></a>
-                {% if commit.parent %}
-                    <div class="clear-fix" />
-                    1 parent <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': commit.parent }) }}" class="sha-block"><span class="sha">{{ commit.parent }}</span></a>
+                {% if commit.parents|length > 0 %}
+                    <div class="clearfix">
+                        {{ commit.parents|length }} parent{% if commit.parents|length > 1%}s{% endif %}
+                        {% for sha1 in commit.parents %}
+                            <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': sha1 }) }}" class="sha-block">
+                                <span class="sha">{{ sha1 }}</span>
+                            </a>
+                        {% endfor %}
+                    </div>
                 {% endif %}
             </td>
         </tr>

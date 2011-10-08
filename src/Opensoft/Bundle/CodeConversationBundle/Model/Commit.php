@@ -21,8 +21,7 @@ class Commit
     private $message;
     private $timestamp;
     private $author;
-    private $parent;
-    private $mergeParent;
+    private $parents;
 
     private $fileDiffs;
 
@@ -55,16 +54,6 @@ class Commit
         return $this->fileDiffs;
     }
 
-    public function setMergeParent($mergeParent)
-    {
-        $this->mergeParent = $mergeParent;
-    }
-
-    public function getMergeParent()
-    {
-        return $this->mergeParent;
-    }
-
     public function setMessage($message)
     {
         $this->message = $message;
@@ -75,14 +64,22 @@ class Commit
         return $this->message;
     }
 
-    public function setParent($parent)
+    public function setParents(array $parents)
     {
-        $this->parent = $parent;
+        $this->parents = array();
+        foreach ($parents as $parent) {
+            $this->addParent($parent);
+        }
     }
 
-    public function getParent()
+    public function addParent($parent)
     {
-        return $this->parent;
+        $this->parents[] = $parent;
+    }
+
+    public function getParents()
+    {
+        return $this->parents;
     }
 
     public function setSha1($sha1)
