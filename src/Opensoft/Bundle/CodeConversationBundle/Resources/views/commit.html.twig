@@ -5,6 +5,13 @@
                 {{ commit.message|truncate(80) }}
             </th>
         </tr>
+        {% if commit.message|length >= 80 %}
+            <tr>
+                <th style="font-size: smaller; color: #777; background-color: #EEEEEE" colspan="2">
+                    <pre>{{ commit.message }}</pre>
+                </th>
+            </tr>
+        {% endif %}
     </thead>
     <tbody>
         <tr>

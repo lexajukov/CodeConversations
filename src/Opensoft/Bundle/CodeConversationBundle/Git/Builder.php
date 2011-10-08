@@ -194,10 +194,13 @@ class Builder
         $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['show'], array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($object))), sprintf('Unable to show commit for project "%s".', $this->project->getName()));
 
         $output = explode("\n", trim($process->getOutput()));
+//        print_r($output);
+//        die();
 
         $commit = new Commit();
         $commit->setSha1($output[0]);
-        $commit->setMessage($output[1]);
+        $message = $output[1];
+//        $commit->setMessage($output[1]);
         $commit->setAuthor($output[2]);
         $commit->setTimestamp(new \DateTime($output[3]));
 
@@ -208,9 +211,21 @@ class Builder
         } else {
             $commit->addParent($output[4]);
         }
+
+        $i = 5;
+        $subMessage = '';
+        do {
+            if (!empty($output[$i])) {
+                $subMessage .= "\n" . $output[$i];
+            }
+
+            $i++;
+        } while($i < (count($output) - 1) && strpos($output[$i], 'diff --git') !== 0);
+        $commit->setMessage($message . "\n" . $subMessage);
+//        print_r($message);
         
-        if (isset($output[6])) {
-            $diffs = $this->parseDiffOutput(array_slice($output, 6));
+        if (isset($output[$i])) {
+            $diffs = $this->parseDiffOutput(array_slice($output, $i));
             $commit->setFileDiffs($diffs);
         }
 
