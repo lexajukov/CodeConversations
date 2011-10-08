@@ -28,15 +28,17 @@ abstract class BaseCommand extends ContainerAwareCommand
         $knownBranches = $project->getBranches();
         $remoteBranches = $builder->fetchRemoteBranches();
 
-        foreach ($knownBranches as $knownBranch) {
-            if (in_array($knownBranch->getName(), $remoteBranches)) {
-                // Remove knownBranch->getName from remoteBranches by value
-                $remoteBranches = array_values(array_diff($remoteBranches,array($knownBranch->getName())));
-                continue;
-            }
+        if (!empty($knownBranches)) {
+            foreach ($knownBranches as $knownBranch) {
+                if (in_array($knownBranch->getName(), $remoteBranches)) {
+                    // Remove knownBranch->getName from remoteBranches by value
+                    $remoteBranches = array_values(array_diff($remoteBranches,array($knownBranch->getName())));
+                    continue;
+                }
 
-            $knownBranch->setEnabled(false);
-            $em->persist($knownBranch);
+                $knownBranch->setEnabled(false);
+                $em->persist($knownBranch);
+            }
         }
 
         foreach ($remoteBranches as $newBranch) {
