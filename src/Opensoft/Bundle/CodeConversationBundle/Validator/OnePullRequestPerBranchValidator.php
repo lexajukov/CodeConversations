@@ -12,27 +12,26 @@ namespace Opensoft\Bundle\CodeConversationBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Opensoft\Bundle\CodeConversationBundle\Git\Builder;
-use Opensoft\Bundle\CodeConversationBundle\Exception\BuildException;
+use Symfony\Bundle\DoctrineBundle\Registry;
 
 /**
  *
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */ 
-class BranchPointValidator extends ConstraintValidator
+class OnePullRequestPerBranchValidator extends ConstraintValidator
 {
     /**
-     * @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder
+     * @var \Doctrine\ORM\EntityManager
      */
-    private $builder;
+    private $em;
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder
+     * @param \Symfony\Bundle\DoctrineBundle\Registry $doctrineRegistry
      */
-    public function __construct(Builder $builder)
+    public function __construct(Registry $doctrineRegistry)
     {
-        $this->builder = $builder;
+        $this->em = $doctrineRegistry->getEntityManager();
     }
 
     /**
@@ -51,16 +50,14 @@ class BranchPointValidator extends ConstraintValidator
             throw new \RuntimeException('This is a class constraint.');
         }
 
-        
-        $source = $object->getSourceBranch()->getName();
-        $destination = $object->getDestinationBranch()->getName();
-
-        try {
-            $this->builder->init($object->getProject());
-            $common = $this->builder->mergeBase($source, $destination);
-        } catch (\BuildException $e) {
+        $exists = $this->em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array(
+            'project' => $object->getProject()->getId(),
+            'sourceBranch' => $object->getSourceBranch()->getId(),
+            'destinationBranch' => $object->getDestinationBranch()->getId()
+        ));
+//        print_r($exists);
+        if (!empty($exists)) {
             $this->setMessage($constraint->message);
-
             return false;
         }
 

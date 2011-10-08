@@ -8,6 +8,7 @@ namespace Opensoft\Bundle\CodeConversationBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Opensoft\Bundle\CodeConversationBundle\Validator\BranchPoint as AssertBranchPoint;
+use Opensoft\Bundle\CodeConversationBundle\Validator\OnePullRequestPerBranch as AssertOnePullRequestPerBranch;
 
 /**
  *
@@ -15,9 +16,13 @@ use Opensoft\Bundle\CodeConversationBundle\Validator\BranchPoint as AssertBranch
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  *
  * @ORM\Entity
- * @ORM\Table(name="pull_requests")
+ * @ORM\Table(
+ *      name="pull_requests",
+ *      uniqueConstraints={@ORM\UniqueConstraint(name="only_one_per_branch_set", columns={"project_id", "sourcebranch_id", "destinationbranch_id"})}
+ * )
  *
  * @AssertBranchPoint()
+ * @AssertOnePullRequestPerBranch()
  */
 class PullRequest
 {
