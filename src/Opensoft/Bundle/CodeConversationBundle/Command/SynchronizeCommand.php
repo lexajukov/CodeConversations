@@ -20,7 +20,7 @@ use Doctrine\ORM\EntityManager;
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class SynchronizeCommand extends BaseCommand
+class SynchronizeCommand extends ContainerAwareCommand
 {
 
     public function configure()
@@ -31,9 +31,6 @@ class SynchronizeCommand extends BaseCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var \Doctrine\ORM\EntityManager $em  */
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
-
         /** @var \Opensoft\Bundle\CodeConversationBundle\Model\ProjectManagerInterface $projectManager */
         $projectManager = $this->getContainer()->get('opensoft_codeconversation.manager.project');
 
@@ -64,9 +61,9 @@ class SynchronizeCommand extends BaseCommand
                 }
             });
 
-            $this->synchronizeBranches($em, $project);
+            $project->synchronizeBranches();
 
-            $em->flush();
+            $projectManager->updateProject($project);
 
             $output->writeln('');
             $output->writeln(strtr('Synchronization complete "<info>%project%</info>"', array('%project%' => $project->getName())));

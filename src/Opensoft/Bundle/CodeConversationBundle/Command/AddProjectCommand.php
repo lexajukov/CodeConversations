@@ -17,7 +17,7 @@ use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class AddProjectCommand extends BaseCommand
+class AddProjectCommand extends ContainerAwareCommand
 {
 
     public function configure()
@@ -31,9 +31,6 @@ class AddProjectCommand extends BaseCommand
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var \Doctrine\ORM\EntityManager $em  */
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
-
         /** @var \Opensoft\Bundle\CodeConversationBundle\Model\ProjectManagerInterface $projectManager  */
         $projectManager = $this->getContainer()->get('opensoft_codeconversation.manager.project');
 
@@ -49,9 +46,10 @@ class AddProjectCommand extends BaseCommand
             }
         });
 
+        $project->synchronizeBranches();
+        print_r($project->getHeadBranch()->getName());
+        
         $projectManager->updateProject($project);
-
-        $this->synchronizeBranches($em, $project);
 
         $output->writeln(strtr("Project <info>%project%</info> created!", array('%project%' => $project->getName())));
     }

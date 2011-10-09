@@ -104,6 +104,9 @@ interface ProjectInterface
      */
     public function initSourceCodeRepo($callback = null);
 
+
+    public function synchronizeBranches();
+
     /**
      * @param string $sha1
      * @return Commit

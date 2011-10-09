@@ -24,11 +24,17 @@
 
         <field name="password" type="string" nullable="true" />
 
-        <one-to-many target-entity="Branch" mapped-by="project" field="branches" />
+        <one-to-many target-entity="Branch" mapped-by="project" field="branches">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
 
         <one-to-many target-entity="PullRequest" mapped-by="project" field="pullRequests" />
 
-        <many-to-one target-entity="Branch" field="headBranch" />
+        <many-to-one target-entity="Branch" field="headBranch">
+            <join-column name="headbranch_id" nullable="false" />
+        </many-to-one>
 
     </entity>
 

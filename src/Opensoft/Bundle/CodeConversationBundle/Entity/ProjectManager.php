@@ -102,6 +102,11 @@ class ProjectManager extends BaseProjectManager
      */
     public function updateProject(ProjectInterface $project, $andFlush = true)
     {
+        // Ensure that branches get persisted first, otherwise headBranch references will fail
+        foreach ($project->getBranches() as $branch) {
+            $this->em->persist($branch);
+        }
+
         $this->em->persist($project);
         if ($andFlush) {
             $this->em->flush();

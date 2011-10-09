@@ -78,6 +78,11 @@ class Project implements ProjectInterface
         return $this->branches;
     }
 
+    public function addBranch(BranchInterface $branch)
+    {
+        $this->branches[] = $branch;
+    }
+
     /**
      * @param int $id
      */
@@ -214,6 +219,57 @@ class Project implements ProjectInterface
     public function initSourceCodeRepo($callback = null)
     {
         $this->repo->init($this, $callback);
+    }
+
+    /**
+     *
+     * @todo - this should get moved into the source repository?
+     *
+     * @return void
+     */
+    public function synchronizeBranches()
+    {
+        $knownBranches = $this->getBranches();
+        $remoteBranches = $this->repo->fetchRemoteBranches();
+
+        if (!empty($knownBranches)) {
+            foreach ($knownBranches as $knownBranch) {
+                if (in_array($knownBranch->getName(), $remoteBranches)) {
+                    // Remove knownBranch->getName from remoteBranches by value
+                    $remoteBranches = array_values(array_diff($remoteBranches,array($knownBranch->getName())));
+                    continue;
+                }
+
+                $knownBranch->setEnabled(false);
+//                $em->persist($knownBranch);
+            }
+        }
+
+        $defaultBranch = null;
+        // known branches now only has the ones this project doesn't know about
+        foreach ($remoteBranches as $newBranch) {
+            // set origin/HEAD pointer as default branch
+            if (strpos($newBranch, 'origin/HEAD -> ') === 0) {
+                $defaultBranchName = substr($newBranch, 15);
+                continue;
+            }
+
+            $branch = $this->createBranch();
+            $branch->setProject($this);
+            $branch->setName($newBranch);
+
+
+            if ($branch->getName() === $defaultBranchName) {
+                $this->setHeadBranch($branch);
+            }
+
+            $this->addBranch($branch);
+        }
+    }
+
+    protected function createBranch()
+    {
+        return new Branch();
     }
 
     /**

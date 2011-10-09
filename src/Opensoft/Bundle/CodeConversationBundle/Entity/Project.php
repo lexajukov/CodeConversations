@@ -14,5 +14,14 @@ use Opensoft\Bundle\CodeConversationBundle\Model\Project as BaseProject;
  */
 class Project extends BaseProject
 {
-    
+
+    /**
+     * Ensure new branches created by this project are Entities
+     *
+     * @return Branch
+     */
+    protected function createBranch()
+    {
+        return new Branch();
+    }
 }
