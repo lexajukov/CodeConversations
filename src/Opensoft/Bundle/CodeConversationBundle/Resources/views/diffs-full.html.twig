@@ -18,9 +18,11 @@
                                     {{ diff.srcPath }}
                                 {% endif %}
                             </span>
+                            {% if commit is defined %}
                             <span class="pull-right">
                                 <a href="{{ path('opensoft_codeconversation_project_file', {'slug': project.slug, 'sha1': commit.id, 'filepath': diff.dstPath }) }}">view file</a>
                             </span>
+                            {% endif %}
                         </th>
                     </tr>
                 </thead>
