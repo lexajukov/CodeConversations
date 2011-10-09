@@ -1,19 +1,19 @@
 {% extends 'OpensoftCodeConversationBundle::layout.html.twig' %}
 
-{% block page_title %}Show commit {{ commit.sha1|truncate(6) }}{% endblock %}
+{% block page_title %}Show commit {{ commit.id|truncate(6) }}{% endblock %}
 
 {% block content %}
 
     {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': commit, 'project': project} %}
 
-    {% if commit.fileDiffs %}
+    {% if commit.diff %}
 
-        <p>Showing {{ commit.fileDiffs|length|default(0) }} files changed</p>
+        <p>Showing {{ commit.diff.fileDiffs|length|default(0) }} files changed</p>
     
-        {% include 'OpensoftCodeConversationBundle::diffs-table.html.twig' with {'diffs': commit.fileDiffs} %}
+        {% include 'OpensoftCodeConversationBundle::diffs-table.html.twig' with {'fullDiff': commit.diff} %}
 
         <div>
-            {% include 'OpensoftCodeConversationBundle::diffs-full.html.twig' with {'diffs': commit.fileDiffs} %}
+            {% include 'OpensoftCodeConversationBundle::diffs-full.html.twig' with {'fullDiff': commit.diff} %}
         </div>
     {% endif %}
 
@@ -27,7 +27,7 @@
 
     <h4>Comment on this commit</h4>
 
-    <form action="{{ path('opensoft_codeconversation_comment_postcommitcomment', {'slug': project.slug, 'sha1': commit.sha1 }) }}" {{ form_enctype(form) }} method="POST">
+    <form action="{{ path('opensoft_codeconversation_comment_postcommitcomment', {'slug': project.slug, 'sha1': commit.id }) }}" {{ form_enctype(form) }} method="POST">
         <fieldset>
             {{ form_errors(form) }}
 

@@ -6,12 +6,14 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
+use Opensoft\Bundle\CodeConversationBundle\Timeline\EventInterface;
+
 /**
  *
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-abstract class Comment implements CommentInterface
+abstract class Comment implements CommentInterface, EventInterface
 {
     /**
      * @var integer
@@ -97,4 +99,14 @@ abstract class Comment implements CommentInterface
     {
         return $this->id;
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getEventTimestamp()
+    {
+        return $this->createdAt;
+    }
+
+
 }

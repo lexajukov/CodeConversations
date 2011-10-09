@@ -47,7 +47,6 @@ class AddProjectCommand extends ContainerAwareCommand
         });
 
         $project->synchronizeBranches();
-        print_r($project->getHeadBranch()->getName());
         
         $projectManager->updateProject($project);
 

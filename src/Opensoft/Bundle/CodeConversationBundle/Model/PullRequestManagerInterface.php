@@ -26,6 +26,12 @@ interface PullRequestManagerInterface
     public function findPullRequestById($id);
 
     /**
+     * @param array $criteria
+     * @return PullRequestInterface
+     */
+    public function findPullRequestBy(array $criteria);
+
+    /**
      * @return PullRequestInterface[]
      */
     public function findPullRequests();

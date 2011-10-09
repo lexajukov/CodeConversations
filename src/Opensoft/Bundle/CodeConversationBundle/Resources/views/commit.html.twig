@@ -16,24 +16,42 @@
     <tbody>
         <tr>
             <td>
-            <span class="author-name">
-                {% if git_author_exists(commit.author) %}
-                    {% set user = git_author(commit.author) %}
-                    {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': user} %}
-                {% else %}
-                    {{ commit.author }}
-                {% endif %}
-            </span>
-            authored <time class="js-relative-date" datetime="{{ commit.timestamp|date("Y-m-d\TG:i:sO") }}" title="{{ commit.timestamp|date("Y-m-d G:i:s") }}">{{ time_diff(commit.timestamp) }}</time>
+                <div class="clearfix">
+                    <span class="author-name">
+                        {% if git_author_exists(commit.authorName) %}
+                            {% set user = git_author(commit.authorName) %}
+                            {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': user} %}
+                        {% else %}
+                            {{ commit.authorName }}
+                        {% endif %}
+                    </span>
+                    authored <time class="js-relative-date" datetime="{{ commit.authoredDate|date("Y-m-d\TG:i:sO") }}" title="{{ commit.authoredDate|date("Y-m-d G:i:s") }}">{{ time_diff(commit.authoredDate) }}</time>
+                </div>
+                <div class="clearfix">
+                    <span class="author-name">
+                        {% if git_author_exists(commit.committerName) %}
+                            {% set user = git_author(commit.committerName) %}
+                            {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': user} %}
+                        {% else %}
+                            {{ commit.committerName }}
+                        {% endif %}
+                    </span>
+                    committed <time class="js-relative-date" datetime="{{ commit.committedDate|date("Y-m-d\TG:i:sO") }}" title="{{ commit.committedDate|date("Y-m-d G:i:s") }}">{{ time_diff(commit.committedDate) }}</time>
+                </div>
             </td>
             <td style="text-align: right;" align="right">
-                commit <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': commit.sha1 }) }}" class="sha-block"><span class="sha">{{ commit.sha1 }}</span></a>
+                <div class="clearfix">
+                    tree <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': commit.id }) }}" class="sha-block"><span class="sha">{{ commit.tree }}</span></a>
+                </div>
+                <div class="clearfix">
+                    commit <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': commit.id }) }}" class="sha-block"><span class="sha">{{ commit.id }}</span></a>
+                </div>
                 {% if commit.parents|length > 0 %}
                     <div class="clearfix">
                         {{ commit.parents|length }} parent{% if commit.parents|length > 1%}s{% endif %}
-                        {% for sha1 in commit.parents %}
-                            <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': sha1 }) }}" class="sha-block">
-                                <span class="sha">{{ sha1 }}</span>
+                        {% for id in commit.parents %}
+                            <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': id }) }}" class="sha-block">
+                                <span class="sha">{{ id }}</span>
                             </a>
                         {% endfor %}
                     </div>

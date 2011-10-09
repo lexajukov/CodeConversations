@@ -9,6 +9,7 @@ namespace Opensoft\Bundle\CodeConversationBundle\Model;
 use Opensoft\Bundle\CodeConversationBundle\Model\Commit;
 use Opensoft\Bundle\CodeConversationBundle\Validator\BranchPoint as AssertBranchPoint;
 use Opensoft\Bundle\CodeConversationBundle\Validator\OnePullRequestPerBranch as AssertOnePullRequestPerBranch;
+use Opensoft\Bundle\CodeConversationBundle\Timeline\EventTimeline;
 
 /**
  *
@@ -71,7 +72,7 @@ class PullRequest implements PullRequestInterface
     /**
      * @var \Opensoft\Bundle\CodeConversationBundle\Model\Commit[]
      */
-    protected $commits;
+    protected $commits = array();
 
     /**
      * Github concept of a comment thread about a specific line of code
@@ -85,10 +86,32 @@ class PullRequest implements PullRequestInterface
      */
     protected $createdAt;
 
-
-    public function setComments($comments)
+    public function getEventTimeline()
     {
-        $this->comments = $comments;
+        $timeline = new EventTimeline();
+
+        foreach ($this->getComments() as $comment) {
+            $timeline->insert($comment);
+        }
+        foreach ($this->getCommits() as $commit) {
+            $timeline->insert($commit);
+        }
+
+        return $timeline;
+    }
+
+
+    public function setComments(array $comments)
+    {
+        $this->comments = array();
+        foreach ($comments as $comment) {
+            $this->addComment($comment);
+        }
+    }
+
+    public function addComment(CommentInterface $comment)
+    {
+        $this->comments[] = $comment;
     }
 
     /**
@@ -107,13 +130,19 @@ class PullRequest implements PullRequestInterface
         }
     }
 
-    public function addCommit(Commit $commit)
+    public function addCommit(CommitInterface $commit)
     {
         $this->commits[] = $commit;
     }
 
     public function getCommits()
     {
+        if (empty($this->commits)) {
+            $repo = $this->getProject()->getSourceCodeRepository();
+            $mergeBase = $repo->mergeBase($this->getSourceBranch()->getName(), $this->getDestinationBranch()->getName());
+            $this->setCommits($repo->fetchCommits($mergeBase, $this->getSourceBranch()->getName()));
+        }
+
         return $this->commits;
     }
 

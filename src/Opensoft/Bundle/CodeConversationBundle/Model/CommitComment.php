@@ -33,4 +33,14 @@ class CommitComment extends Comment
     {
         return $this->commitSha1;
     }
+
+    /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return get_class($this);
+    }
+
+
 }

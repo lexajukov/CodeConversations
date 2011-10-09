@@ -19,8 +19,8 @@
 
     <ul class="tabs" data-tabs="tabs" >
         <li class="active"><a href="#code-conversation">Code Conversation</a></li>
-        <li><a href="#commits">Commits ({{ commits|length|default(0) }})</a></li>
-        <li><a href="#full-diff">Full Diff ({{ diffs|length|default(0) }} files)</a></li>
+        <li><a href="#commits">Commits ({{ pullRequest.commits|length|default(0) }})</a></li>
+        <li><a href="#full-diff">Full Diff ({{ fullDiff.fileDiffs|length|default(0) }} files)</a></li>
     </ul>
 
     <div class="pill-content">
@@ -42,14 +42,14 @@
                 </tbody>
             </table>
 
-            {% if timeline %}
-                {% for item in timeline.timeline %}
+            {% if pullRequest.eventTimeline %}
+                {% for item in pullRequest.eventTimeline %}
                     {% if item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Model\\Commit' %}
-                        {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': item[item.class]} %}
+                        {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': item } %}
                     {% elseif item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequestComment' %}
-                        {% include 'OpensoftCodeConversationBundle::comment.html.twig' with {'comment': item[item.class] } %}
+                        {% include 'OpensoftCodeConversationBundle::comment.html.twig' with {'comment': item } %}
                     {% else %}
-                        {% include 'OpensoftCodeConversationBundle:PullRequest:log-status-change.html.twig' with {'logEntry': item[item.class] } %}
+                        {% include 'OpensoftCodeConversationBundle:PullRequest:log-status-change.html.twig' with {'logEntry': item } %}
                     {% endif %}
                 {% endfor %}
             {% endif %}
@@ -88,15 +88,15 @@
         </div>
 
         <div id="commits">
-            {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': commits} %}
+            {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': pullRequest.commits} %}
         </div>
 
 
         <div id="full-diff">
 
-            {% if diffs %}
-                {% include 'OpensoftCodeConversationBundle::diffs-table.html.twig' with {'diffs': diffs} %}
-                {% include 'OpensoftCodeConversationBundle::diffs-full.html.twig' with {'diffs': diffs} %}
+            {% if fullDiff %}
+                {% include 'OpensoftCodeConversationBundle::diffs-table.html.twig' with {'fullDiff': fullDiff} %}
+                {% include 'OpensoftCodeConversationBundle::diffs-full.html.twig' with {'fullDiff': fullDiff} %}
             {% endif %}
         </div>
     </div>

@@ -112,4 +112,6 @@ interface ProjectInterface
      * @return Commit
      */
     public function getCommit($sha1);
+
+    public function getRecentCommits($object = null, $limit = null);
 }

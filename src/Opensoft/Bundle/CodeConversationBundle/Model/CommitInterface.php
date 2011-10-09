@@ -20,11 +20,11 @@ interface CommitInterface
 
     public function getAuthorName();
 
-    public function setAuthoredDate($authoredDate);
+    public function setAuthoredDate(\DateTime $authoredDate);
 
     public function getAuthoredDate();
 
-    public function setCommittedDate($committedDate);
+    public function setCommittedDate(\DateTime $committedDate);
 
     public function getCommittedDate();
 
@@ -36,10 +36,6 @@ interface CommitInterface
 
     public function getCommitterName();
 
-    public function setFileDiff(FileDiffInterface $fileDiff);
-
-    public function getFileDiff();
-
     public function setId($id);
 
     public function getId();
@@ -48,11 +44,15 @@ interface CommitInterface
 
     public function getMessage();
 
-    public function setParents($parents);
+    public function setParents(array $parents);
 
     public function getParents();
 
     public function setTree($tree);
 
     public function getTree();
+
+    public function getDiff();
+
+    public function setDiff(DiffInterface $diff);
 }

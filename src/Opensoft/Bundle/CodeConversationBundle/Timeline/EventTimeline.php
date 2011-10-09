@@ -21,9 +21,9 @@ class EventTimeline extends \SplHeap
 //        $this->insert($event);
 //    }
 
-    public function insert(EventInterface $value)
+    public function insert($value)
     {
-        if (!($value instanceof Event)) {
+        if (!($value instanceof EventInterface)) {
             throw new \RuntimeException("The EventTimeline heap only holds EventInterface objects");
         }
 

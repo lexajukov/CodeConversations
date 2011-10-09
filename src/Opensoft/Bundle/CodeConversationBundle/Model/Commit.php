@@ -10,48 +10,107 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
+use Opensoft\Bundle\CodeConversationBundle\Timeline\EventInterface;
+
 /**
  *
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */ 
-class Commit 
+class Commit implements CommitInterface, EventInterface
 {
-    private $sha1;
+    private $id;
+    private $tree;
     private $message;
-    private $timestamp;
-    private $author;
-    private $parents;
+    private $authorEmail;
+    private $authorName;
+    private $authoredDate;
+    private $committerEmail;
+    private $committerName;
+    private $committedDate;
+    private $parents = array();
 
-    private $fileDiffs;
+    private $diff;
 
 
-    public function setAuthor($author)
+    public function setDiff(DiffInterface $diff)
     {
-        $this->author = $author;
+        $this->diff = $diff;
     }
 
-    public function getAuthor()
+    public function getDiff()
     {
-        return $this->author;
+        return $this->diff;
     }
 
-    public function setFileDiffs(array $fileDiffs)
+    public function setAuthorEmail($authorEmail)
     {
-        $this->fileDiffs = array();
-        foreach ($fileDiffs as $fileDiff) {
-            $this->addFileDiff($fileDiff);
-        }
+        $this->authorEmail = $authorEmail;
     }
 
-    public function addFileDiff(Diff $fileDiff)
+    public function getAuthorEmail()
     {
-        $this->fileDiffs[] = $fileDiff;
+        return $this->authorEmail;
     }
 
-    public function getFileDiffs()
+    public function setAuthorName($authorName)
     {
-        return $this->fileDiffs;
+        $this->authorName = $authorName;
+    }
+
+    public function getAuthorName()
+    {
+        return $this->authorName;
+    }
+
+    public function setAuthoredDate(\DateTime $authoredDate)
+    {
+        $this->authoredDate = $authoredDate;
+    }
+
+    public function getAuthoredDate()
+    {
+        return $this->authoredDate;
+    }
+
+    public function setCommittedDate(\DateTime $committedDate)
+    {
+        $this->committedDate = $committedDate;
+    }
+
+    public function getCommittedDate()
+    {
+        return $this->committedDate;
+    }
+
+    public function setCommitterEmail($committerEmail)
+    {
+        $this->committerEmail = $committerEmail;
+    }
+
+    public function getCommitterEmail()
+    {
+        return $this->committerEmail;
+    }
+
+    public function setCommitterName($committerName)
+    {
+        $this->committerName = $committerName;
+    }
+
+    public function getCommitterName()
+    {
+        return $this->committerName;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function setMessage($message)
@@ -82,26 +141,31 @@ class Commit
         return $this->parents;
     }
 
-    public function setSha1($sha1)
+    public function setTree($tree)
     {
-        $this->sha1 = $sha1;
+        $this->tree = $tree;
     }
 
-    public function getSha1()
+    public function getTree()
     {
-        return $this->sha1;
-    }
-
-    public function setTimestamp(\DateTime $timestamp)
-    {
-        $this->timestamp = $timestamp;
+        return $this->tree;
     }
 
     /**
      * @return \DateTime
      */
-    public function getTimestamp()
+    public function getEventTimestamp()
     {
-        return $this->timestamp;
+        return $this->committedDate;
     }
+
+    /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return get_class($this);
+    }
+
+
 }

@@ -36,4 +36,14 @@ class PullRequestComment extends Comment
     {
         return $this->pullRequest;
     }
+
+    /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return get_class($this);
+    }
+
+
 }

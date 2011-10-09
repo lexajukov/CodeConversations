@@ -1,18 +1,18 @@
 <table>
     <tbody>
         {% set i = 0 %}
-        {% for diff in diffs %}
+        {% for diff in fullDiff.fileDiffs %}
         <tr>
             <td>
                 <span class="label">{{ diff.status }}</span>
             </td>
             <td>
                 <span>
-                    {% if diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_MODIFICATION") %}
+                    {% if diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\FileDiff::STATUS_MODIFICATION") %}
                         <a href="#diff-{{ i }}">{{ diff.dstPath }}</a>
-                    {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_ADDITION") %}
+                    {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\FileDiff::STATUS_ADDITION") %}
                         <a href="#diff-{{ i }}">{{ diff.dstPath }}</a>
-                    {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_DELETION") %}
+                    {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\FileDiff::STATUS_DELETION") %}
                         <a href="#diff-{{ i }}">{{ diff.srcPath }}</a>
                     {% endif %}
                 </span>

@@ -69,11 +69,7 @@ class PullRequestController extends Controller
      */
     public function listAction(ProjectInterface $project)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        $pullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId()), array('createdAt' => 'DESC'));
-
-        return array('project' => $project, 'pullRequests' => $pullRequests);
+        return array('project' => $project, 'pullRequests' => $this->getPullRequestManager()->findPullRequestBy(array('project' => $project->getId()), array('createdAt' => 'DESC')));
     }
 
     /**
@@ -94,23 +90,25 @@ class PullRequestController extends Controller
         $mergeBase = $sourceCodeRepo->mergeBase($pullRequest->getSourceBranch()->getName(), $pullRequest->getDestinationBranch()->getName());
 //        print_r($mergeBase);
 //        die();
-        $diffs = $sourceCodeRepo->unifiedDiff($mergeBase, $pullRequest->getSourceBranch()->getName());
-        $commits = $sourceCodeRepo->fetchCommits($mergeBase, $pullRequest->getSourceBranch()->getName());
+        $fullDiff = $sourceCodeRepo->unifiedDiff($mergeBase, $pullRequest->getSourceBranch()->getName());
+//        $commits = $sourceCodeRepo->fetchCommits($mergeBase, $pullRequest->getSourceBranch()->getName());
 
-        $timeline = new PullRequestTimeline();
-        foreach ($commits as $commit) {
-            $timeline->add($commit->getTimestamp(), $commit);
-        }
-        foreach ($pullRequest->getComments() as $comment)
-        {
-            $timeline->add($comment->getCreatedAt(), $comment);
-        }
+        $timeline = $pullRequest->getEventTimeline();
+
+//        $timeline = new PullRequestTimeline();
+//        foreach ($commits as $commit) {
+//            $timeline->add($commit->getTimestamp(), $commit);
+//        }
+//        foreach ($pullRequest->getComments() as $comment)
+//        {
+//            $timeline->add($comment->getCreatedAt(), $comment);
+//        }
 
         /** @var \Gedmo\Loggable\Entity\LogEntry[] $logs  */
-        $logs = $em->getRepository('StofDoctrineExtensionsBundle:LogEntry')->findBy(array('objectClass' => get_class($pullRequest), 'objectId' => $pullRequest->getId()));
-        foreach ($logs as $logEntry) {
-            $timeline->add($logEntry->getLoggedAt(), $logEntry);
-        }
+//        $logs = $em->getRepository('StofDoctrineExtensionsBundle:LogEntry')->findBy(array('objectClass' => get_class($pullRequest), 'objectId' => $pullRequest->getId()));
+//        foreach ($logs as $logEntry) {
+//            $timeline->insert($logEntry);
+//        }
 
         $form = $this->createForm(new PullRequestCommentFormType(), new PullRequestComment());
 
@@ -118,8 +116,8 @@ class PullRequestController extends Controller
             'project' => $project,
             'pullRequest' => $pullRequest,
             'form' => $form->createView(),
-            'diffs' => $diffs,
-            'commits' => $commits,
+            'fullDiff' => $fullDiff,
+//            'commits' => $commits,
             'timeline' => $timeline
         );
     }

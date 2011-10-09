@@ -1,19 +1,19 @@
-{% if diffs|length > 40 %}
+{% if fullDiff.fileDiffs|length > 40 %}
     <p>More than 40 diffs... will kill twig...</p>
 {% else %}
     {% set i = 0 %}
-    {% for diff in diffs %}
+    {% for diff in fullDiff.filediffs %}
         <div id="diff-{{ i }}">
             <table cellpadding="0" cellspacing="0">
                 <thead>
                     <tr>
                         <th colspan="3" style="background-color: #E0EDFF;">
                             <span class="label">{{ diff.status }}</span>
-                            {% if diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_MODIFICATION") %}
+                            {% if diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\FileDiff::STATUS_MODIFICATION") %}
                                 {{ diff.dstPath }}
-                            {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_ADDITION") %}
+                            {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\FileDiff::STATUS_ADDITION") %}
                                 {{ diff.dstPath }}
-                            {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\Diff::STATUS_DELETION") %}
+                            {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\FileDiff::STATUS_DELETION") %}
                                 {{ diff.srcPath }}
                             {% endif %}
                         </th>
@@ -21,7 +21,7 @@
                 </thead>
                 <tbody style="overflow: auto; display:block; width: 938px;">
 
-                    {% for diffChunk in diff.diffChunks %}
+                    {% for diffChunk in diff.fileDiffChunks %}
                         {% set srcLineCount = diffChunk.srcStartLineNumber %}
                         {% set dstLineCount = diffChunk.dstStartLineNumber %}
 

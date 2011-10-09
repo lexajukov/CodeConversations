@@ -44,9 +44,9 @@ interface FileDiffInterface
 
     public function getStatusScore();
 
-    public function setDiffChunks(array $diffChunks);
+    public function setFileDiffChunks(array $diffChunks);
 
-    public function addDiffChunk(DiffChunk $diffChunk);
+    public function addFileDiffChunk(FileDiffChunkInterface $diffChunk);
 
-    public function getDiffChunks();
+    public function getFileDiffChunks();
 }

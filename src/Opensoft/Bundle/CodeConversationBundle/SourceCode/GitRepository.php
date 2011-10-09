@@ -8,7 +8,8 @@ namespace Opensoft\Bundle\CodeConversationBundle\SourceCode;
 use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\Branch;
 use Opensoft\Bundle\CodeConversationBundle\Model\Diff;
-use Opensoft\Bundle\CodeConversationBundle\Model\DiffChunk;
+use Opensoft\Bundle\CodeConversationBundle\Model\FileDiff;
+use Opensoft\Bundle\CodeConversationBundle\Model\FileDiffChunk;
 use Opensoft\Bundle\CodeConversationBundle\Model\Commit;
 use Opensoft\Bundle\CodeConversationBundle\Exception\BuildException;
 use Symfony\Component\Process\Process;
@@ -83,7 +84,8 @@ class GitRepository implements RepositoryInterface
             $revision = $this->fetchHeadCommit($revision);
         }
 
-        $format = '%H%n%s%n%cn%n%ai%n%P%n';
+        $format = '%H|%T|%an|%ae|%ad|%cn|%ce|%cd|%P|%s';
+//        $format = '%H%n%s%n%cn%n%ai%n%P%n';
         $args = array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($revision), '%limit%' => escapeshellarg($limit), '%revision2%' => null);
         $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['log'], $args), sprintf('Unable to get logs for project "%s".', $this->project->getName()));
 
@@ -92,29 +94,49 @@ class GitRepository implements RepositoryInterface
 
         $commits = array();
         $output = explode("\n", trim($process->getOutput()));
-        $i = 0;
-        do {
-            if (!empty($output[$i])) {
-                $commit = new Commit();
-                $commit->setSha1($output[$i]);
-                $commit->setMessage($output[$i+1]);
-                $commit->setAuthor($output[$i+2]);
-                $commit->setTimestamp(new \DateTime($output[$i+3]));
+        foreach ($output as $line) {
+            $infos = explode('|', $line);
+            $commit = new Commit();
+            $commit->setId($infos[0]);
+            $commit->setTree($infos[1]);
+            $commit->setAuthorName($infos[2]);
+            $commit->setAuthorEmail($infos[3]);
+            $commit->setAuthoredDate(new \DateTime($infos[4]));
+            $commit->setCommitterName($infos[5]);
+            $commit->setCommitterEmail($infos[6]);
+            $commit->setCommittedDate(new \DateTime($infos[7]));
+            $commit->setParents(explode(' ',$infos[8]));
+            $commit->setMessage($infos[9]);
 
-                // Detect merge parent
-                if (strpos($output[$i+4], " ") > 0) {
-                    $merge = explode(" ", $output[$i+4]);
-                    $commit->setParents($merge);
-                } else {
-                    $commit->addParent($output[$i+4]);
-                }
+            $commits[] = $commit;
+        }
 
-                $commits[] = $commit;
-                $i += 6;
-            } else {
-                $i++;
-            }
-        } while ($i <= count($output));
+
+//        $commits = array();
+//        $output = explode("\n", trim($process->getOutput()));
+//        $i = 0;
+//        do {
+//            if (!empty($output[$i])) {
+//                $commit = new Commit();
+//                $commit->setSha1($output[$i]);
+//                $commit->setMessage($output[$i+1]);
+//                $commit->setAuthor($output[$i+2]);
+//                $commit->setTimestamp(new \DateTime($output[$i+3]));
+//
+//                // Detect merge parent
+//                if (strpos($output[$i+4], " ") > 0) {
+//                    $merge = explode(" ", $output[$i+4]);
+//                    $commit->setParents($merge);
+//                } else {
+//                    $commit->addParent($output[$i+4]);
+//                }
+//
+//                $commits[] = $commit;
+//                $i += 6;
+//            } else {
+//                $i++;
+//            }
+//        } while ($i <= count($output));
 
         return $commits;
     }
@@ -131,7 +153,9 @@ class GitRepository implements RepositoryInterface
             $revision = $this->fetchHeadCommit($revision);
         }
 
-        $format = '%H%n%s%n%cn%n%ai%n%P%n';
+        $format = '%H|%T|%an|%ae|%ad|%cn|%ce|%cd|%P|%s';
+
+//        $format = '%H%n%s%n%cn%n%ai%n%P%n';
         $args = array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($revision), '%revision2%' => escapeshellarg($revision2));
         $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['log-since'], $args), sprintf('Unable to get logs between "%s" and "%s".', $revision, $revision2));
 
@@ -140,29 +164,48 @@ class GitRepository implements RepositoryInterface
 
         $commits = array();
         $output = explode("\n", trim($process->getOutput()));
-        $i = 0;
-        do {
-            if (!empty($output[$i])) {
-                $commit = new Commit();
-                $commit->setSha1($output[$i]);
-                $commit->setMessage($output[$i+1]);
-                $commit->setAuthor($output[$i+2]);
-                $commit->setTimestamp(new \DateTime($output[$i+3]));
+        foreach ($output as $line) {
+            $infos = explode('|', $line);
+            $commit = new Commit();
+            $commit->setId($infos[0]);
+            $commit->setTree($infos[1]);
+            $commit->setAuthorName($infos[2]);
+            $commit->setAuthorEmail($infos[3]);
+            $commit->setAuthoredDate(new \DateTime($infos[4]));
+            $commit->setCommitterName($infos[5]);
+            $commit->setCommitterEmail($infos[6]);
+            $commit->setCommittedDate(new \DateTime($infos[7]));
+            $commit->setParents(explode(' ',$infos[8]));
+            $commit->setMessage($infos[9]);
 
-                // Detect merge parent
-                if (strpos($output[$i+4], " ") > 0) {
-                    $merge = explode(" ", $output[$i+4]);
-                    $commit->setParents($merge);
-                } else {
-                    $commit->addParent($output[$i+4]);
-                }
+            $commits[] = $commit;
+        }
 
-                $commits[] = $commit;
-                $i += 6;
-            } else {
-                $i++;
-            }
-        } while ($i <= count($output));
+
+//
+//        $i = 0;
+//        do {
+//            if (!empty($output[$i])) {
+//                $commit = new Commit();
+//                $commit->setSha1($output[$i]);
+//                $commit->setMessage($output[$i+1]);
+//                $commit->setAuthor($output[$i+2]);
+//                $commit->setTimestamp(new \DateTime($output[$i+3]));
+//
+//                // Detect merge parent
+//                if (strpos($output[$i+4], " ") > 0) {
+//                    $merge = explode(" ", $output[$i+4]);
+//                    $commit->setParents($merge);
+//                } else {
+//                    $commit->addParent($output[$i+4]);
+//                }
+//
+//                $commits[] = $commit;
+//                $i += 6;
+//            } else {
+//                $i++;
+//            }
+//        } while ($i <= count($output));
 
         return $commits;
     }
@@ -196,29 +239,58 @@ class GitRepository implements RepositoryInterface
 
     public function fetchCommit($object)
     {
-        $format = '%H%n%s%n%cn%n%ai%n%P%n%b';
+        $format = '%H|%T|%an|%ae|%ad|%cn|%ce|%cd|%P|%s%n%b';
+//        $format = '%H%n%s%n%cn%n%ai%n%P%n%b';
         $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['show'], array('%format%' => escapeshellarg($format), '%revision%' => escapeshellarg($object))), sprintf('Unable to show commit for project "%s".', $this->project->getName()));
 
         $output = explode("\n", trim($process->getOutput()));
 //        print_r($output);
 //        die();
 
+        $commits = array();
+        $output = explode("\n", trim($process->getOutput()));
+//        foreach ($output as $line) {
+
+//        print_r($output);
+//        die();
+
+        $infos = explode('|', $output[0]);
         $commit = new Commit();
-        $commit->setSha1($output[0]);
-        $message = $output[1];
-//        $commit->setMessage($output[1]);
-        $commit->setAuthor($output[2]);
-        $commit->setTimestamp(new \DateTime($output[3]));
+        $commit->setId($infos[0]);
+        $commit->setTree($infos[1]);
+        $commit->setAuthorName($infos[2]);
+        $commit->setAuthorEmail($infos[3]);
+        $commit->setAuthoredDate(new \DateTime($infos[4]));
+        $commit->setCommitterName($infos[5]);
+        $commit->setCommitterEmail($infos[6]);
+        $commit->setCommittedDate(new \DateTime($infos[7]));
+        $commit->setParents(explode(' ',$infos[8]));
+//        $commit->setMessage($infos[9]);
+        $message = $infos[9];
 
-        // Detect merge parent
-        if (strpos($output[4], " ") > 0) {
-            $merge = explode(" ", $output[4]);
-            $commit->setParents($merge);
-        } else {
-            $commit->addParent($output[4]);
-        }
+//            $commits[] = $commit;
+//        }
 
-        $i = 5;
+
+
+
+//
+//        $commit = new Commit();
+//        $commit->setSha1($output[0]);
+//        $message = $output[1];
+////        $commit->setMessage($output[1]);
+//        $commit->setAuthor($output[2]);
+//        $commit->setTimestamp(new \DateTime($output[3]));
+//
+//        // Detect merge parent
+//        if (strpos($output[4], " ") > 0) {
+//            $merge = explode(" ", $output[4]);
+//            $commit->setParents($merge);
+//        } else {
+//            $commit->addParent($output[4]);
+//        }
+//
+        $i = 1;
         $subMessage = '';
         do {
             if (!empty($output[$i])) {
@@ -231,8 +303,8 @@ class GitRepository implements RepositoryInterface
 //        print_r($message);
         
         if (isset($output[$i])) {
-            $diffs = $this->parseDiffOutput(array_slice($output, $i));
-            $commit->setFileDiffs($diffs);
+            $diff = $this->parseDiffOutput(array_slice($output, $i));
+            $commit->setDiff($diff);
         }
 
 
@@ -258,11 +330,11 @@ class GitRepository implements RepositoryInterface
      */
     private function parseDiffOutput(array $output)
     {
-        $diff = null;
+        $diffFile = null;
         $diffChunk = null;
         $diffChunkContent = array();
 
-        $diffChunks = array();
+        $fileDiffs = array();
 
         $i = 0;
         do {
@@ -273,54 +345,54 @@ class GitRepository implements RepositoryInterface
 //                print_r($i . "\n");
 
                 // Clean up old diff object, if there is one
-                if (null !== $diff) {
+                if (null !== $diffFile) {
                     if (null !== $diffChunk) {
                         if (!empty($diffChunkContent)) {
                             $diffChunk->setContent($diffChunkContent);
                         }
 
-                        $diff->addDiffChunk($diffChunk);
+                        $diffFile->addFileDiffChunk($diffChunk);
                         $diffChunk = null;
                     }
 
 //                    $commit->addFileDiff($diff);
-                    $diffChunks[] = $diff;
+                    $fileDiffs[] = $diffFile;
                 }
 
-                $diff = new Diff();
+                $diffFile = new FileDiff();
 
                 list($srcFileName, $dstFileName) = explode(" ", trim(substr($line, 11)));
-                $diff->setSrcPath(substr($srcFileName, 2));
-                $diff->setDstPath(substr($dstFileName,2));
+                $diffFile->setSrcPath(substr($srcFileName, 2));
+                $diffFile->setDstPath(substr($dstFileName,2));
 
 //                // Parse extended header lines
                 do {
                     $line = $output[$i++];
 
                     if (strpos($line, 'old mode ') === 0) {
-                        $diff->setSrcMode(substr($line, 8));
-                        $diff->setStatus(Diff::STATUS_MODIFICATION);
+                        $diffFile->setSrcMode(substr($line, 8));
+                        $diffFile->setStatus(FileDiff::STATUS_MODIFICATION);
                     } elseif (strpos($line, 'new mode ') === 0) {
-                        $diff->setDstMode(substr($line, 8));
-                        $diff->setStatus(Diff::STATUS_MODIFICATION);
+                        $diffFile->setDstMode(substr($line, 8));
+                        $diffFile->setStatus(FileDiff::STATUS_MODIFICATION);
                     } elseif (strpos($line, 'deleted file mode') === 0) {
-                        $diff->setDstMode(substr($line, 18));
-                        $diff->setStatus(Diff::STATUS_DELETION);
+                        $diffFile->setDstMode(substr($line, 18));
+                        $diffFile->setStatus(FileDiff::STATUS_DELETION);
                     } elseif (strpos($line, 'new file mode ') === 0) {
-                        $diff->setDstMode(substr($line, 14));
-                        $diff->setStatus(Diff::STATUS_ADDITION);
+                        $diffFile->setDstMode(substr($line, 14));
+                        $diffFile->setStatus(FileDiff::STATUS_ADDITION);
                     } elseif (strpos($line, 'copy from ') === 0) {
-                        $diff->setSrcPath(substr($line, 10));
-                        $diff->setStatus(Diff::STATUS_COPY);
+                        $diffFile->setSrcPath(substr($line, 10));
+                        $diffFile->setStatus(FileDiff::STATUS_COPY);
                     } elseif (strpos($line, 'copy to ') === 0) {
-                        $diff->setDstPath(substr($line, 8));
-                        $diff->setStatus(Diff::STATUS_COPY);
+                        $diffFile->setDstPath(substr($line, 8));
+                        $diffFile->setStatus(FileDiff::STATUS_COPY);
                     } elseif (strpos($line, 'rename from ') === 0) {
-                        $diff->setSrcPath(substr($line, 12));
-                        $diff->setStatus(Diff::STATUS_RENAMING);
+                        $diffFile->setSrcPath(substr($line, 12));
+                        $diffFile->setStatus(FileDiff::STATUS_RENAMING);
                     } elseif (strpos($line, 'rename to ') === 0) {
-                        $diff->setDstPath(substr($line, 10));
-                        $diff->setStatus(Diff::STATUS_RENAMING);
+                        $diffFile->setDstPath(substr($line, 10));
+                        $diffFile->setStatus(FileDiff::STATUS_RENAMING);
                     } elseif (strpos($line, 'index ') === 0) {
                         if (strpos(substr($line, 6), ' ') > 0) {
 //                            print_r($line);
@@ -328,16 +400,16 @@ class GitRepository implements RepositoryInterface
 //                            print_r(explode(" ", substr($line, 6)));
 //                            die();
                             list($hash, $mode) = explode(" ", substr($line, 6));
-                            $diff->setSrcMode($mode);
-                            $diff->setDstMode($mode);
-                            $diff->setStatus(Diff::STATUS_MODIFICATION);
+                            $diffFile->setSrcMode($mode);
+                            $diffFile->setDstMode($mode);
+                            $diffFile->setStatus(FileDiff::STATUS_MODIFICATION);
                         } else {
                             $hash = substr($line, 6);
                         }
                         list($srcHash, $dstHash) = explode("..", $hash);
 
-                        $diff->setSrcSha1($srcHash);
-                        $diff->setDstSha1($dstHash);
+                        $diffFile->setSrcSha1($srcHash);
+                        $diffFile->setDstSha1($dstHash);
                     }
                 } while ($i < count($output) && strpos($output[$i], '---') !== 0);
 //
@@ -347,9 +419,9 @@ class GitRepository implements RepositoryInterface
                         $line = $output[$i++];
 
                         if (strpos($line, '--- ') === 0) {
-                            $diff->setSrcPath(substr($line, 6));
+                            $diffFile->setSrcPath(substr($line, 6));
                         } elseif (strpos($line, '+++ ') === 0 ) {
-                            $diff->setDstPath(substr($line, 6));
+                            $diffFile->setDstPath(substr($line, 6));
                         }
                     } while ($i < count($output) && strpos($output[$i], '@@') !== 0);
                 }
@@ -363,10 +435,10 @@ class GitRepository implements RepositoryInterface
                     if (!empty($diffChunkContent)) {
                         $diffChunk->setContent($diffChunkContent);
                     }
-                    $diff->addDiffChunk($diffChunk);
+                    $diffFile->addFileDiffChunk($diffChunk);
                 }
 
-                $diffChunk = new DiffChunk();
+                $diffChunk = new FileDiffChunk();
                 $diffChunk->setDescription(trim($line));
                 $diffChunkContent = array();
 
@@ -394,20 +466,23 @@ class GitRepository implements RepositoryInterface
 //            $i++;
         } while ($i < count($output));
 
-        if (null !== $diff) {
+        if (null !== $diffFile) {
             if (null !== $diffChunk) {
                 if (!empty($diffChunkContent)) {
                     $diffChunk->setContent($diffChunkContent);
                 }
 
-                $diff->addDiffChunk($diffChunk);
+                $diffFile->addFileDiffChunk($diffChunk);
             }
 
 //            $commit->addFileDiff($diff);
-            $diffChunks[] = $diff;
+            $fileDiffs[] = $diffFile;
         }
 
-        return $diffChunks;
+        $diff = new Diff();
+        $diff->setFileDiffs($fileDiffs);
+
+        return $diff;
     }
 
     public function fetchHeadCommit($revision = null)
@@ -426,7 +501,7 @@ class GitRepository implements RepositoryInterface
             }
 
             if (null === $revision) {
-                throw new BuildException(sprintf('Unable to get HEAD for branch "%s" for project "%s".', $this->project->getHeadBranch(), $this->project));
+                throw new BuildException(sprintf('Unable to get HEAD for revision "%s".', $revision));
             }
         }
 

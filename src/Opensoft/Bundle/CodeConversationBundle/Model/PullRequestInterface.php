@@ -12,7 +12,7 @@ namespace Opensoft\Bundle\CodeConversationBundle\Model;
  */
 interface PullRequestInterface 
 {
-     public function setComments($comments);
+     public function setComments(array $comments);
 
     /**
      * @return \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment[]
@@ -21,9 +21,14 @@ interface PullRequestInterface
 
     public function setCommits(array $commits);
 
-    public function addCommit(Commit $commit);
+    public function addCommit(CommitInterface $commit);
 
     public function getCommits();
+
+    /**
+     * @return \Opensoft\Bundle\CodeConversationBundle\Timeline\EventTimeline
+     */
+    public function getEventTimeline();
 
     /**
      * @param \DateTime $createdAt

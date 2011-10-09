@@ -58,6 +58,15 @@ class PullRequestManager extends BasePullRequestManager
     }
 
     /**
+     * @param array $criteria
+     * @return \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest[]
+     */
+    public function findPullRequestBy(array $criteria, $order = null)
+    {
+        return $this->repository->findBy($criteria, $order);
+    }
+
+    /**
      * @return \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest[]
      */
     public function findPullRequests()

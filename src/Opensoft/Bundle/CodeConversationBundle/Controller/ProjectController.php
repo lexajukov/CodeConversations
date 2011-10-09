@@ -46,23 +46,17 @@ class ProjectController extends Controller
     public function showAction(ProjectInterface $project, $branchName = null)
     {
         $em = $this->get('doctrine')->getEntityManager();
-
-        /** @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepo  */
-        $sourceCodeRepo = $this->get('opensoft_codeconversation.source_code.repository');
-        $sourceCodeRepo->init($project);
-
-        if ($branchName === null) {
-            $branchName = 'origin/master';
+        
+        if ($branchName !== null) {
+            /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
+            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($branchName);
+        } else {
+            $branch = $project->getHeadBranch();
         }
-
-        /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
-        $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($branchName);
-
-        $recentCommits = $sourceCodeRepo->fetchRecentCommits($branch->getName(), 15);
 
         $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
 
-        return array('project' => $project, 'recentCommits' => $recentCommits, 'branch' => $branch, 'openPullRequests' => $openPullRequests);
+        return array('project' => $project, 'branch' => $branch, 'openPullRequests' => $openPullRequests);
     }
 
     /**

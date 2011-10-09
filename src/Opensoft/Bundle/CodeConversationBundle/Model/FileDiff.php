@@ -35,7 +35,7 @@ class FileDiff implements FileDiffInterface
     public $srcPath;
     public $dstPath;
 
-    public $diffChunks = array();
+    public $fileDiffChunk = array();
 
     public function setDstMode($dstMode)
     {
@@ -117,24 +117,24 @@ class FileDiff implements FileDiffInterface
         return $this->statusScore;
     }
 
-    public function setDiffChunks(array $diffChunks)
+    public function setFileDiffChunks(array $diffChunks)
     {
-        $this->diffChunks = array();
+        $this->fileDiffChunk = array();
         foreach ($diffChunks as $diffChunk) {
-            $this->addDiffChunk($diffChunk);
+            $this->addFileDiffChunk($diffChunk);
         }
     }
 
-    public function addDiffChunk(FileDiffChunkInterface $diffChunk)
+    public function addFileDiffChunk(FileDiffChunkInterface $diffChunk)
     {
-        $this->diffChunks[] = $diffChunk;
+        $this->fileDiffChunk[] = $diffChunk;
 
         $this->insertions += $diffChunk->getInsertions();
         $this->deletions += $diffChunk->getDeletions();
     }
 
-    public function getDiffChunks()
+    public function getFileDiffChunks()
     {
-        return $this->diffChunks;
+        return $this->fileDiffChunk;
     }
 }

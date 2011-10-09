@@ -222,9 +222,7 @@ class Project implements ProjectInterface
     }
 
     /**
-     *
      * @todo - this should get moved into the source repository?
-     *
      * @return void
      */
     public function synchronizeBranches()
@@ -241,7 +239,6 @@ class Project implements ProjectInterface
                 }
 
                 $knownBranch->setEnabled(false);
-//                $em->persist($knownBranch);
             }
         }
 
@@ -265,6 +262,13 @@ class Project implements ProjectInterface
 
             $this->addBranch($branch);
         }
+    }
+
+
+    public function getRecentCommits($object = null, $limit = 15)
+    {
+        $this->repo->init($this);
+        return $this->repo->fetchRecentCommits($object, $limit);
     }
 
     protected function createBranch()
