@@ -31,7 +31,7 @@ class ProjectManager extends BaseProjectManager
     /**
      * @var \Doctrine\ORM\EntityRepository
      */
-    protected $repository;
+    protected $entityRepository;
 
     /**
      * @param \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository
@@ -43,7 +43,7 @@ class ProjectManager extends BaseProjectManager
         parent::__construct($repository);
 
         $this->em = $em;
-        $this->repository = $em->getRepository($class);
+        $this->entityRepository = $em->getRepository($class);
         $metadata = $em->getClassMetadata($class);
         $this->class = $metadata->name;
     }
@@ -54,7 +54,10 @@ class ProjectManager extends BaseProjectManager
      */
     public function findProjectBySlug($slug)
     {
-        return $this->repository->findOneBy(array('slug' => $slug));
+        $project = $this->entityRepository->findOneBy(array('slug' => $slug));;
+        $project->setRepository($this->repository);
+
+        return $project;
     }
 
     /**
@@ -62,7 +65,7 @@ class ProjectManager extends BaseProjectManager
      */
     public function findProjects()
     {
-        return $this->repository->findAll();
+        return $this->entityRepository->findAll();
     }
 
     /**

@@ -6,6 +6,8 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
+use Opensoft\Bundle\CodeConversationBundle\Git\Repository;
+
 /**
  *
  *
@@ -57,6 +59,25 @@ class Project implements ProjectInterface
      * @var PullRequest[]
      */
     protected $pullRequests;
+
+    /**
+     * @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository
+     */
+    protected $repo;
+
+    /**
+     * @param \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repo
+     */
+    public function __construct(Repository $repo)
+    {
+        $this->repo = $repo;
+    }
+
+    public function setRepository(Repository $repo)
+    {
+        $this->repo = $repo;
+    }
+
 
     public function getBranches()
     {
@@ -111,7 +132,7 @@ class Project implements ProjectInterface
         return $this->password;
     }
 
-    public function setPullRequests($pullRequests)
+    public function setPullRequests(array $pullRequests)
     {
         $this->pullRequests = $pullRequests;
     }
@@ -183,6 +204,17 @@ class Project implements ProjectInterface
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * @param string $sha1
+     * @return Commit
+     */
+    public function getCommit($sha1)
+    {
+        $this->repo->init($this);
+
+        return $this->repo->fetchCommit($sha1);
     }
 
 

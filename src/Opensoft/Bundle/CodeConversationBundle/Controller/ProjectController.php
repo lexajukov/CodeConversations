@@ -73,11 +73,7 @@ class ProjectController extends Controller
     {
         $em = $this->get('doctrine')->getEntityManager();
 
-        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
-        $repository = $this->get('opensoft_codeconversation.git.repository');
-        $repository->init($project);
-
-        $commit = $repository->fetchCommit($sha1);
+        $commit = $project->getCommit($sha1);
 
         $form = $this->createForm(new CommitCommentFormType(), new CommitComment());
         $comments = $em->getRepository('OpensoftCodeConversationBundle:CommitComment')->findBy(array('commitSha1' => $sha1));

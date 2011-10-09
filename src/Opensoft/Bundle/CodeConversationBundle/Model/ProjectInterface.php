@@ -44,8 +44,14 @@ interface ProjectInterface
      */
     public function getPassword();
 
-    public function setPullRequests($pullRequests);
+    /**
+     * @param PullRequestInterface[] $pullRequests
+     */
+    public function setPullRequests(array $pullRequests);
 
+    /**
+     * @return PullRequestInterface[]
+     */
     public function getPullRequests();
 
     /**
@@ -86,4 +92,10 @@ interface ProjectInterface
      * @return string
      */
     public function getSlug();
+
+    /**
+     * @param string $sha1
+     * @return Commit
+     */
+    public function getCommit($sha1);
 }
