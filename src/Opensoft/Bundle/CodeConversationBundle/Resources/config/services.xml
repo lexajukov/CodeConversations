@@ -7,11 +7,9 @@
     <parameters>
         <parameter key="opensoft_codeconversation.git.builder.class">Opensoft\Bundle\CodeConversationBundle\Git\Builder</parameter>
         <parameter key="opensoft_codeconversation.manager.project.class">Opensoft\Bundle\CodeConversationBundle\Entity\ProjectManager</parameter>
+        <parameter key="opensoft_codeconversation.manager.pull_request.class">Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestManager</parameter>
         <parameter key="opensoft_codeconversation.converter.project.class">Opensoft\Bundle\CodeConversationBundle\Request\ParamConverter\ProjectParamConverter</parameter>
-
-        <!--<parameter key="opensoft_codeconversation.validator.branch_point.class">Opensoft\Bundle\CodeConversationBundle\Validator\BranchPointValidator</parameter>-->
-        <!--<parameter key="opensoft_codeconversation.validator.one_pull_request_per_branch.class">Opensoft\Bundle\CodeConversationBundle\Validator\OnePullRequestPerBranchValidator</parameter>-->
-
+        <parameter key="opensoft_codeconversation.converter.pull_request.class">Opensoft\Bundle\CodeConversationBundle\Request\ParamConverter\PullRequestParamConverter</parameter>
     </parameters>
 
     <services>
@@ -26,21 +24,23 @@
             <argument>Opensoft\Bundle\CodeConversationBundle\Entity\Project</argument>
         </service>
 
+        <service id="opensoft_codeconversation.manager.pull_request" class="%opensoft_codeconversation.manager.pull_request.class%">
+            <argument type="service" id="opensoft_codeconversation.git.builder" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument>Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest</argument>
+        </service>
+
         <service id="opensoft_codeconversation.converter.project" class="%opensoft_codeconversation.converter.project.class%">
             <tag name="request.param_converter" />
             <argument type="service" id="opensoft_codeconversation.manager.project" />
             <argument>Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface</argument>
         </service>
 
+        <service id="opensoft_codeconversation.converter.pull_request" class="%opensoft_codeconversation.converter.pull_request.class%">
+            <tag name="request.param_converter" />
+            <argument type="service" id="opensoft_codeconversation.manager.pull_request" />
+            <argument>Opensoft\Bundle\CodeConversationBundle\Model\PullRequestInterface</argument>
+        </service>
 
-        <!--<service id="opensoft_codeconversation.validator.branch_point" class="%opensoft_codeconversation.validator.branch_point.class%">-->
-            <!--<tag name="validator.constraint_validator" alias="opensoft_codeconversation.validator.branch_point" />-->
-            <!--<argument type="service" id="opensoft_codeconversation.git.builder" />-->
-        <!--</service>-->
-
-        <!--<service id="opensoft_codeconversation.validator.one_pull_request_per_branch" class="%opensoft_codeconversation.validator.one_pull_request_per_branch.class%">-->
-            <!--<tag name="validator.constraint_validator" alias="opensoft_codeconversation.validator.one_pull_request_per_branch" />-->
-            <!--<argument type="service" id="doctrine" />-->
-        <!--</service>-->
     </services>
 </container>

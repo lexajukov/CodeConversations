@@ -7,27 +7,38 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
+use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestManagerInterface;
+use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestCommentFormType;
-use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
+use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestInterface;
+use Opensoft\Bundle\CodeConversationBundle\Model\PullRequest;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestTimeline;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment;
 
 /**
  * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
+ * @ParamConverter("pullRequest", class="Opensoft\Bundle\CodeConversationBundle\Model\PullRequestInterface")
  */
 class PullRequestController extends Controller
 {
     /**
+     * @return \Opensoft\Bundle\CodeConversationBundle\Model\PullRequestManagerInterface
+     */
+    public function getPullRequestManager()
+    {
+        return $this->container->get('opensoft_codeconversation.manager.pull_request');
+    }
+
+    /**
      * @Route("/project/{slug}/pulls/new")
      * @Template()
      */
-    public function createAction(Project $project)
+    public function createAction(ProjectInterface $project)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $pullRequestManager = $this->getPullRequestManager();
 
-        $pullRequest = new PullRequest();
+        $pullRequest = $pullRequestManager->createPullRequest();
         $pullRequest->setProject($project);
         $pullRequest->setCreatedAt(new \DateTime());
         $pullRequest->setInitiatedBy($this->container->get('security.context')->getToken()->getUser());
@@ -41,8 +52,7 @@ class PullRequestController extends Controller
 
             if ($form->isValid()) {
 
-                $em->persist($pullRequest);
-                $em->flush();
+                $pullRequestManager->updatePullRequest($pullRequest);
 
                 $this->get('session')->setFlash('success', 'Pull request engaged.');
 
@@ -57,7 +67,7 @@ class PullRequestController extends Controller
      * @Route("/project/{slug}/pulls")
      * @Template()
      */
-    public function listAction(Project $project)
+    public function listAction(ProjectInterface $project)
     {
         $em = $this->getDoctrine()->getEntityManager();
 
@@ -70,16 +80,9 @@ class PullRequestController extends Controller
      * @Route("/project/{slug}/pull/{pullId}")
      * @Template()
      */
-    public function viewAction(Project $project, $pullId)
+    public function viewAction(ProjectInterface $project, PullRequestInterface $pullRequest)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        // TODO - find a better way...
-        /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest $pullRequest  */
-        $pullRequest = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->find($pullId);
-        if (!$pullRequest || $pullRequest->getProject()->getId() != $project->getId()) {
-            throw $this->createNotFoundException("Could not find pull request '$pullId' for " . $project->getName());
-        }
 
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
         $builder = $this->get('opensoft_codeconversation.git.builder');

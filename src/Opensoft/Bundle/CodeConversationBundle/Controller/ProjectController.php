@@ -7,7 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
+use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommitCommentFormType;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
@@ -43,7 +43,7 @@ class ProjectController extends Controller
      * @Route("/project/{slug}/branch/{branchId}")
      * @Template()
      */
-    public function showAction(Project $project, $branchId = null)
+    public function showAction(ProjectInterface $project, $branchId = null)
     {
         $em = $this->get('doctrine')->getEntityManager();
 //        $project = $this->getProjectManager()->findProjectBySlug($slug);
@@ -74,7 +74,7 @@ class ProjectController extends Controller
      * @Route("/project/{slug}/commit/{sha1}")
      * @Template()
      */
-    public function viewCommitAction(Project $project, $sha1)
+    public function viewCommitAction(ProjectInterface $project, $sha1)
     {
         $em = $this->get('doctrine')->getEntityManager();
 
@@ -94,7 +94,7 @@ class ProjectController extends Controller
      * @Route("/project/{slug}/blob/{blob}")
      * @Template()
      */
-    public function blobAction(Project $project, $blob)
+    public function blobAction(ProjectInterface $project, $blob)
     {/** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
         $builder = $this->get('opensoft_codeconversation.git.builder');
         $builder->init($project);

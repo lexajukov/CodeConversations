@@ -7,11 +7,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
+use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommitCommentFormType;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestCommentFormType;
-use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
+use Opensoft\Bundle\CodeConversationBundle\Model\PullRequest;
+use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestInterface;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment;
 use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
 
@@ -23,17 +24,12 @@ class CommentController extends Controller
     /**
      * @Route("/project/{slug}/pull/{pullId}/comment/new")
      * @Method("POST")
+     * @ParamConverter("pullRequest", class="Opensoft\Bundle\CodeConversationBundle\Model\PullRequestInterface")
      * @Template("OpensoftCodeConversationsBundle:Default:viewPullRequest")
      */
-    public function postPrCommentAction(Project $project, $pullId)
+    public function postPrCommentAction(ProjectInterface $project, PullRequestInterface $pullRequest)
     {
         $em = $this->getDoctrine()->getEntityManager();
-
-        // TODO - find a better way...
-        $pullRequest = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->find($pullId);
-        if (!$pullRequest || $pullRequest->getProject()->getId() != $project->getId()) {
-            throw $this->createNotFoundException("Could not find pull request '$pullId' for " . $project->getName());
-        }
 
         $comment = new PullRequestComment();
         $comment->setPullRequest($pullRequest);
@@ -76,7 +72,7 @@ class CommentController extends Controller
      * @Method("POST")
      * @Template("OpensoftCodeConversationsBundle:Default:viewComment")
      */
-    public function postCommitCommentAction(Project $project, $sha1)
+    public function postCommitCommentAction(ProjectInterface $project, $sha1)
     {
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
         $builder = $this->get('opensoft_codeconversation.git.builder');
