@@ -114,4 +114,6 @@ interface ProjectInterface
     public function getCommit($sha1);
 
     public function getRecentCommits($object = null, $limit = null);
+
+    public function getFileAtCommit($sha1, $filepath);
 }

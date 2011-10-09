@@ -30,18 +30,19 @@ class GitRepository implements RepositoryInterface
     private $callback = null;
     private $gitPath;
     private $gitCmds = array(
-        'clone' => 'clone --progress %repo% %dir%',
-        'fetch'    => 'fetch -p origin',
-        'prepare'  => 'submodule update --init --recursive',
-        'checkout' => 'checkout origin/%branch%',
-        'reset'    => 'reset --hard %revision%',
-        'log'     => 'log --pretty=format:%format% %revision% %revision2% -n %limit%',
-        'log-since' => 'log --pretty=format:%format% %revision%..%revision2%',
-        'show'     => 'show --pretty=format:%format% %revision%',
-        'diff'     => 'diff %commit1%..%commit2% %path%',
-        'diff-name-status'     => 'diff -M -C --raw %commit1% %commit2% %path%',
-        'branch-list' => 'branch -r',
-        'merge-base' => 'merge-base %object1% %object2%'
+        'clone'            => 'clone --progress %repo% %dir%',
+        'fetch'            => 'fetch -p origin',
+        'prepare'          => 'submodule update --init --recursive',
+        'checkout'         => 'checkout origin/%branch%',
+        'reset'            => 'reset --hard %revision%',
+        'log'              => 'log --pretty=format:%format% %revision% %revision2% -n %limit%',
+        'log-since'        => 'log --pretty=format:%format% %revision%..%revision2%',
+        'show'             => 'show -c -t --pretty=format:%format% %revision%',
+        'show-file'        => 'show %commit%:%filepath%',
+        'diff'             => 'diff %commit1%..%commit2% %path%',
+        'diff-name-status' => 'diff -M -C --raw %commit1% %commit2% %path%',
+        'branch-list'      => 'branch -r',
+        'merge-base'       => 'merge-base %object1% %object2%'
     );
 
     public function __construct($buildDir, $gitPath)
@@ -272,7 +273,7 @@ class GitRepository implements RepositoryInterface
 //        }
 
 
-
+//        print_r($output);
 
 //
 //        $commit = new Commit();
@@ -483,6 +484,22 @@ class GitRepository implements RepositoryInterface
         $diff->setFileDiffs($fileDiffs);
 
         return $diff;
+    }
+
+    /**
+     * @param $sha1
+     * @param $filepath
+     * @return array
+     */
+    public function fetchFileAtCommit($sha1, $filepath)
+    {
+        $failMessage = sprintf('Unable to find file "%s" at commit "%s".', $filepath, $sha1);
+        $args = array('%commit%' => $sha1, '%filepath%' => $filepath);
+
+        $process = $this->execute(strtr($this->gitPath.' '.$this->gitCmds['show-file'], $args), $failMessage);
+
+        return explode("\n", trim($process->getOutput()));
+
     }
 
     public function fetchHeadCommit($revision = null)

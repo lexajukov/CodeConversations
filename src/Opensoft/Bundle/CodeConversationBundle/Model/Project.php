@@ -287,5 +287,11 @@ class Project implements ProjectInterface
         return $this->repo->fetchCommit($sha1);
     }
 
+    public function getFileAtCommit($sha1, $filepath)
+    {
+        $this->repo->init($this);
+
+        return $this->repo->fetchFileAtCommit($sha1, $filepath);
+    }
 
 }

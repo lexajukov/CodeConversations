@@ -37,4 +37,6 @@ interface RepositoryInterface
     public function fetchHeadCommit($revision = null);
 
     public function diff($object1, $object2 = null, $path = null);
+
+    public function fetchFileAtCommit($sha1, $filepath);
 }

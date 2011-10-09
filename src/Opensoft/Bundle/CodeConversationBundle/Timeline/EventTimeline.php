@@ -16,17 +16,17 @@ use Opensoft\Bundle\CodeConversationBundle\Timeline\Event;
  */
 class EventTimeline extends \SplHeap
 {
+    /**
+     * {@inheritdoc}
+     */
     public function insert($value)
     {
         if (!($value instanceof EventInterface)) {
             throw new \RuntimeException("The EventTimeline heap only holds EventInterface objects");
         }
 
-//        print_r('inserting ' . $value->getClass() . ' ' . $value->getEventTimestamp()->getTimestamp() . "\n");
-
         parent::insert($value);
     }
-
 
     /**
      * {@inheritdoc}

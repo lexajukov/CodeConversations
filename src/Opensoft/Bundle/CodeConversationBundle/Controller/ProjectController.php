@@ -76,17 +76,11 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project/{slug}/blob/{blob}")
+     * @Route("/project/{slug}/commit/{sha1}/{filepath}", requirements={"filepath" = ".+"})
      * @Template()
      */
-    public function blobAction(ProjectInterface $project, $blob)
+    public function fileAction(ProjectInterface $project, $sha1, $filepath)
     {
-        /** @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepository  */
-        $sourceCodeRepository = $this->get('opensoft_codeconversation.source_code.repository');
-        $sourceCodeRepository->init($project);
-
-        $file = $sourceCodeRepository->blob($blob);
-
-        return array();
+        return array('file' => $project->getFileAtCommit($sha1, $filepath));
     }
 }
