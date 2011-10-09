@@ -73,12 +73,6 @@ class Project implements ProjectInterface
         $this->repo = $repo;
     }
 
-    public function setRepository(RepositoryInterface $repo)
-    {
-        $this->repo = $repo;
-    }
-
-
     public function getBranches()
     {
         return $this->branches;
@@ -204,6 +198,22 @@ class Project implements ProjectInterface
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    public function setSourceCodeRepository(RepositoryInterface $repo)
+    {
+        $this->repo = $repo;
+    }
+
+    public function getSourceCodeRepository()
+    {
+        return $this->repo;
+    }
+
+
+    public function initSourceCodeRepo($callback = null)
+    {
+        $this->repo->init($this, $callback);
     }
 
     /**

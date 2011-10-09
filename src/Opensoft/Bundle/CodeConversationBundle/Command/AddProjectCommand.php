@@ -34,13 +34,14 @@ class AddProjectCommand extends BaseCommand
         /** @var \Doctrine\ORM\EntityManager $em  */
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
 
-        $project = new Project();
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Model\ProjectManagerInterface $projectManager  */
+        $projectManager = $this->getContainer()->get('opensoft_codeconversation.manager.project');
+
+        $project = $projectManager->createProject();
         $project->setName($input->getArgument('name'));
         $project->setUrl($input->getArgument('url'));
 
-        /** @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepo  */
-        $sourceCodeRepo = $this->getContainer()->get('opensoft_codeconversation.source_code.repository');
-        $sourceCodeRepo->init($project, function ($type, $buffer) use ($output) {
+        $project->initSourceCodeRepo(function ($type, $buffer) use ($output) {
             if ('err' === $type) {
                 $output->write(str_replace("\n", "\nERR| ", $buffer));
             } else {
@@ -48,10 +49,9 @@ class AddProjectCommand extends BaseCommand
             }
         });
 
-        $em->persist($project);
-        $em->flush();
+        $projectManager->updateProject($project);
 
-        $this->synchronizeBranches($em, $project, $sourceCodeRepo);
+        $this->synchronizeBranches($em, $project);
 
         $output->writeln(strtr("Project <info>%project%</info> created!", array('%project%' => $project->getName())));
     }

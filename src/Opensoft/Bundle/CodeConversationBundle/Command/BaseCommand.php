@@ -23,8 +23,9 @@ use Doctrine\ORM\EntityManager;
  */ 
 abstract class BaseCommand extends ContainerAwareCommand
 {
-    protected function synchronizeBranches(EntityManager $em, Project $project, RepositoryInterface $sourceCodeRepo)
+    protected function synchronizeBranches(EntityManager $em, Project $project)
     {
+        $sourceCodeRepo = $project->getSourceCodeRepository();
         $knownBranches = $project->getBranches();
         $remoteBranches = $sourceCodeRepo->fetchRemoteBranches();
 

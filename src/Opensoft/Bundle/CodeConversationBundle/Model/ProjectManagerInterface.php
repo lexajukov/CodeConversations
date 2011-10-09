@@ -26,6 +26,12 @@ interface ProjectManagerInterface
     public function findProjectBySlug($slug);
 
     /**
+     * @param array $criteria
+     * @return ProjectInterface
+     */
+    public function findProjectBy(array $criteria);
+
+    /**
      * @return ProjectInterface[]
      */
     public function findProjects();

@@ -5,6 +5,8 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
+use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
+
 /**
  *
  *
@@ -92,6 +94,15 @@ interface ProjectInterface
      * @return string
      */
     public function getSlug();
+
+    public function setSourceCodeRepository(RepositoryInterface $repo);
+
+    public function getSourceCodeRepository();
+
+    /**
+     * @param \Closure $callback
+     */
+    public function initSourceCodeRepo($callback = null);
 
     /**
      * @param string $sha1

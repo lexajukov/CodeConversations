@@ -34,10 +34,13 @@ class SynchronizeCommand extends BaseCommand
         /** @var \Doctrine\ORM\EntityManager $em  */
         $em = $this->getContainer()->get('doctrine')->getEntityManager();
 
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Model\ProjectManagerInterface $projectManager */
+        $projectManager = $this->getContainer()->get('opensoft_codeconversation.manager.project');
+
         if ($projectName = $input->getArgument('name')) {
-            $projects = array($em->getRepository('OpensoftCodeConversationBundle:Project')->findOneBy(array('name' => $projectName)));
+            $projects = array($projectManager->findProjectBy(array('name'=>$projectName)));
         } else {
-            $projects = $em->getRepository('OpensoftCodeConversationBundle:Project')->findAll();
+            $projects = $projectManager->findProjects();
         }
 
         if (empty($projects)) {
@@ -50,12 +53,10 @@ class SynchronizeCommand extends BaseCommand
             return 1;
         }
 
-        /** @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepo  */
-        $sourceCodeRepo = $this->getContainer()->get('opensoft_codeconversation.source_code.repository');
         foreach ($projects as $project) {
             $output->writeln(strtr('Synchronizing project "<info>%project%</info>...', array('%project%' => $project->getName())));
 
-            $sourceCodeRepo->init($project, function ($type, $buffer) use ($output) {
+            $project->initSourceCodeRepo(function ($type, $buffer) use ($output) {
                 if ('err' === $type) {
                     $output->write(str_replace("\n", "\nERR| ", $buffer));
                 } else {
@@ -63,7 +64,7 @@ class SynchronizeCommand extends BaseCommand
                 }
             });
 
-            $this->synchronizeBranches($em, $project, $sourceCodeRepo);
+            $this->synchronizeBranches($em, $project);
 
             $em->flush();
 
