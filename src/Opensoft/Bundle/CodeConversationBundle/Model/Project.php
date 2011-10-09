@@ -6,7 +6,7 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
-use Opensoft\Bundle\CodeConversationBundle\Git\Repository;
+use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
 
 /**
  *
@@ -61,19 +61,19 @@ class Project implements ProjectInterface
     protected $pullRequests;
 
     /**
-     * @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository
+     * @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface
      */
     protected $repo;
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repo
+     * @param \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $repo
      */
-    public function __construct(Repository $repo)
+    public function __construct(RepositoryInterface $repo)
     {
         $this->repo = $repo;
     }
 
-    public function setRepository(Repository $repo)
+    public function setRepository(RepositoryInterface $repo)
     {
         $this->repo = $repo;
     }

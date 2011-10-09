@@ -5,7 +5,7 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
-use Opensoft\Bundle\CodeConversationBundle\Git\Repository;
+use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
 
 /**
  *
@@ -14,11 +14,11 @@ use Opensoft\Bundle\CodeConversationBundle\Git\Repository;
  */
 abstract class PullRequestManager implements PullRequestManagerInterface
 {
-    protected $repository;
+    protected $sourceCodeRepository;
 
-    public function __construct(Repository $repository)
+    public function __construct(RepositoryInterface $sourceCodeRepo)
     {
-        $this->repository = $repository;
+        $this->sourceCodeRepository = $sourceCodeRepo;
     }
     
     public function createPullRequest()

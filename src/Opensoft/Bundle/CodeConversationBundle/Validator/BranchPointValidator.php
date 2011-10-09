@@ -12,7 +12,7 @@ namespace Opensoft\Bundle\CodeConversationBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Opensoft\Bundle\CodeConversationBundle\Git\Repository;
+use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
 use Opensoft\Bundle\CodeConversationBundle\Exception\BuildException;
 
 /**
@@ -23,16 +23,16 @@ use Opensoft\Bundle\CodeConversationBundle\Exception\BuildException;
 class BranchPointValidator extends ConstraintValidator
 {
     /**
-     * @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository
+     * @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface
      */
-    private $repository;
+    private $sourceCodeRepository;
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository
+     * @param \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepo
      */
-    public function __construct(Repository $repository)
+    public function __construct(RepositoryInterface $sourceCodeRepo)
     {
-        $this->repository = $repository;
+        $this->sourceCodeRepository = $sourceCodeRepo;
     }
 
     /**
@@ -56,8 +56,8 @@ class BranchPointValidator extends ConstraintValidator
         $destination = $object->getDestinationBranch()->getName();
 
         try {
-            $this->repository->init($object->getProject());
-            $common = $this->repository->mergeBase($source, $destination);
+            $this->sourceCodeRepository->init($object->getProject());
+            $common = $this->sourceCodeRepository->mergeBase($source, $destination);
         } catch (\BuildException $e) {
             $this->setMessage($constraint->message);
 

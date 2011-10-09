@@ -7,7 +7,7 @@ namespace Opensoft\Bundle\CodeConversationBundle\Entity;
 
 use Opensoft\Bundle\CodeConversationBundle\Model\ProjectManager as BaseProjectManager;
 use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
-use Opensoft\Bundle\CodeConversationBundle\Git\Repository;
+use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
 use Symfony\Component\Validator\Constraint;
 use Doctrine\ORM\EntityManager;
 
@@ -34,13 +34,13 @@ class ProjectManager extends BaseProjectManager
     protected $entityRepository;
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository
+     * @param \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepo
      * @param \Doctrine\ORM\EntityManager $em
      * @param string $class
      */
-    public function __construct(Repository $repository, EntityManager $em, $class)
+    public function __construct(RepositoryInterface $sourceCodeRepo, EntityManager $em, $class)
     {
-        parent::__construct($repository);
+        parent::__construct($sourceCodeRepo);
 
         $this->em = $em;
         $this->entityRepository = $em->getRepository($class);
@@ -55,7 +55,7 @@ class ProjectManager extends BaseProjectManager
     public function findProjectBySlug($slug)
     {
         $project = $this->entityRepository->findOneBy(array('slug' => $slug));;
-        $project->setRepository($this->repository);
+        $project->setRepository($this->sourceCodeRepository);
 
         return $project;
     }
@@ -65,7 +65,13 @@ class ProjectManager extends BaseProjectManager
      */
     public function findProjects()
     {
-        return $this->entityRepository->findAll();
+        $projects = $this->entityRepository->findAll();
+        // Wish there was a better way to do this...
+        foreach ($projects as $project) {
+            $project->setRepository($this->sourceCodeRepository);
+        }
+
+        return $projects;
     }
 
     /**

@@ -84,18 +84,18 @@ class PullRequestController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
-        $repository = $this->get('opensoft_codeconversation.git.repository');
-        $repository->init($project);
+        /** @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepo  */
+        $sourceCodeRepo = $this->get('opensoft_codeconversation.source_code.repository');
+        $sourceCodeRepo->init($project);
 //
 //        print_r($project->getName());
 //        die();
 
-        $mergeBase = $repository->mergeBase($pullRequest->getSourceBranch()->getName(), $pullRequest->getDestinationBranch()->getName());
+        $mergeBase = $sourceCodeRepo->mergeBase($pullRequest->getSourceBranch()->getName(), $pullRequest->getDestinationBranch()->getName());
 //        print_r($mergeBase);
 //        die();
-        $diffs = $repository->unifiedDiff($mergeBase, $pullRequest->getSourceBranch()->getName());
-        $commits = $repository->fetchCommits($mergeBase, $pullRequest->getSourceBranch()->getName());
+        $diffs = $sourceCodeRepo->unifiedDiff($mergeBase, $pullRequest->getSourceBranch()->getName());
+        $commits = $sourceCodeRepo->fetchCommits($mergeBase, $pullRequest->getSourceBranch()->getName());
 
         $timeline = new PullRequestTimeline();
         foreach ($commits as $commit) {

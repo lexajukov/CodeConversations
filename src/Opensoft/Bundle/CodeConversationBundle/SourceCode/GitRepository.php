@@ -3,10 +3,10 @@
  *
  */
 
-namespace Opensoft\Bundle\CodeConversationBundle\Git;
+namespace Opensoft\Bundle\CodeConversationBundle\SourceCode;
 
-use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
-use Opensoft\Bundle\CodeConversationBundle\Entity\Branch;
+use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
+use Opensoft\Bundle\CodeConversationBundle\Model\Branch;
 use Opensoft\Bundle\CodeConversationBundle\Model\Diff;
 use Opensoft\Bundle\CodeConversationBundle\Model\DiffChunk;
 use Opensoft\Bundle\CodeConversationBundle\Model\Commit;
@@ -18,10 +18,10 @@ use Symfony\Component\Process\Process;
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class Repository
+class GitRepository implements RepositoryInterface
 {
     /**
-     * @var \Opensoft\Bundle\CodeConversationBundle\Entity\Project
+     * @var \Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface
      */
     private $project;
     private $buildDir;
@@ -54,7 +54,7 @@ class Repository
     }
 
 
-    public function init(Project $project, $callback = null)
+    public function init(ProjectInterface $project, $callback = null)
     {
         $this->project = $project;
         $this->callback = $callback;

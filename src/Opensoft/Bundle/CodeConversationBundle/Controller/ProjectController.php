@@ -7,9 +7,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommitCommentFormType;
+use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequest;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestTimeline;
 use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
@@ -47,9 +47,9 @@ class ProjectController extends Controller
     {
         $em = $this->get('doctrine')->getEntityManager();
 
-        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
-        $repository = $this->get('opensoft_codeconversation.git.repository');
-        $repository->init($project);
+        /** @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepo  */
+        $sourceCodeRepo = $this->get('opensoft_codeconversation.source_code.repository');
+        $sourceCodeRepo->init($project);
 
         if ($branchName === null) {
             $branchName = 'origin/master';
@@ -58,7 +58,7 @@ class ProjectController extends Controller
         /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
         $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($branchName);
 
-        $recentCommits = $repository->fetchRecentCommits($branch->getName(), 15);
+        $recentCommits = $sourceCodeRepo->fetchRecentCommits($branch->getName(), 15);
 
         $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
 
@@ -86,11 +86,12 @@ class ProjectController extends Controller
      * @Template()
      */
     public function blobAction(ProjectInterface $project, $blob)
-    {/** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
-        $repository = $this->get('opensoft_codeconversation.git.repository');
-        $repository->init($project);
+    {
+        /** @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepository  */
+        $sourceCodeRepository = $this->get('opensoft_codeconversation.source_code.repository');
+        $sourceCodeRepository->init($project);
 
-        $file = $repository->blob($blob);
+        $file = $sourceCodeRepository->blob($blob);
 
         return array();
     }
