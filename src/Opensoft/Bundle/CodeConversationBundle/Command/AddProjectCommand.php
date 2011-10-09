@@ -38,9 +38,9 @@ class AddProjectCommand extends BaseCommand
         $project->setName($input->getArgument('name'));
         $project->setUrl($input->getArgument('url'));
 
-        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
-        $builder = $this->getContainer()->get('opensoft_codeconversation.git.builder');
-        $builder->init($project, function ($type, $buffer) use ($output) {
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
+        $repository = $this->getContainer()->get('opensoft_codeconversation.git.repository');
+        $repository->init($project, function ($type, $buffer) use ($output) {
             if ('err' === $type) {
                 $output->write(str_replace("\n", "\nERR| ", $buffer));
             } else {
@@ -51,7 +51,7 @@ class AddProjectCommand extends BaseCommand
         $em->persist($project);
         $em->flush();
 
-        $this->synchronizeBranches($em, $project, $builder);
+        $this->synchronizeBranches($em, $project, $repository);
 
         $output->writeln(strtr("Project <info>%project%</info> created!", array('%project%' => $project->getName())));
     }

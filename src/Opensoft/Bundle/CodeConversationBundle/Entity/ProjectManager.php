@@ -7,7 +7,7 @@ namespace Opensoft\Bundle\CodeConversationBundle\Entity;
 
 use Opensoft\Bundle\CodeConversationBundle\Model\ProjectManager as BaseProjectManager;
 use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
-use Opensoft\Bundle\CodeConversationBundle\Git\Builder;
+use Opensoft\Bundle\CodeConversationBundle\Git\Repository;
 use Symfony\Component\Validator\Constraint;
 use Doctrine\ORM\EntityManager;
 
@@ -34,13 +34,13 @@ class ProjectManager extends BaseProjectManager
     protected $repository;
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder
+     * @param \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository
      * @param \Doctrine\ORM\EntityManager $em
      * @param string $class
      */
-    public function __construct(Builder $builder, EntityManager $em, $class)
+    public function __construct(Repository $repository, EntityManager $em, $class)
     {
-        parent::__construct($builder);
+        parent::__construct($repository);
 
         $this->em = $em;
         $this->repository = $em->getRepository($class);

@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommitCommentFormType;
-use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
+use Opensoft\Bundle\CodeConversationBundle\Model\PullRequest;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestTimeline;
 use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
 
@@ -46,11 +46,10 @@ class ProjectController extends Controller
     public function showAction(ProjectInterface $project, $branchName = null)
     {
         $em = $this->get('doctrine')->getEntityManager();
-//        $project = $this->getProjectManager()->findProjectBySlug($slug);
 
-        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
-        $builder = $this->get('opensoft_codeconversation.git.builder');
-        $builder->init($project);
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
+        $repository = $this->get('opensoft_codeconversation.git.repository');
+        $repository->init($project);
 
         if ($branchName === null) {
             $branchName = 'origin/master';
@@ -59,7 +58,7 @@ class ProjectController extends Controller
         /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
         $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($branchName);
 
-        $recentCommits = $builder->fetchRecentCommits($branch->getName(), 15);
+        $recentCommits = $repository->fetchRecentCommits($branch->getName(), 15);
 
         $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
 
@@ -74,11 +73,11 @@ class ProjectController extends Controller
     {
         $em = $this->get('doctrine')->getEntityManager();
 
-        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
-        $builder = $this->get('opensoft_codeconversation.git.builder');
-        $builder->init($project);
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
+        $repository = $this->get('opensoft_codeconversation.git.repository');
+        $repository->init($project);
 
-        $commit = $builder->fetchCommit($sha1);
+        $commit = $repository->fetchCommit($sha1);
 
         $form = $this->createForm(new CommitCommentFormType(), new CommitComment());
         $comments = $em->getRepository('OpensoftCodeConversationBundle:CommitComment')->findBy(array('commitSha1' => $sha1));
@@ -91,11 +90,11 @@ class ProjectController extends Controller
      * @Template()
      */
     public function blobAction(ProjectInterface $project, $blob)
-    {/** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
-        $builder = $this->get('opensoft_codeconversation.git.builder');
-        $builder->init($project);
+    {/** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
+        $repository = $this->get('opensoft_codeconversation.git.repository');
+        $repository->init($project);
 
-        $file = $builder->blob($blob);
+        $file = $repository->blob($blob);
 
         return array();
     }

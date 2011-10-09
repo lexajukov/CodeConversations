@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
 use Opensoft\Bundle\CodeConversationBundle\Entity\Branch;
-use Opensoft\Bundle\CodeConversationBundle\Git\Builder;
+use Opensoft\Bundle\CodeConversationBundle\Git\Repository;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -50,12 +50,12 @@ class SynchronizeCommand extends BaseCommand
             return 1;
         }
 
-        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
-        $builder = $this->getContainer()->get('opensoft_codeconversation.git.builder');
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
+        $repository = $this->getContainer()->get('opensoft_codeconversation.git.repository');
         foreach ($projects as $project) {
             $output->writeln(strtr('Synchronizing project "<info>%project%</info>...', array('%project%' => $project->getName())));
 
-            $builder->init($project, function ($type, $buffer) use ($output) {
+            $repository->init($project, function ($type, $buffer) use ($output) {
                 if ('err' === $type) {
                     $output->write(str_replace("\n", "\nERR| ", $buffer));
                 } else {
@@ -63,7 +63,7 @@ class SynchronizeCommand extends BaseCommand
                 }
             });
 
-            $this->synchronizeBranches($em, $project, $builder);
+            $this->synchronizeBranches($em, $project, $repository);
 
             $em->flush();
 

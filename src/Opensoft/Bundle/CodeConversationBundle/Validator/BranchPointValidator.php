@@ -12,7 +12,7 @@ namespace Opensoft\Bundle\CodeConversationBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Opensoft\Bundle\CodeConversationBundle\Git\Builder;
+use Opensoft\Bundle\CodeConversationBundle\Git\Repository;
 use Opensoft\Bundle\CodeConversationBundle\Exception\BuildException;
 
 /**
@@ -23,16 +23,16 @@ use Opensoft\Bundle\CodeConversationBundle\Exception\BuildException;
 class BranchPointValidator extends ConstraintValidator
 {
     /**
-     * @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder
+     * @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository
      */
-    private $builder;
+    private $repository;
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder
+     * @param \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository
      */
-    public function __construct(Builder $builder)
+    public function __construct(Repository $repository)
     {
-        $this->builder = $builder;
+        $this->repository = $repository;
     }
 
     /**
@@ -56,8 +56,8 @@ class BranchPointValidator extends ConstraintValidator
         $destination = $object->getDestinationBranch()->getName();
 
         try {
-            $this->builder->init($object->getProject());
-            $common = $this->builder->mergeBase($source, $destination);
+            $this->repository->init($object->getProject());
+            $common = $this->repository->mergeBase($source, $destination);
         } catch (\BuildException $e) {
             $this->setMessage($constraint->message);
 

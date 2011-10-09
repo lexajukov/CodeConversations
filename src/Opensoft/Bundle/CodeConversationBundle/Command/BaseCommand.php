@@ -13,7 +13,7 @@ namespace Opensoft\Bundle\CodeConversationBundle\Command;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
 use Opensoft\Bundle\CodeConversationBundle\Entity\Branch;
-use Opensoft\Bundle\CodeConversationBundle\Git\Builder;
+use Opensoft\Bundle\CodeConversationBundle\Git\Repository;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -23,10 +23,10 @@ use Doctrine\ORM\EntityManager;
  */ 
 abstract class BaseCommand extends ContainerAwareCommand
 {
-    protected function synchronizeBranches(EntityManager $em, Project $project, Builder $builder)
+    protected function synchronizeBranches(EntityManager $em, Project $project, Repository $repository)
     {
         $knownBranches = $project->getBranches();
-        $remoteBranches = $builder->fetchRemoteBranches();
+        $remoteBranches = $repository->fetchRemoteBranches();
 
         if (!empty($knownBranches)) {
             foreach ($knownBranches as $knownBranch) {

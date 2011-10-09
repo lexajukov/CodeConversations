@@ -18,7 +18,7 @@ use Symfony\Component\Process\Process;
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class Builder
+class Repository
 {
     /**
      * @var \Opensoft\Bundle\CodeConversationBundle\Entity\Project

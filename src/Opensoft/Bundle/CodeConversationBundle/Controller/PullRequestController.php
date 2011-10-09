@@ -84,18 +84,18 @@ class PullRequestController extends Controller
     {
         $em = $this->getDoctrine()->getEntityManager();
 
-        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
-        $builder = $this->get('opensoft_codeconversation.git.builder');
-        $builder->init($project);
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
+        $repository = $this->get('opensoft_codeconversation.git.repository');
+        $repository->init($project);
 //
 //        print_r($project->getName());
 //        die();
 
-        $mergeBase = $builder->mergeBase($pullRequest->getSourceBranch()->getName(), $pullRequest->getDestinationBranch()->getName());
+        $mergeBase = $repository->mergeBase($pullRequest->getSourceBranch()->getName(), $pullRequest->getDestinationBranch()->getName());
 //        print_r($mergeBase);
 //        die();
-        $diffs = $builder->unifiedDiff($mergeBase, $pullRequest->getSourceBranch()->getName());
-        $commits = $builder->fetchCommits($mergeBase, $pullRequest->getSourceBranch()->getName());
+        $diffs = $repository->unifiedDiff($mergeBase, $pullRequest->getSourceBranch()->getName());
+        $commits = $repository->fetchCommits($mergeBase, $pullRequest->getSourceBranch()->getName());
 
         $timeline = new PullRequestTimeline();
         foreach ($commits as $commit) {
