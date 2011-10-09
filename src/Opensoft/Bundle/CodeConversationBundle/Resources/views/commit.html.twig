@@ -3,6 +3,7 @@
         <tr>
             <th style="background-color: #E0EDFF;" colspan="2">
                 {{ commit.message|truncate(80) }}
+                <span class="pull-right">{{ time_diff(commit.committedDate) }}</span>
             </th>
         </tr>
         {% if commit.message|length >= 80 %}
@@ -41,21 +42,19 @@
             </td>
             <td style="text-align: right;" align="right">
                 <div class="clearfix">
-                    tree <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': commit.id }) }}" class="sha-block"><span class="sha">{{ commit.tree }}</span></a>
+                    tree <span class="sha">{{ commit.tree }}</span>
                 </div>
                 <div class="clearfix">
                     commit <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': commit.id }) }}" class="sha-block"><span class="sha">{{ commit.id }}</span></a>
                 </div>
-                {% if commit.parents|length > 0 %}
-                    <div class="clearfix">
-                        {{ commit.parents|length }} parent{% if commit.parents|length > 1%}s{% endif %}
-                        {% for id in commit.parents %}
-                            <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': id }) }}" class="sha-block">
-                                <span class="sha">{{ id }}</span>
-                            </a>
-                        {% endfor %}
-                    </div>
-                {% endif %}
+                <div class="clearfix">
+                    {{ commit.parents|length }} parent{% if commit.parents|length > 1%}s{% endif %}
+                    {% for id in commit.parents %}
+                        <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'slug': project.slug, 'sha1': id }) }}" class="sha-block">
+                            <span class="sha">{{ id }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
             </td>
         </tr>
     </tbody>

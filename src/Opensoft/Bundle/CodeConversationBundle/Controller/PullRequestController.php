@@ -93,7 +93,7 @@ class PullRequestController extends Controller
         $fullDiff = $sourceCodeRepo->unifiedDiff($mergeBase, $pullRequest->getSourceBranch()->getName());
 //        $commits = $sourceCodeRepo->fetchCommits($mergeBase, $pullRequest->getSourceBranch()->getName());
 
-        $timeline = $pullRequest->getEventTimeline();
+//        $timeline = $pullRequest->getEventTimeline();
 
 //        $timeline = new PullRequestTimeline();
 //        foreach ($commits as $commit) {
@@ -118,7 +118,7 @@ class PullRequestController extends Controller
             'form' => $form->createView(),
             'fullDiff' => $fullDiff,
 //            'commits' => $commits,
-            'timeline' => $timeline
+//            'timeline' => $timeline
         );
     }
 }

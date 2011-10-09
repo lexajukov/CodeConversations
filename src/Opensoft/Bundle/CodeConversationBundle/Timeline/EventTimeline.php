@@ -16,16 +16,13 @@ use Opensoft\Bundle\CodeConversationBundle\Timeline\Event;
  */
 class EventTimeline extends \SplHeap
 {
-//    public function addEvent(EventInterface $event)
-//    {
-//        $this->insert($event);
-//    }
-
     public function insert($value)
     {
         if (!($value instanceof EventInterface)) {
             throw new \RuntimeException("The EventTimeline heap only holds EventInterface objects");
         }
+
+//        print_r('inserting ' . $value->getClass() . ' ' . $value->getEventTimestamp()->getTimestamp() . "\n");
 
         parent::insert($value);
     }
@@ -36,9 +33,9 @@ class EventTimeline extends \SplHeap
      */
     protected function compare($value1, $value2)
     {
-        $event1 = $value1->getEventTimestamp()->getTimestamp();
-        $event2 = $value1->getEventTimestamp()->getTimestamp();
-
-        return ($event1 > $event2 ? 1 : ($event1 < $event2 ? -1 : 0));
+        $event1 = (float) $value1->getEventTimestamp()->getTimestamp();
+        $event2 = (float) $value2->getEventTimestamp()->getTimestamp();
+        
+        return ($event1 > $event2 ? -1 : ($event1 < $event2 ? 1 : 0));
     }
 }

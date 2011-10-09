@@ -3,7 +3,7 @@
         <tr style="background-color: #F5F5F5;">
             <th>
                 {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': comment.author} %}
-                <span class="pull-right">{{ comment.createdAt|date("F j, Y") }}</span>
+                <span class="pull-right">{{ time_diff(comment.createdAt) }}</span>
             </th>
         </tr>
     </thead>
