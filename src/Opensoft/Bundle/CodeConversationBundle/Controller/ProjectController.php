@@ -9,10 +9,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
-use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommentFormType;
+use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommitCommentFormType;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestTimeline;
-use Opensoft\Bundle\CodeConversationBundle\Entity\Comment;
+use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
 
 class ProjectController extends Controller
 {
@@ -75,7 +75,7 @@ class ProjectController extends Controller
 
         $commit = $builder->fetchCommit($sha1);
 
-        $form = $this->createForm(new CommentFormType(), new Comment());
+        $form = $this->createForm(new CommitCommentFormType(), new CommitComment());
         $comments = $em->getRepository('OpensoftCodeConversationBundle:CommitComment')->findBy(array('commitSha1' => $sha1));
         
         return array('commit' => $commit, 'project' => $project, 'form' => $form->createView(), 'comments' => $comments);

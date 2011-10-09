@@ -9,10 +9,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
-use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommentFormType;
+use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestCommentFormType;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestTimeline;
-use Opensoft\Bundle\CodeConversationBundle\Entity\Comment;
+use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment;
 
 class PullRequestController extends Controller
 {
@@ -109,7 +109,7 @@ class PullRequestController extends Controller
             $timeline->add($logEntry->getLoggedAt(), $logEntry);
         }
 
-        $form = $this->createForm(new CommentFormType(), new Comment());
+        $form = $this->createForm(new PullRequestCommentFormType(), new PullRequestComment());
 
         return array(
             'project' => $project,

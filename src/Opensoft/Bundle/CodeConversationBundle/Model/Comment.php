@@ -4,64 +4,46 @@
  */
 
 
-namespace Opensoft\Bundle\CodeConversationBundle\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
+namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
 /**
  *
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
- *
- * @ORM\Entity
- * @ORM\Table(name="comments")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="type", type="integer")
- * @ORM\DiscriminatorMap({1 = "PullRequestComment", 2 = "CommitComment"})
  */
-class Comment 
+abstract class Comment implements CommentInterface
 {
     /**
      * @var integer
-     * 
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
     
     /**
      * @var string
-     *
-     * @ORM\Column(type="text")
      */
     protected $content;
 
     /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @var UserInterface
      */
     protected $author;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
      */
     protected $createdAt;
 
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\User $author
+     * @param UserInterface $author
      */
-    public function setAuthor($author)
+    public function setAuthor(UserInterface $author)
     {
         $this->author = $author;
     }
 
     /**
-     * @return \Opensoft\Bundle\CodeConversationBundle\Entity\User
+     * @return UserInterface
      */
     public function getAuthor()
     {
@@ -87,7 +69,7 @@ class Comment
     /**
      * @param \DateTime $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }

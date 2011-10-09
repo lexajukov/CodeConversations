@@ -9,7 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
-use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommentFormType;
+use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommitCommentFormType;
+use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestCommentFormType;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment;
 use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
@@ -38,7 +39,7 @@ class CommentController extends Controller
         $comment->setAuthor($this->container->get('security.context')->getToken()->getUser());
 
         /** @var \Symfony\Component\Form\Form $form  */
-        $form = $this->createForm(new CommentFormType(), $comment);
+        $form = $this->createForm(new PullRequestCommentFormType(), $comment);
 
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
@@ -92,7 +93,7 @@ class CommentController extends Controller
         $comment->setAuthor($this->container->get('security.context')->getToken()->getUser());
 
         /** @var \Symfony\Component\Form\Form $form  */
-        $form = $this->createForm(new CommentFormType(), $comment);
+        $form = $this->createForm(new CommitCommentFormType(), $comment);
 
         $request = $this->getRequest();
         $em = $this->getDoctrine()->getEntityManager();

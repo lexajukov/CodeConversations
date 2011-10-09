@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+      xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                          http://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest" table="pull_requests">
+        
+        <unique-constraints>
+            <unique-constraint columns="project_id,sourcebranch_id,destinationbranch_id" />
+        </unique-constraints>
+
+        <id name="id" type="integer">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="status" type="integer">
+            <gedmo:versioned />
+        </field>
+
+        <field name="title" type="string" />
+
+        <field name="description" type="text" />
+
+        <field name="createdAt" type="datetime" />
+
+        <one-to-many target-entity="PullRequestComment" mapped-by="pullRequest" field="comments" />
+
+        <many-to-one target-entity="Project" field="project" />
+
+        <many-to-one target-entity="Branch" field="sourceBranch" />
+
+        <many-to-one target-entity="Branch" field="destinationBranch" />
+
+        <many-to-one target-entity="User" field="initiatedBy" />
+
+        <gedmo:loggable />
+
+    </entity>
+
+</doctrine-mapping>

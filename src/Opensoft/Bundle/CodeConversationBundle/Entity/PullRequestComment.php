@@ -5,39 +5,14 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestComment as BasePullRequestComment;
 
 /**
  *
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
- *
- * @ORM\Entity
  */
-class PullRequestComment extends Comment
+class PullRequestComment extends BasePullRequestComment
 {
 
-
-    /**
-     * @var PullRequest
-     *
-     * @ORM\ManyToOne(targetEntity="PullRequest")
-     */
-    protected $pullRequest;
-
-    /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest $pullRequest
-     */
-    public function setPullRequest($pullRequest)
-    {
-        $this->pullRequest = $pullRequest;
-    }
-
-    /**
-     * @return \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest
-     */
-    public function getPullRequest()
-    {
-        return $this->pullRequest;
-    }
 }
