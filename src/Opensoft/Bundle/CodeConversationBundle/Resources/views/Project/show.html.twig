@@ -52,7 +52,7 @@
                             <td>{{ branch.enabled ? 'Yes' : 'No' }}</td>
                             <td>
                                 {% if branch.enabled %}
-                                <a class="btn" href="{{ path('opensoft_codeconversation_project_show_1', {'slug': project.slug, 'branchId': branch.id}) }}">Switch to branch</a>
+                                <a class="btn" href="{{ path('opensoft_codeconversation_project_show_1', {'slug': project.slug, 'branchName': branch.name}) }}">Switch to branch</a>
                                 <a href="{{ path('opensoft_codeconversation_pullrequest_create', {'slug': project.slug }) }}" class="btn primary">Open Pull Request</a>
                                 {% endif %}
                             </td>

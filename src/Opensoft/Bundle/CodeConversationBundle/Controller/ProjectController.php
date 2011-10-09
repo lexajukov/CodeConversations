@@ -40,10 +40,10 @@ class ProjectController extends Controller
 
     /**
      * @Route("/project/{slug}")
-     * @Route("/project/{slug}/branch/{branchId}")
+     * @Route("/project/{slug}/branch/{branchName}", requirements={"branchName" = ".+"})
      * @Template()
      */
-    public function showAction(ProjectInterface $project, $branchId = null)
+    public function showAction(ProjectInterface $project, $branchName = null)
     {
         $em = $this->get('doctrine')->getEntityManager();
 //        $project = $this->getProjectManager()->findProjectBySlug($slug);
@@ -52,16 +52,12 @@ class ProjectController extends Controller
         $builder = $this->get('opensoft_codeconversation.git.builder');
         $builder->init($project);
 
-        if ($branchId != null) {
-            /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
-            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->find($branchId);
-        } else {
-            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName('origin/master');
+        if ($branchName === null) {
+            $branchName = 'origin/master';
         }
 
-        if (!$branch) {
-            throw $this->createNotFoundException("Branch '$branchId' does not exist");
-        }
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
+        $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($branchName);
 
         $recentCommits = $builder->fetchRecentCommits($branch->getName(), 15);
 

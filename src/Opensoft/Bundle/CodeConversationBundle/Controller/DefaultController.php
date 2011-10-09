@@ -36,6 +36,6 @@ class DefaultController extends Controller
      */
     public function getProjectManager()
     {
-        return $this->container->get('opensoft_codeconversation.manager.project');
+        return $this->get('opensoft_codeconversation.manager.project');
     }
 }
