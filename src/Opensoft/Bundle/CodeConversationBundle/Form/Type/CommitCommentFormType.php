@@ -22,6 +22,17 @@ class CommitCommentFormType extends CommentFormType
 {
     public function getDefaultOptions(array $options)
     {
-        return array('data_class' => 'Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment');
+        return array('data_class' => 'Opensoft\Bundle\CodeConversationBundle\Model\CommitComment');
+    }
+
+
+    /**
+     * Returns the name of this type.
+     *
+     * @return string The name of this type
+     */
+    function getName()
+    {
+        return 'commit_comment';
     }
 }

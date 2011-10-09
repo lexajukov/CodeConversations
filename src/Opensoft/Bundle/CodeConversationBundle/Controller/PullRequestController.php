@@ -14,11 +14,13 @@ use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestTimeline;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment;
 
+/**
+ * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
+ */
 class PullRequestController extends Controller
 {
     /**
      * @Route("/project/{slug}/pulls/new")
-     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
      * @Template()
      */
     public function createAction(Project $project)
@@ -53,7 +55,6 @@ class PullRequestController extends Controller
 
     /**
      * @Route("/project/{slug}/pulls")
-     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
      * @Template()
      */
     public function listAction(Project $project)
@@ -67,7 +68,6 @@ class PullRequestController extends Controller
 
     /**
      * @Route("/project/{slug}/pull/{pullId}")
-     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
      * @Template()
      */
     public function viewAction(Project $project, $pullId)

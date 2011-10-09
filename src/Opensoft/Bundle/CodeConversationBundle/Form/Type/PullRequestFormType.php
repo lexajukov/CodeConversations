@@ -34,8 +34,8 @@ class PullRequestFormType extends AbstractType
     {
         $project = $this->project;
         $builder
-            ->add('title')
-            ->add('description')
+            ->add('title', 'text')
+            ->add('description', 'textarea')
             ->add('sourceBranch', 'entity', array(
                 'property' => 'name',
                 'class' => 'OpensoftCodeConversationBundle:Branch',

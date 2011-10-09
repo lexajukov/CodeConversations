@@ -14,29 +14,39 @@ use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestTimeline;
 use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
 
+/**
+ * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
+ */
 class ProjectController extends Controller
 {
+    /**
+     * @return \Opensoft\Bundle\CodeConversationBundle\Model\ProjectManagerInterface
+     */
+    public function getProjectManager()
+    {
+        return $this->container->get('opensoft_codeconversation.manager.project');
+    }
+
     /**
      * @Route("/project-menu")
      * @Template()
      */
     public function dropdownMenuAction()
     {
-        $em = $this->get('doctrine')->getEntityManager();
-        $projects = $em->getRepository('OpensoftCodeConversationBundle:Project')->findAll();
-
-        return array('projects' => $projects);
+        return array(
+            'projects' => $this->getProjectManager()->findProjects()
+        );
     }
 
     /**
      * @Route("/project/{slug}")
      * @Route("/project/{slug}/branch/{branchId}")
-     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
      * @Template()
      */
     public function showAction(Project $project, $branchId = null)
     {
         $em = $this->get('doctrine')->getEntityManager();
+//        $project = $this->getProjectManager()->findProjectBySlug($slug);
 
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Builder $builder  */
         $builder = $this->get('opensoft_codeconversation.git.builder');
@@ -62,7 +72,6 @@ class ProjectController extends Controller
 
     /**
      * @Route("/project/{slug}/commit/{sha1}")
-     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
      * @Template()
      */
     public function viewCommitAction(Project $project, $sha1)
@@ -83,7 +92,6 @@ class ProjectController extends Controller
 
     /**
      * @Route("/project/{slug}/blob/{blob}")
-     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
      * @Template()
      */
     public function blobAction(Project $project, $blob)

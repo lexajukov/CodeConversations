@@ -19,9 +19,7 @@ class DefaultController extends Controller
      */
     public function homepageAction()
     {
-        $projects = $this->get('doctrine')->getEntityManager()->getRepository('OpensoftCodeConversationBundle:Project')->findAll();
-
-        return array('projects' => $projects);
+        return array('projects' => $this->getProjectManager()->findProjects());
     }
 
     /**
@@ -31,5 +29,13 @@ class DefaultController extends Controller
     public function aboutAction()
     {
         return array();
+    }
+
+    /**
+     * @return \Opensoft\Bundle\CodeConversationBundle\Model\ProjectManagerInterface
+     */
+    public function getProjectManager()
+    {
+        return $this->container->get('opensoft_codeconversation.manager.project');
     }
 }

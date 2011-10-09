@@ -15,12 +15,14 @@ use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment;
 use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
 
+/**
+ * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
+ */
 class CommentController extends Controller
 {
     /**
      * @Route("/project/{slug}/pull/{pullId}/comment/new")
      * @Method("POST")
-     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
      * @Template("OpensoftCodeConversationsBundle:Default:viewPullRequest")
      */
     public function postPrCommentAction(Project $project, $pullId)
@@ -71,7 +73,6 @@ class CommentController extends Controller
 
     /**
      * @Route("/project/{slug}/commit/{sha1}/comment/new")
-     * @ParamConverter("project", class="OpensoftCodeConversationBundle:Project")
      * @Method("POST")
      * @Template("OpensoftCodeConversationsBundle:Default:viewComment")
      */

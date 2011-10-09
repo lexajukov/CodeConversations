@@ -22,6 +22,17 @@ class PullRequestCommentFormType extends CommentFormType
 {
     public function getDefaultOptions(array $options)
     {
-        return array('data_class' => 'Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment');
+//        return array('data_class' => 'Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment');
+        return array();
+    }
+
+    /**
+     * Returns the name of this type.
+     *
+     * @return string The name of this type
+     */
+    function getName()
+    {
+        return 'pullrequest_comment';
     }
 }

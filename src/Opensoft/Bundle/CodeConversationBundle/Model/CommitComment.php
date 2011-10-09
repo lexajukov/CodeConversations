@@ -18,7 +18,6 @@ class CommitComment extends Comment
      */
     protected $commitSha1;
 
-
     /**
      * @param string $commitSha1
      */

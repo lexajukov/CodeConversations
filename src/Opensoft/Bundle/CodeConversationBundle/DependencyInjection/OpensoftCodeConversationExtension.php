@@ -23,6 +23,9 @@ class OpensoftCodeConversationExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.xml');
+
+        foreach (array('services', 'twig', 'form', 'validator') as $file) {
+            $loader->load($file.'.xml');
+        }
     }
 }
