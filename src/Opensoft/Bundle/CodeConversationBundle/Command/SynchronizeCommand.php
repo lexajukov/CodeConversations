@@ -63,6 +63,8 @@ class SynchronizeCommand extends ContainerAwareCommand
 
             $project->synchronizeBranches();
 
+            // Loop through pull requests and check for "merged" pull requests (ones with zero commit difference?)
+
             $projectManager->updateProject($project);
 
             $output->writeln('');

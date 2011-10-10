@@ -111,7 +111,7 @@ class CommentController extends Controller
 
                 /** @var \Redpanda\Bundle\ActivityStreamBundle\Entity\ActionManager $activityManager  */
                 $activityManager = $this->container->get('activity_stream.action_manager');
-                $activityManager->send('commented on', $comment);
+                $activityManager->send('commented on', $project, $comment);
 
                 $this->get('session')->setFlash('success', 'Your comment was added to commit '.$sha1.'.');
 

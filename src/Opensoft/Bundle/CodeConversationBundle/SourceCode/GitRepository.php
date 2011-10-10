@@ -164,22 +164,25 @@ class GitRepository implements RepositoryInterface
 //        die();
 
         $commits = array();
-        $output = explode("\n", trim($process->getOutput()));
-        foreach ($output as $line) {
-            $infos = explode('|', $line);
-            $commit = new Commit();
-            $commit->setId($infos[0]);
-            $commit->setTree($infos[1]);
-            $commit->setAuthorName($infos[2]);
-            $commit->setAuthorEmail($infos[3]);
-            $commit->setAuthoredDate(new \DateTime($infos[4]));
-            $commit->setCommitterName($infos[5]);
-            $commit->setCommitterEmail($infos[6]);
-            $commit->setCommittedDate(new \DateTime($infos[7]));
-            $commit->setParents(explode(' ',$infos[8]));
-            $commit->setMessage($infos[9]);
+        $output = $process->getOutput();
+        if (!empty($output)) {
+            $output = explode("\n", trim($output));
+            foreach ($output as $line) {
+                $infos = explode('|', $line);
+                $commit = new Commit();
+                $commit->setId($infos[0]);
+                $commit->setTree($infos[1]);
+                $commit->setAuthorName($infos[2]);
+                $commit->setAuthorEmail($infos[3]);
+                $commit->setAuthoredDate(new \DateTime($infos[4]));
+                $commit->setCommitterName($infos[5]);
+                $commit->setCommitterEmail($infos[6]);
+                $commit->setCommittedDate(new \DateTime($infos[7]));
+                $commit->setParents(explode(' ',$infos[8]));
+                $commit->setMessage($infos[9]);
 
-            $commits[] = $commit;
+                $commits[] = $commit;
+            }
         }
 
 
