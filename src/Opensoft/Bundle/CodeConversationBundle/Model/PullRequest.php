@@ -306,7 +306,7 @@ class PullRequest implements PullRequestInterface
         return array(
             'route' => 'opensoft_codeconversation_pullrequest_view',
             'parameters' => array(
-                'slug' => $this->getProject()->getSlug(),
+                'projectSlug' => $this->getProject()->getSlug(),
                 'pullId' => $this->getId()
             )
         );

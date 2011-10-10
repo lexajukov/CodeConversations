@@ -22,7 +22,7 @@ use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
 class CommentController extends Controller
 {
     /**
-     * @Route("/project/{slug}/pull/{pullId}/comment/new")
+     * @Route("/{projectSlug}/pull/{pullId}/comment/new")
      * @Method("POST")
      * @ParamConverter("pullRequest", class="Opensoft\Bundle\CodeConversationBundle\Model\PullRequestInterface")
      * @Template("OpensoftCodeConversationsBundle:Default:viewPullRequest")
@@ -66,7 +66,7 @@ class CommentController extends Controller
                 $em->persist($comment);
                 $em->flush();
 
-                return $this->redirect($this->generateUrl('opensoft_codeconversation_pullrequest_view', array('pullId' => $pullRequest->getId(), 'slug' => $project->getSlug())));
+                return $this->redirect($this->generateUrl('opensoft_codeconversation_pullrequest_view', array('pullId' => $pullRequest->getId(), 'projectSlug' => $project->getSlug())));
             }
         }
 
@@ -75,7 +75,7 @@ class CommentController extends Controller
 
 
     /**
-     * @Route("/project/{slug}/commit/{sha1}/comment/new")
+     * @Route("/{projectSlug}/commit/{sha1}/comment/new")
      * @Method("POST")
      * @Template("OpensoftCodeConversationsBundle:Default:viewComment")
      */
@@ -115,7 +115,7 @@ class CommentController extends Controller
 
                 $this->get('session')->setFlash('success', 'Your comment was added to commit '.$sha1.'.');
 
-                return $this->redirect($this->generateUrl('opensoft_codeconversation_project_viewcommit', array('sha1' => $sha1, 'slug' => $project->getSlug())));
+                return $this->redirect($this->generateUrl('opensoft_codeconversation_project_viewcommit', array('sha1' => $sha1, 'projectSlug' => $project->getSlug())));
             }
         }
         $comments = $em->getRepository('OpensoftCodeConversationBundle:CommitComment')->findBy(array('commitSha1' => $sha1));

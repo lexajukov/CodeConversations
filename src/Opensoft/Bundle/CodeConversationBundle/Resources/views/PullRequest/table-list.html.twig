@@ -10,7 +10,7 @@
                             <span class="label important">Closed</span>
                         {% endif %}
 
-                        <a href="{{ path('opensoft_codeconversation_pullrequest_view', {'pullId': pullRequest.id, 'slug': project.slug}) }}">{{ pullRequest.title|truncate(80) }}</a>
+                        <a href="{{ path('opensoft_codeconversation_pullrequest_view', {'pullId': pullRequest.id, 'projectSlug': project.slug}) }}">{{ pullRequest.title|truncate(80) }}</a>
 
                         <span class="pull-right">opened {{ time_diff(pullRequest.createdAt) }}</span>
 

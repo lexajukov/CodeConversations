@@ -45,11 +45,11 @@ class ProjectParamConverter implements ParamConverterInterface
      */
     function apply(Request $request, ConfigurationInterface $configuration)
     {
-        if (!$request->attributes->has('slug')) {
+        if (!$request->attributes->has('projectSlug')) {
             return;
         }
 
-        $slug = $request->attributes->get('slug');
+        $slug = $request->attributes->get('projectSlug');
         $project = $this->projectManager->findProjectBySlug($slug);
 
         if (null === $project) {

@@ -28,7 +28,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project-menu")
+     * @Route("/project")
      * @Template()
      */
     public function dropdownMenuAction()
@@ -39,8 +39,8 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project/{slug}")
-     * @Route("/project/{slug}/branch/{branchName}", requirements={"branchName" = ".+"})
+     * @Route("/{projectSlug}")
+     * @Route("/{projectSlug}/tree/{branchName}", requirements={"branchName" = ".+"})
      * @Template()
      */
     public function showAction(ProjectInterface $project, $branchName = null)
@@ -60,7 +60,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project/{slug}/commit/{sha1}")
+     * @Route("/{projectSlug}/commit/{sha1}")
      * @Template()
      */
     public function viewCommitAction(ProjectInterface $project, $sha1)
@@ -76,7 +76,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project/{slug}/commit/{sha1}/{filepath}", requirements={"filepath" = ".+"})
+     * @Route("/{projectSlug}/commit/{sha1}/{filepath}", requirements={"filepath" = ".+"})
      * @Template()
      */
     public function fileAction(ProjectInterface $project, $sha1, $filepath)

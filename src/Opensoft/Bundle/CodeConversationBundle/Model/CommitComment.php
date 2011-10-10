@@ -81,7 +81,7 @@ class CommitComment extends Comment implements StreamableInterface
             'route' => 'opensoft_codeconversation_project_viewcommit',
             'parameters' => array(
                 'sha1' => $this->commitSha1,
-                'slug' => $this->project->getSlug()
+                'projectSlug' => $this->project->getSlug()
             )
         );
     }

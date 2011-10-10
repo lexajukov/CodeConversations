@@ -60,7 +60,7 @@ class PullRequestComment extends Comment
         return array(
             'route' => 'opensoft_codeconversation_pullrequest_view',
             'parameters' => array(
-                'slug' => $this->getPullRequest()->getProject()->getSlug(),
+                'projectSlug' => $this->getPullRequest()->getProject()->getSlug(),
                 'pullId' => $this->getPullRequest()->getId()
             )
         );

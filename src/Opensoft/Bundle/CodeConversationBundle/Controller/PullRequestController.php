@@ -31,7 +31,7 @@ class PullRequestController extends Controller
     }
 
     /**
-     * @Route("/project/{slug}/pulls/new")
+     * @Route("/{projectSlug}/pulls/new")
      * @Template()
      */
     public function createAction(ProjectInterface $project)
@@ -56,7 +56,7 @@ class PullRequestController extends Controller
 
                 $this->get('session')->setFlash('success', 'Pull request engaged.');
 
-                return $this->redirect($this->generateUrl('opensoft_codeconversation_pullrequest_view', array('pullId' => $pullRequest->getId(), 'slug' => $project->getSlug())));
+                return $this->redirect($this->generateUrl('opensoft_codeconversation_pullrequest_view', array('pullId' => $pullRequest->getId(), 'projectSlug' => $project->getSlug())));
             }
         }
 
@@ -64,7 +64,7 @@ class PullRequestController extends Controller
     }
 
     /**
-     * @Route("/project/{slug}/pulls")
+     * @Route("/{projectSlug}/pulls")
      * @Template()
      */
     public function listAction(ProjectInterface $project)
@@ -73,7 +73,7 @@ class PullRequestController extends Controller
     }
 
     /**
-     * @Route("/project/{slug}/pull/{pullId}")
+     * @Route("/{projectSlug}/pull/{pullId}")
      * @Template()
      */
     public function viewAction(ProjectInterface $project, PullRequestInterface $pullRequest)
@@ -108,7 +108,7 @@ class PullRequestController extends Controller
         /** @var \Redpanda\Bundle\ActivityStreamBundle\Entity\ActionManager $activityManager  */
         $activityManager = $this->container->get('activity_stream.action_manager');
         $stream = $activityManager->findStreamByTarget($pullRequest);
-        $activityManager->
+//        $activityManager->
 
 
         /** @var \Gedmo\Loggable\Entity\LogEntry[] $logs  */
