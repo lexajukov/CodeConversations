@@ -1,8 +1,8 @@
 {% extends 'OpensoftCodeConversationBundle::layout.html.twig' %}
 
-{% block page_title %}{{ project.name }}{% endblock %}
-
 {% block content %}
+
+    {% include 'OpensoftCodeConversationBundle::project-header.html.twig' with {'project': project} %}
 
     <ul class="tabs" data-tabs="tabs" >
         <li class="active"><a href="#recent-commits">Recent Commits</a></li>

@@ -248,6 +248,7 @@ class Project implements ProjectInterface
             // set origin/HEAD pointer as default branch
             if (strpos($newBranch, 'origin/HEAD -> ') === 0) {
                 $defaultBranchName = substr($newBranch, 15);
+                print_r($defaultBranchName);
                 continue;
             }
 
@@ -294,4 +295,26 @@ class Project implements ProjectInterface
         return $this->repo->fetchFileAtCommit($sha1, $filepath);
     }
 
+    /**
+     * Return an array for the form
+     *
+     * array(
+     *   'route' => $routeName,
+     *   'parameters' => array(key => value, ...)
+     * )
+     *
+     * @return array
+     */
+    public function getAbsolutePathParams()
+    {
+        return array(
+            'route' => 'opensoft_codeconversation_project_show',
+            'parameters' => array('projectSlug' => $this->getSlug())
+        );
+    }
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

@@ -2,9 +2,10 @@
 
 {% form_theme form 'OpensoftCodeConversationBundle:Form:fields.html.twig' %}
 
-{% block page_title %}Create Pull Request{% endblock %}
-
 {% block content %}
+
+    {% include 'OpensoftCodeConversationBundle::project-header.html.twig' with {'project': project} %}
+
     <h2>Open a pull request on {{ project.name }}</h2>
     <hr />
 

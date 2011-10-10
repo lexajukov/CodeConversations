@@ -54,6 +54,12 @@ class PullRequestController extends Controller
 
                 $pullRequestManager->updatePullRequest($pullRequest);
 
+
+                /** @var \Redpanda\Bundle\ActivityStreamBundle\Entity\ActionManager $activityManager  */
+                $activityManager = $this->container->get('activity_stream.action_manager');
+                $activityManager->send('opened', $pullRequest, $project);
+
+
                 $this->get('session')->setFlash('success', 'Pull request engaged.');
 
                 return $this->redirect($this->generateUrl('opensoft_codeconversation_pullrequest_view', array('pullId' => $pullRequest->getId(), 'projectSlug' => $project->getSlug())));

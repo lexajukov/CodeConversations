@@ -1,0 +1,31 @@
+<table>
+    <thead>
+        <tr>
+            <th>
+                <h3>{{ project.name }}</h3>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <form style="display: inline;" method="POST" action="{{ path('opensoft_codeconversation_project_redirect', {'projectSlug': project.slug}) }}">
+                    <span>Branch</span>
+                    <select name="branchName" type="select" onchange="this.form.submit();">
+                        {% for branch in project.branches %}
+                            {% if branch.name == app.request.get('branchName') %}
+                                <option value="{{ branch.name }}" selected="selected">{{ branch.name }}</option>
+                            {% elseif not app.request.attributes.has('branchName') and branch.name == project.headBranch.name %}
+                                <option value="{{ branch.name }}" selected="selected">{{ branch.name }}</option>
+                            {% else %}
+                                <option value="{{ branch.name }}">{{ branch.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </form>
+                <a class="btn" href="{{ path('opensoft_codeconversation_project_show', {'projectSlug': project.slug}) }}">Commits</a></li>
+                <a class="btn" href="{{ path('opensoft_codeconversation_pullrequest_list', {'projectSlug': project.slug}) }}">Active Pull Requests (0)</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
