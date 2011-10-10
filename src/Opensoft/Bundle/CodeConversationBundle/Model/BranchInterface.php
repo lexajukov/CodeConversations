@@ -33,14 +33,14 @@ interface BranchInterface
     public function getName();
 
     /**
-     * @param ProjectInterface $project
+     * @param RemoteInterface $remote
      */
-    public function setProject(ProjectInterface $project);
+    public function setRemote(RemoteInterface $remote);
 
     /**
-     * @return ProjectInterface
+     * @return RemoteInterface
      */
-    public function getProject();
+    public function getRemote();
 
     /**
      * @param \Boolean $enabled

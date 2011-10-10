@@ -4,7 +4,7 @@
       xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           http://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Opensoft\Bundle\CodeConversationBundle\Entity\Branch" table="branches">
+    <entity name="Opensoft\Bundle\CodeConversationBundle\Entity\Remote" table="remotes">
 
         <id name="id" type="integer">
             <generator strategy="AUTO"/>
@@ -12,9 +12,19 @@
 
         <field name="name" type="string" />
 
-        <field name="enabled" type="boolean" />
+        <field name="url" type="text" />
 
-        <many-to-one target-entity="Remote" field="remote" />
+        <field name="username" type="text" />
+
+        <field name="password" type="text" />
+
+        <many-to-one target-entity="Branch" field="branches" />
+
+        <many-to-one target-entity="Project" field="project" />
+
+        <many-to-one target-entity="Branch" field="headBranch">
+            <join-column name="headbranch_id" nullable="false" />
+        </many-to-one>
 
     </entity>
 

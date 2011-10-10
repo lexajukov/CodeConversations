@@ -46,14 +46,9 @@ class Project implements ProjectInterface
     protected $password;
 
     /**
-     * @var Branch
+     * @var Remote[]
      */
-    protected $headBranch;
-
-    /**
-     * @var Branch[]
-     */
-    protected $branches;
+    protected $remotes;
 
     /**
      * @var PullRequest[]
@@ -73,15 +68,7 @@ class Project implements ProjectInterface
         $this->repo = $repo;
     }
 
-    public function getBranches()
-    {
-        return $this->branches;
-    }
 
-    public function addBranch(BranchInterface $branch)
-    {
-        $this->branches[] = $branch;
-    }
 
     /**
      * @param int $id
@@ -115,22 +102,6 @@ class Project implements ProjectInterface
         return $this->name;
     }
 
-    /**
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
     public function setPullRequests(array $pullRequests)
     {
         $this->pullRequests = $pullRequests;
@@ -139,54 +110,6 @@ class Project implements ProjectInterface
     public function getPullRequests()
     {
         return $this->pullRequests;
-    }
-
-    /**
-     * @param string $url
-     */
-    public function setUrl($url)
-    {
-        $this->url = $url;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    /**
-     * @param string $username
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * @param BranchInterface $headBranch
-     */
-    public function setHeadBranch(BranchInterface $headBranch)
-    {
-        $this->headBranch = $headBranch;
-    }
-
-    /**
-     * @return BranchInterface
-     */
-    public function getHeadBranch()
-    {
-        return $this->headBranch;
     }
 
     /**
@@ -316,5 +239,23 @@ class Project implements ProjectInterface
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function setRemotes($remotes)
+    {
+        $this->remotes = array();
+        foreach ($remotes as $remote) {
+            $this->addRemote($remote);
+        }
+    }
+
+    public function addRemote(RemoteInterface $remote)
+    {
+        $this->remotes[] = $remote;
+    }
+
+    public function getRemotes()
+    {
+        return $this->remotes;
     }
 }

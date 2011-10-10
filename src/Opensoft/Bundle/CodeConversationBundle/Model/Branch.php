@@ -24,9 +24,9 @@ class Branch implements BranchInterface
     protected $name;
     
     /**
-     * @var Project
+     * @var RemoteInterface
      */
-    protected $project;
+    protected $remote;
 
     /**
      * @var Boolean
@@ -67,20 +67,21 @@ class Branch implements BranchInterface
     }
 
     /**
-     * @param ProjectInterface $project
+     * @param RemoteInterface $remote
      */
-    public function setProject(ProjectInterface $project)
+    public function setRemote(RemoteInterface $remote)
     {
-        $this->project = $project;
+        $this->remote = $remote;
     }
 
     /**
-     * @return ProjectInterface
+     * @return RemoteInterface
      */
-    public function getProject()
+    public function getRemote()
     {
-        return $this->project;
+        return $this->remote;
     }
+
 
     /**
      * @param \Boolean $enabled
