@@ -54,6 +54,13 @@
                 {% endfor %}
             {% endif %}
 
+            <h2>Activity stream</h2>
+            {% if stream %}
+                {% for event in stream %}
+                    {{ activity_stream_get_action(event) }}
+                {% endfor %}
+            {% endif %}
+
             <hr />
             <h4>Comment on this pull request</h4>
 

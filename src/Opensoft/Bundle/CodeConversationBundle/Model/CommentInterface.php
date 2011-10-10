@@ -5,12 +5,14 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
+use Redpanda\Bundle\ActivityStreamBundle\Streamable\StreamableInterface;
+
 /**
  *
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-interface CommentInterface 
+interface CommentInterface extends StreamableInterface
 {
     /**
      * @param UserInterface $author
@@ -46,9 +48,4 @@ interface CommentInterface
      * @param int $id
      */
     public function setId($id);
-
-    /**
-     * @return int
-     */
-    public function getId();
 }

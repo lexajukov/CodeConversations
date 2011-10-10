@@ -44,16 +44,23 @@ class CommentController extends Controller
             $form->bindRequest($request);
 
             if ($form->isValid()) {
+
+                /** @var \Redpanda\Bundle\ActivityStreamBundle\Entity\ActionManager $activityManager  */
+                $activityManager = $this->container->get('activity_stream.action_manager');
+
                 if ($request->get('close')) {
                     $pullRequest->setStatus(PullRequest::STATUS_CLOSED);
                     $em->persist($pullRequest);
                     $this->get('session')->setFlash('error', 'This pull request was closed.');
+                    $activityManager->send("closed", $pullRequest);
                 } elseif ($request->get('reopen')) {
                     $pullRequest->setStatus(PullRequest::STATUS_OPEN);
                     $em->persist($pullRequest);
                     $this->get('session')->setFlash('success', 'This pull request was reopened.');
+                    $activityManager->send("reopened", $pullRequest);
                 } else {
                     $this->get('session')->setFlash('success', 'Your comment was added to this pull request.');
+                    $activityManager->send("commented on", $pullRequest);
                 }
 
                 $em->persist($comment);
@@ -87,6 +94,7 @@ class CommentController extends Controller
         $comment = new CommitComment();
         $comment->setCommitSha1($sha1);
         $comment->setCreatedAt(new \DateTime());
+        $comment->setProject($project);
         $comment->setAuthor($this->container->get('security.context')->getToken()->getUser());
 
         /** @var \Symfony\Component\Form\Form $form  */
@@ -98,9 +106,12 @@ class CommentController extends Controller
             $form->bindRequest($request);
 
             if ($form->isValid()) {
-
                 $em->persist($comment);
                 $em->flush();
+
+                /** @var \Redpanda\Bundle\ActivityStreamBundle\Entity\ActionManager $activityManager  */
+                $activityManager = $this->container->get('activity_stream.action_manager');
+                $activityManager->send('commented on', $comment);
 
                 $this->get('session')->setFlash('success', 'Your comment was added to commit '.$sha1.'.');
 

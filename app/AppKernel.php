@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\TimeBundle\KnpTimeBundle(),
             new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+            new Redpanda\Bundle\ActivityStreamBundle\RedpandaActivityStreamBundle(),
 
             new Opensoft\Bundle\CodeConversationBundle\OpensoftCodeConversationBundle(),
         );

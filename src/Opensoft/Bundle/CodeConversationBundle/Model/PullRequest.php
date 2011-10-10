@@ -10,6 +10,7 @@ use Opensoft\Bundle\CodeConversationBundle\Model\Commit;
 use Opensoft\Bundle\CodeConversationBundle\Validator\BranchPoint as AssertBranchPoint;
 use Opensoft\Bundle\CodeConversationBundle\Validator\OnePullRequestPerBranch as AssertOnePullRequestPerBranch;
 use Opensoft\Bundle\CodeConversationBundle\Timeline\EventTimeline;
+use Redpanda\Bundle\ActivityStreamBundle\Streamable\StreamableInterface;
 
 /**
  *
@@ -288,5 +289,32 @@ class PullRequest implements PullRequestInterface
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Return an array for the form
+     *
+     * array(
+     *   'route' => $routeName,
+     *   'parameters' => array(key => value, ...)
+     * )
+     *
+     * @return array
+     */
+    public function getAbsolutePathParams()
+    {
+        return array(
+            'route' => 'opensoft_codeconversation_pullrequest_view',
+            'parameters' => array(
+                'slug' => $this->getProject()->getSlug(),
+                'pullId' => $this->getId()
+            )
+        );
+    }
+
+
+    public function __toString()
+    {
+        return 'PR #' . $this->id;
     }
 }

@@ -22,6 +22,8 @@
 
         <many-to-one target-entity="User" field="author" />
 
+        <many-to-one target-entity="Project" field="project" />
+
     </entity>
 
 </doctrine-mapping>

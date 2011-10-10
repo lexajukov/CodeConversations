@@ -104,6 +104,13 @@ class PullRequestController extends Controller
 //            $timeline->add($comment->getCreatedAt(), $comment);
 //        }
 
+
+        /** @var \Redpanda\Bundle\ActivityStreamBundle\Entity\ActionManager $activityManager  */
+        $activityManager = $this->container->get('activity_stream.action_manager');
+        $stream = $activityManager->findStreamByTarget($pullRequest);
+        $activityManager->
+
+
         /** @var \Gedmo\Loggable\Entity\LogEntry[] $logs  */
 //        $logs = $em->getRepository('StofDoctrineExtensionsBundle:LogEntry')->findBy(array('objectClass' => get_class($pullRequest), 'objectId' => $pullRequest->getId()));
 //        foreach ($logs as $logEntry) {
@@ -117,6 +124,7 @@ class PullRequestController extends Controller
             'pullRequest' => $pullRequest,
             'form' => $form->createView(),
             'fullDiff' => $fullDiff,
+            'stream' => $stream,
 //            'commits' => $commits,
 //            'timeline' => $timeline
         );

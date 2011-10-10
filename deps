@@ -79,7 +79,12 @@
 [DoctrineExtensionsBundle]
     git=http://github.com/stof/StofDoctrineExtensionsBundle.git
     target=/bundles/Stof/DoctrineExtensionsBundle
+    version=1.0.0
 
 [GravatarBundle]
     git=http://github.com/ornicar/GravatarBundle.git
     target=/bundles/Ornicar/GravatarBundle
+
+[ActivityStreamBundle]
+    git=http://github.com/richardfullmer/ActivityStreamBundle.git
+    target=/bundles/Redpanda/Bundle/ActivityStreamBundle

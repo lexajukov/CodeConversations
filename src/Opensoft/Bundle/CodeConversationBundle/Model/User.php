@@ -5,15 +5,15 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
+use Redpanda\Bundle\ActivityStreamBundle\Streamable\StreamableInterface;
 use FOS\UserBundle\Entity\User as BaseUser;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class User extends BaseUser implements UserInterface
+class User extends BaseUser implements UserInterface, StreamableInterface
 {
 
     /**
@@ -46,6 +46,26 @@ class User extends BaseUser implements UserInterface
     public function getGitAlias()
     {
         return $this->gitAlias;
+    }
+
+    /**
+     * Return an array for the form
+     *
+     * array(
+     *   'route' => $routeName,
+     *   'parameters' => array(key => value, ...)
+     * )
+     *
+     * @return array
+     */
+    public function getAbsolutePathParams()
+    {
+        return array(
+            'route' => 'opensoft_codeconversation_user_show',
+            'parameters' => array(
+                'usernameCanonical' => $this->getUsernameCanonical()
+            )
+        );
     }
 
 

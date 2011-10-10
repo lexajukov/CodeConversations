@@ -47,7 +47,7 @@ doctrine:
         auto_generate_proxy_classes: %kernel.debug%
         auto_mapping: true
         mappings:
-            StofDoctrineExtensionsBundle: true # done need translatable or loggable
+            StofDoctrineExtensionsBundle: false # done need translatable or loggable
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -80,9 +80,11 @@ stof_doctrine_extensions:
     orm:
         default:
             sluggable: true
-            loggable: true
 
 ornicar_gravatar: ~
+
+redpanda_activity_stream:
+    db_driver: orm
 
 services:
  twig.extension.text:

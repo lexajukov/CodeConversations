@@ -45,5 +45,30 @@ class PullRequestComment extends Comment
         return get_class($this);
     }
 
+    /**
+     * Return an array for the form
+     *
+     * array(
+     *   'route' => $routeName,
+     *   'parameters' => array(key => value, ...)
+     * )
+     *
+     * @return array
+     */
+    public function getAbsolutePathParams()
+    {
+        return array(
+            'route' => 'opensoft_codeconversation_pullrequest_view',
+            'parameters' => array(
+                'slug' => $this->getPullRequest()->getProject()->getSlug(),
+                'pullId' => $this->getPullRequest()->getId()
+            )
+        );
+    }
+
+    public function __toString()
+    {
+        return 'PR#' . $this->getPullRequest()->getId();
+    }
 
 }

@@ -5,12 +5,14 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
+use Redpanda\Bundle\ActivityStreamBundle\Streamable\StreamableInterface;
+
 /**
  *
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-interface PullRequestInterface 
+interface PullRequestInterface extends StreamableInterface
 {
      public function setComments(array $comments);
 
@@ -64,11 +66,6 @@ interface PullRequestInterface
      * @param int $id
      */
     public function setId($id);
-
-    /**
-     * @return int
-     */
-    public function getId();
 
     /**
      * @param \Opensoft\Bundle\CodeConversationBundle\Entity\User $initiatedBy

@@ -1,0 +1,9 @@
+{% extends 'OpensoftCodeConversationBundle::layout.html.twig' %}
+
+{% block page_title %}@{{ user.username }} Stream{% endblock %}
+
+{% block content %}
+    {% for event in stream %}
+        {{ activity_stream_get_action(event) }}
+    {% endfor %}
+{% endblock %}
