@@ -54,23 +54,29 @@ class ProjectManager extends BaseProjectManager
      */
     public function findProjectBySlug($slug)
     {
-        $project = $this->entityRepository->findOneBy(array('slug' => $slug));;
-        $project->setSourceCodeRepository($this->sourceCodeRepository);
+        $project = $this->entityRepository->findOneBy(array('slug' => $slug));
+
+        if ($project !== null) {
+            $project->setSourceCodeRepository($this->sourceCodeRepository);
+        }
 
         return $project;
     }
 
 
     /**
-     * @param string $slug
+     * @param array $criteria
      * @return \Opensoft\Bundle\CodeConversationBundle\Entity\Project
      */
     public function findProjectBy(array $criteria)
     {
-        $project = $this->entityRepository->findOneBy($criteria);;
-        $project->setSourceCodeRepository($this->sourceCodeRepository);
+        $projects = $this->entityRepository->findBy($criteria);
+        // Wish there was a better way to do this...
+        foreach ($projects as $project) {
+            $project->setSourceCodeRepository($this->sourceCodeRepository);
+        }
 
-        return $project;
+        return $projects;
     }
 
     /**

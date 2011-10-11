@@ -1,8 +1,9 @@
 {% extends 'OpensoftCodeConversationBundle::layout.html.twig' %}
 
-{% block page_title %}{{ pullRequest.initiatedBy.username }} opened a pull request on {{ project.name }}{% endblock %}
-
 {% block content %}
+
+    {% include 'OpensoftCodeConversationBundle::project-header.html.twig' with {'project': project} %}
+    
     <span style="font-size: larger;">
         {% if pullRequest.status == 1 %}
             <span style="font-size: large;" class="label success">Open</span>

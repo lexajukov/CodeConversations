@@ -18,25 +18,10 @@ class UserController extends Controller
      */
     public function showAction(User $user)
     {
-        return array('user' => $user);
-    }
-
-    /**
-     * @Route("/user/{usernameCanonical}/stream")
-     * @ParamConverter("user", class="OpensoftCodeConversationBundle:User")
-     * @Template()
-     */
-    public function streamAction(User $user)
-    {
         /** @var \Redpanda\Bundle\ActivityStreamBundle\Model\ActionManagerInterface $activityManager **/
         $activityManager = $this->container->get('activity_stream.action_manager');
-
         $data = $activityManager->findStreamByActor($user);
-
-//        foreach ($data as $item) {
-//            print_r(get_class($item));
-//        }
-
+        
         return array('user' => $user, 'stream' => $data);
     }
 }

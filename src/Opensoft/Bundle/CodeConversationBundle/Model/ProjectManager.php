@@ -27,5 +27,4 @@ abstract class ProjectManager implements ProjectManagerInterface
 
         return new $class($this->sourceCodeRepository);
     }
-
 }

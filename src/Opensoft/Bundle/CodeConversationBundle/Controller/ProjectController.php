@@ -39,17 +39,27 @@ class ProjectController extends Controller
     }
 
     /**
+     * @Route("/{projectSlug}/redirect")
+     * @Method("POST")
+     */
+    public function redirectAction(ProjectInterface $project)
+    {
+        $branchName = $this->getRequest()->get('branchName');
+        return $this->redirect($this->generateUrl('opensoft_codeconversation_project_show_1', array('projectSlug' => $project->getSlug(), 'branchName' => $branchName)));
+    }
+
+    /**
      * @Route("/{projectSlug}")
-     * @Route("/{projectSlug}/tree/{branchName}", requirements={"branchName" = ".+"})
+     * @Route("/{projectSlug}/tree/{remote}/{branchName}")
      * @Template()
      */
-    public function showAction(ProjectInterface $project, $branchName = null)
+    public function showAction(ProjectInterface $project, $remote = null, $branchName = null)
     {
         $em = $this->get('doctrine')->getEntityManager();
         
-        if ($branchName !== null) {
+        if ($branchName !== null && $remote !== null) {
             /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
-            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($branchName);
+            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($remote . '/' . $branchName);
         } else {
             $branch = $project->getHeadBranch();
         }
@@ -57,6 +67,26 @@ class ProjectController extends Controller
         $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
 
         return array('project' => $project, 'branch' => $branch, 'openPullRequests' => $openPullRequests);
+    }
+    /**
+     * @Route("/{projectSlug}/commits")
+     * @Route("/{projectSlug}/tree/{branchName}/commits", requirements={"branchName" = ".+"})
+     * @Template()
+     */
+    public function commitsAction(ProjectInterface $project, $branchName = null)
+    {
+        $em = $this->get('doctrine')->getEntityManager();
+
+        if ($branchName !== null) {
+            /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
+            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($branchName);
+        } else {
+            $branch = $project->getHeadBranch();
+        }
+
+//        $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
+
+        return array('project' => $project, 'branch' => $branch);
     }
 
     /**

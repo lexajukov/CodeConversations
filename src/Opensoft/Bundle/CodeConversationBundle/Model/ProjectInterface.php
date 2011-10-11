@@ -15,8 +15,6 @@ use Redpanda\Bundle\ActivityStreamBundle\Streamable\StreamableInterface;
  */
 interface ProjectInterface extends StreamableInterface
 {
-    public function getBranches();
-
     /**
      * @param int $id
      */
@@ -32,15 +30,6 @@ interface ProjectInterface extends StreamableInterface
      */
     public function getName();
 
-    /**
-     * @param string $password
-     */
-    public function setPassword($password);
-
-    /**
-     * @return string
-     */
-    public function getPassword();
 
     /**
      * @param PullRequestInterface[] $pullRequests
@@ -52,35 +41,6 @@ interface ProjectInterface extends StreamableInterface
      */
     public function getPullRequests();
 
-    /**
-     * @param string $url
-     */
-    public function setUrl($url);
-
-    /**
-     * @return string
-     */
-    public function getUrl();
-
-    /**
-     * @param string $username
-     */
-    public function setUsername($username);
-
-    /**
-     * @return string
-     */
-    public function getUsername();
-
-    /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $headBranch
-     */
-    public function setHeadBranch(BranchInterface $headBranch);
-
-    /**
-     * @return \Opensoft\Bundle\CodeConversationBundle\Entity\Branch
-     */
-    public function getHeadBranch();
     /**
      * @param string $slug
      */
@@ -112,4 +72,14 @@ interface ProjectInterface extends StreamableInterface
     public function getRecentCommits($object = null, $limit = null);
 
     public function getFileAtCommit($sha1, $filepath);
+
+
+    public function setRemotes($remotes);
+
+    public function addRemote(RemoteInterface $remote);
+
+    /**
+     * @return RemoteInterface[]
+     */
+    public function getRemotes();
 }
