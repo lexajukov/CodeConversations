@@ -15,28 +15,15 @@ use Symfony\Component\Validator\Constraint;
 interface RemoteManagerInterface
 {
     /**
-     * @param ProjectInterface $project
      * @return RemoteInterface
      */
-    public function createRemote(ProjectInterface $project);
-
-    /**
-     * @param string $slug
-     * @return RemoteInterface
-     */
-    public function findRemoteByName($name);
-
-    /**
-     * @param string $slug
-     * @return RemoteInterface
-     */
-    public function findRemoteByProject(ProjectInterface $project);
+    public function createRemote();
 
     /**
      * @param array $criteria
      * @return RemoteInterface[]
      */
-    public function findRemoteBy(array $criteria);
+    public function findRemotesBy(array $criteria);
 
     /**
      * @return ProjectInterface[]

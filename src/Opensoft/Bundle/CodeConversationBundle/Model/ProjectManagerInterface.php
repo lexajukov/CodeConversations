@@ -46,6 +46,7 @@ interface ProjectManagerInterface
      */
     public function deleteProject(ProjectInterface $project);
 
+
     /**
      * @param $value
      * @param \Symfony\Component\Validator\Constraint $constraint

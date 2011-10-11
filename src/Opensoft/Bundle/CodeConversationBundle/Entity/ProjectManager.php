@@ -38,10 +38,8 @@ class ProjectManager extends BaseProjectManager
      * @param \Doctrine\ORM\EntityManager $em
      * @param string $class
      */
-    public function __construct(RepositoryInterface $sourceCodeRepo, EntityManager $em, $class)
+    public function __construct(EntityManager $em, $class)
     {
-        parent::__construct($sourceCodeRepo);
-
         $this->em = $em;
         $this->entityRepository = $em->getRepository($class);
         $metadata = $em->getClassMetadata($class);
@@ -54,13 +52,7 @@ class ProjectManager extends BaseProjectManager
      */
     public function findProjectBySlug($slug)
     {
-        $project = $this->entityRepository->findOneBy(array('slug' => $slug));
-
-        if ($project !== null) {
-            $project->setSourceCodeRepository($this->sourceCodeRepository);
-        }
-
-        return $project;
+        return $this->entityRepository->findOneBy(array('slug' => $slug));
     }
 
 
@@ -70,13 +62,7 @@ class ProjectManager extends BaseProjectManager
      */
     public function findProjectBy(array $criteria)
     {
-        $projects = $this->entityRepository->findBy($criteria);
-        // Wish there was a better way to do this...
-        foreach ($projects as $project) {
-            $project->setSourceCodeRepository($this->sourceCodeRepository);
-        }
-
-        return $projects;
+        return $this->entityRepository->findBy($criteria);
     }
 
     /**
@@ -84,13 +70,7 @@ class ProjectManager extends BaseProjectManager
      */
     public function findProjects()
     {
-        $projects = $this->entityRepository->findAll();
-        // Wish there was a better way to do this...
-        foreach ($projects as $project) {
-            $project->setSourceCodeRepository($this->sourceCodeRepository);
-        }
-
-        return $projects;
+        return $this->entityRepository->findAll();
     }
 
     /**
@@ -108,11 +88,6 @@ class ProjectManager extends BaseProjectManager
      */
     public function updateProject(ProjectInterface $project, $andFlush = true)
     {
-        // Ensure that branches get persisted first, otherwise headBranch references will fail
-        foreach ($project->getBranches() as $branch) {
-            $this->em->persist($branch);
-        }
-
         $this->em->persist($project);
         if ($andFlush) {
             $this->em->flush();

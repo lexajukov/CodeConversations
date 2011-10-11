@@ -12,6 +12,14 @@ namespace Opensoft\Bundle\CodeConversationBundle\Model;
  */
 interface CommitInterface
 {
+    public function setId($id);
+
+    public function getId();
+
+    public function setTree($tree);
+
+    public function getTree();
+
     public function setAuthorEmail($authorEmail);
 
     public function getAuthorEmail();
@@ -36,10 +44,6 @@ interface CommitInterface
 
     public function getCommitterName();
 
-    public function setId($id);
-
-    public function getId();
-
     public function setMessage($message);
 
     public function getMessage();
@@ -47,10 +51,6 @@ interface CommitInterface
     public function setParents(array $parents);
 
     public function getParents();
-
-    public function setTree($tree);
-
-    public function getTree();
 
     public function getDiff();
 

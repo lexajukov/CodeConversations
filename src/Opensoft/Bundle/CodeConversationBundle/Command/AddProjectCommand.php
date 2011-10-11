@@ -5,7 +5,6 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,7 +16,7 @@ use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class AddProjectCommand extends ContainerAwareCommand
+class AddProjectCommand extends BaseCommand
 {
 
     public function configure()
@@ -34,11 +33,24 @@ class AddProjectCommand extends ContainerAwareCommand
         /** @var \Opensoft\Bundle\CodeConversationBundle\Model\ProjectManagerInterface $projectManager  */
         $projectManager = $this->getContainer()->get('opensoft_codeconversation.manager.project');
 
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Model\RemoteManagerInterface $remoteManager  */
+        $remoteManager = $this->getContainer()->get('opensoft_codeconversation.manager.remote');
+
         $project = $projectManager->createProject();
         $project->setName($input->getArgument('name'));
-        $project->setUrl($input->getArgument('url'));
-        
-        $project->initSourceCodeRepo(function ($type, $buffer) use ($output) {
+
+        $remote = $remoteManager->createRemote();
+        $remote->setName('origin'); // new projects always get a remote named origin...
+        $remote->setUrl($input->getArgument('url'));
+        $remote->setUsername($input->getOption('username'));
+        $remote->setPassword($input->getOption('password'));
+        $remote->setProject($project);
+
+        $project->addRemote($remote);
+
+        /** @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $repo  */
+        $repo = $this->getContainer()->get('opensoft_codeconversation.source_code.repository');
+        $repo->init($project, function ($type, $buffer) use ($output) {
             if ('err' === $type) {
                 $output->write(str_replace("\n", "\nERR| ", $buffer));
             } else {
@@ -46,8 +58,9 @@ class AddProjectCommand extends ContainerAwareCommand
             }
         });
 
-        $project->synchronizeBranches();
-        
+        $projectManager->synchronizeBranches($repo, $project);
+
+        $remoteManager->updateRemote($remote);
         $projectManager->updateProject($project);
 
         $output->writeln(strtr("Project <info>%project%</info> created!", array('%project%' => $project->getName())));

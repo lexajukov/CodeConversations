@@ -10,6 +10,9 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
+use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
+use Redpanda\Bundle\ActivityStreamBundle\Streamable\StreamableInterface;
+
 /**
  *
  *
@@ -17,16 +20,34 @@ namespace Opensoft\Bundle\CodeConversationBundle\Model;
  */ 
 interface RemoteInterface
 {
+    /**
+     * @param integer $id
+     */
     public function setId($id);
 
+    /**
+     * @return integer
+     */
     public function getId();
 
+    /**
+     * @param string $name
+     */
     public function setName($name);
 
+    /**
+     * @return string
+     */
     public function getName();
 
+    /**
+     * @param string $url
+     */
     public function setUrl($url);
 
+    /**
+     * @return string
+     */
     public function getUrl();
 
     /**
@@ -49,8 +70,14 @@ interface RemoteInterface
      */
     public function getUsername();
 
+    /**
+     * @param BranchInterface $branch
+     */
     public function setHeadBranch(BranchInterface $branch);
 
+    /**
+     * @return BranchInterface
+     */
     public function getHeadBranch();
 
     /**
@@ -68,7 +95,13 @@ interface RemoteInterface
      */
     public function getBranches();
 
+    /**
+     * @param ProjectInterface $project
+     */
     public function setProject(ProjectInterface $project);
 
+    /**
+     * @return ProjectInterface
+     */
     public function getProject();
 }

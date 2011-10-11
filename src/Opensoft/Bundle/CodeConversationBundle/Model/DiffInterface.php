@@ -12,9 +12,18 @@ namespace Opensoft\Bundle\CodeConversationBundle\Model;
  */
 interface DiffInterface
 {
+    /**
+     * @return FileDiffInterface[]
+     */
     public function getFileDiffs();
 
+    /**
+     * @param FileDiffInterface $fileDiff
+     */
     public function addFileDiff(FileDiffInterface $fileDiff);
 
+    /**
+     * @param FileDiffInterface[] $fileDiffs
+     */
     public function setFileDiffs(array $fileDiffs);
 }

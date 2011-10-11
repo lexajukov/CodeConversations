@@ -30,11 +30,9 @@ interface ProjectInterface extends StreamableInterface
      */
     public function getName();
 
+    public function setPullRequests($pullRequests);
 
-    /**
-     * @param PullRequestInterface[] $pullRequests
-     */
-    public function setPullRequests(array $pullRequests);
+    public function addPullRequest(PullRequestInterface $pullRequest);
 
     /**
      * @return PullRequestInterface[]
@@ -50,29 +48,6 @@ interface ProjectInterface extends StreamableInterface
      * @return string
      */
     public function getSlug();
-
-    public function setSourceCodeRepository(RepositoryInterface $repo);
-
-    public function getSourceCodeRepository();
-
-    /**
-     * @param \Closure $callback
-     */
-    public function initSourceCodeRepo($callback = null);
-
-
-    public function synchronizeBranches();
-
-    /**
-     * @param string $sha1
-     * @return Commit
-     */
-    public function getCommit($sha1);
-
-    public function getRecentCommits($object = null, $limit = null);
-
-    public function getFileAtCommit($sha1, $filepath);
-
 
     public function setRemotes($remotes);
 

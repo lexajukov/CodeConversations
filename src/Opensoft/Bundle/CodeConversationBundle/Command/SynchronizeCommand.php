@@ -5,7 +5,6 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,7 +19,7 @@ use Doctrine\ORM\EntityManager;
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class SynchronizeCommand extends ContainerAwareCommand
+class SynchronizeCommand extends BaseCommand
 {
 
     public function configure()

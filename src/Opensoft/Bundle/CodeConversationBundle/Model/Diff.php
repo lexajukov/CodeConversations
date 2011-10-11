@@ -12,18 +12,30 @@ namespace Opensoft\Bundle\CodeConversationBundle\Model;
  */
 class Diff implements DiffInterface
 {
+    /**
+     * @var FileDiffInterface[]
+     */
     protected $fileDiffs = array();
 
+    /**
+     * @return FileDiffInterface[]
+     */
     public function getFileDiffs()
     {
         return $this->fileDiffs;
     }
 
+    /**
+     * @param FileDiffInterface $fileDiff
+     */
     public function addFileDiff(FileDiffInterface $fileDiff)
     {
         $this->fileDiffs[] = $fileDiff;
     }
 
+    /**
+     * @param FileDiffInterface[] $fileDiffs
+     */
     public function setFileDiffs(array $fileDiffs)
     {
         $this->fileDiffs = array();
@@ -31,6 +43,4 @@ class Diff implements DiffInterface
             $this->addFileDiff($fileDiff);
         }
     }
-
-
 }

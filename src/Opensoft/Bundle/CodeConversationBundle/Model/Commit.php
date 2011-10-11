@@ -33,15 +33,26 @@ class Commit implements CommitInterface, EventInterface
     private $diff;
 
 
-    public function setDiff(DiffInterface $diff)
+    public function setId($id)
     {
-        $this->diff = $diff;
+        $this->id = $id;
     }
 
-    public function getDiff()
+    public function getId()
     {
-        return $this->diff;
+        return $this->id;
     }
+
+    public function setTree($tree)
+    {
+        $this->tree = $tree;
+    }
+
+    public function getTree()
+    {
+        return $this->tree;
+    }
+
 
     public function setAuthorEmail($authorEmail)
     {
@@ -103,16 +114,6 @@ class Commit implements CommitInterface, EventInterface
         return $this->committerName;
     }
 
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
-
-    public function getId()
-    {
-        return $this->id;
-    }
-
     public function setMessage($message)
     {
         $this->message = $message;
@@ -141,16 +142,6 @@ class Commit implements CommitInterface, EventInterface
         return $this->parents;
     }
 
-    public function setTree($tree)
-    {
-        $this->tree = $tree;
-    }
-
-    public function getTree()
-    {
-        return $this->tree;
-    }
-
     /**
      * @return \DateTime
      */
@@ -165,6 +156,22 @@ class Commit implements CommitInterface, EventInterface
     public function getClass()
     {
         return get_class($this);
+    }
+
+    /**
+     * @param DiffInterface $diff
+     */
+    public function setDiff(DiffInterface $diff)
+    {
+        $this->diff = $diff;
+    }
+
+    /**
+     * @return DiffInterface
+     */
+    public function getDiff()
+    {
+        return $this->diff;
     }
 
 

@@ -5,17 +5,15 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
-use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
-
 /**
  *
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-abstract class RemoteManager implements RemoteManagerInterface
+abstract class BranchManager implements BranchManagerInterface
 {
 
-    public function createRemote()
+    public function createBranch()
     {
         $class = $this->getClass();
 

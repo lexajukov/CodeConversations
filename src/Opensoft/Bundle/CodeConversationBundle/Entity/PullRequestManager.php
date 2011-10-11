@@ -38,10 +38,8 @@ class PullRequestManager extends BasePullRequestManager
      * @param \Doctrine\ORM\EntityManager $em
      * @param string $class
      */
-    public function __construct(RepositoryInterface $sourceCodeRepo, EntityManager $em, $class)
+    public function __construct(EntityManager $em, $class)
     {
-        parent::__construct($sourceCodeRepo);
-
         $this->em = $em;
         $this->repository = $em->getRepository($class);
         $metadata = $em->getClassMetadata($class);

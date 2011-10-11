@@ -5,7 +5,6 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,7 +16,7 @@ use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-class AddRemoteCommand extends ContainerAwareCommand
+class AddRemoteCommand extends BaseCommand
 {
 
     public function configure()
@@ -43,7 +42,7 @@ class AddRemoteCommand extends ContainerAwareCommand
             }
         }
 
-        $projectManager->createRemote()
+        $projectManager->createRemote();
 
         
         $project->initSourceCodeRepo(function ($type, $buffer) use ($output) {
@@ -60,4 +59,6 @@ class AddRemoteCommand extends ContainerAwareCommand
 
         $output->writeln(strtr("Project <info>%project%</info> created!", array('%project%' => $project->getName())));
     }
+
+
 }

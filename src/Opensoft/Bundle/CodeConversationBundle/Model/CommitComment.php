@@ -86,7 +86,9 @@ class CommitComment extends Comment implements StreamableInterface
         );
     }
 
-
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->commitSha1;

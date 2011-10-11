@@ -14,23 +14,20 @@ use Redpanda\Bundle\ActivityStreamBundle\Streamable\StreamableInterface;
  */
 interface PullRequestInterface extends StreamableInterface
 {
-     public function setComments(array $comments);
+    /**
+     * @param int $id
+     */
+    public function setId($id);
+
+    /**
+     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment[]
+     */
+    public function setComments(array $comments);
 
     /**
      * @return \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment[]
      */
     public function getComments();
-
-    public function setCommits(array $commits);
-
-    public function addCommit(CommitInterface $commit);
-
-    public function getCommits();
-
-    /**
-     * @return \Opensoft\Bundle\CodeConversationBundle\Timeline\EventTimeline
-     */
-    public function getEventTimeline();
 
     /**
      * @param \DateTime $createdAt
@@ -63,19 +60,14 @@ interface PullRequestInterface extends StreamableInterface
     public function getDestinationBranch();
 
     /**
-     * @param int $id
+     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\User $author
      */
-    public function setId($id);
-
-    /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\User $initiatedBy
-     */
-    public function setInitiatedBy($initiatedBy);
+    public function setAuthor(UserInterface $author);
 
     /**
      * @return \Opensoft\Bundle\CodeConversationBundle\Entity\User
      */
-    public function getInitiatedBy();
+    public function getAuthor();
 
     /**
      * @param \Opensoft\Bundle\CodeConversationBundle\Entity\Project $project

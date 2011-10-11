@@ -14,5 +14,14 @@ use Opensoft\Bundle\CodeConversationBundle\Model\Remote as BaseRemote;
  */
 class Remote extends BaseRemote
 {
-
+    /**
+     * @return BranchInterface
+     */
+    public function createBranch()
+    {
+        $branch = new Branch();
+        $branch->setRemote($this);
+        
+        return $branch;
+    }
 }

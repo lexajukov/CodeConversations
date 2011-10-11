@@ -15,6 +15,11 @@ use Redpanda\Bundle\ActivityStreamBundle\Streamable\StreamableInterface;
 interface CommentInterface extends StreamableInterface
 {
     /**
+     * @param int $id
+     */
+    public function setId($id);
+
+    /**
      * @param UserInterface $author
      */
     public function setAuthor(UserInterface $author);
@@ -43,9 +48,4 @@ interface CommentInterface extends StreamableInterface
      * @return \DateTime
      */
     public function getCreatedAt();
-
-    /**
-     * @param int $id
-     */
-    public function setId($id);
 }

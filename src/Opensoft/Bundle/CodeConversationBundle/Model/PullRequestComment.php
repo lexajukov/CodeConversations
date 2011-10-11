@@ -68,7 +68,7 @@ class PullRequestComment extends Comment
 
     public function __toString()
     {
-        return 'PR#' . $this->getPullRequest()->getId();
+        return $this->getId();
     }
 
 }

@@ -48,7 +48,7 @@ class PullRequest implements PullRequestInterface
     /**
      * @var User
      */
-    protected $initiatedBy;
+    protected $author;
 
     /**
      * @var integer
@@ -212,19 +212,19 @@ class PullRequest implements PullRequestInterface
     }
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\User $initiatedBy
+     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\User $author
      */
-    public function setInitiatedBy($initiatedBy)
+    public function setAuthor($author)
     {
-        $this->initiatedBy = $initiatedBy;
+        $this->author = $author;
     }
 
     /**
      * @return \Opensoft\Bundle\CodeConversationBundle\Entity\User
      */
-    public function getInitiatedBy()
+    public function getAuthor()
     {
-        return $this->initiatedBy;
+        return $this->author;
     }
 
     /**
@@ -315,6 +315,6 @@ class PullRequest implements PullRequestInterface
 
     public function __toString()
     {
-        return 'PR #' . $this->id;
+        return 'pull request ' . $this->id;
     }
 }
