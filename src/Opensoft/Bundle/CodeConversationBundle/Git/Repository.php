@@ -71,7 +71,7 @@ class Repository
      */
     public function getCommits($since, $until = null, $limit = null)
     {
-        $command = 'log --date=%dateFormat% --format=format:%format% %since%';
+        $command = "log --date=%dateFormat% --format=format:'%prettyFormat%' %since%";
         $parameters = array(
             '%dateFormat%' => 'iso',
             '%prettyFormat%' => '%H|%T|%an|%ae|%ad|%cn|%ce|%cd|%P|%s',
@@ -87,7 +87,7 @@ class Repository
             $command .= ' -n %limit%';
             $parameters['%limit%'] = (int) $limit;
         }
-
+//        print_r(strtr($command, $parameters));
         $output = $this->repo->git(strtr($command, $parameters));
         $commits = array();
         foreach (explode("\n", $output) as $line) {
@@ -112,7 +112,7 @@ class Repository
 
     public function showCommit($object)
     {
-        $command = 'show -c -t --pretty=format:%format% %object%';
+        $command = "show -c -t --pretty=format:'%format%' %object%";
         $parameters = array('%format%' => '%H|%T|%an|%ae|%ad|%cn|%ce|%cd|%P|%s%n%b', '%object%' => $object);
         
         $output = explode("\n", $this->repo->git(strtr($command, $parameters)));

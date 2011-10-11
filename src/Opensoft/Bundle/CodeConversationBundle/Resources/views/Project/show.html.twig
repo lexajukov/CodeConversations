@@ -14,7 +14,7 @@
         <div class="active" id="recent-commits">
             <h2>Recent commits on <span class="label">{{ branch.name }}</span></h2>
 
-            {#{% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': project.recentCommits(branch.name)} %}#}
+            {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': recentCommits} %}
         </div>
 
         <div id="pull-requests">
@@ -55,7 +55,7 @@
                             <td>{{ branch.enabled ? 'Yes' : 'No' }}</td>
                             <td>
                                 {% if branch.enabled %}
-                                <a class="btn" href="{{ path('opensoft_codeconversation_project_show_1', {'projectSlug': project.slug, 'remote': remote.name, 'branchName': branch.name}) }}">Switch to branch</a>
+                                <a class="btn" href="{{ path('opensoft_codeconversation_project_show_1', {'projectSlug': project.slug, 'remoteSlug': remote.slug, 'branchSlug': branch.slug}) }}">Switch to branch</a>
                                 <a href="{{ path('opensoft_codeconversation_pullrequest_create', {'projectSlug': project.slug }) }}" class="btn primary">Open Pull Request</a>
                                 {% endif %}
                             </td>

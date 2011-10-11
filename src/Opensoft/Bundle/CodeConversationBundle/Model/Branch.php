@@ -22,6 +22,11 @@ class Branch implements BranchInterface
      * @var string
      */
     protected $name;
+
+    /**
+     * @var string
+     */
+    protected $slug;
     
     /**
      * @var RemoteInterface
@@ -97,6 +102,22 @@ class Branch implements BranchInterface
     public function isEnabled()
     {
         return $this->enabled;
+    }
+
+    /**
+     * @param string $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 
 

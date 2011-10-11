@@ -13,6 +13,8 @@
         <parameter key="opensoft_codeconversation.manager.pull_request.class">Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestManager</parameter>
 
         <parameter key="opensoft_codeconversation.converter.project.class">Opensoft\Bundle\CodeConversationBundle\Request\ParamConverter\ProjectParamConverter</parameter>
+        <parameter key="opensoft_codeconversation.converter.remote.class">Opensoft\Bundle\CodeConversationBundle\Request\ParamConverter\RemoteParamConverter</parameter>
+        <parameter key="opensoft_codeconversation.converter.branch.class">Opensoft\Bundle\CodeConversationBundle\Request\ParamConverter\BranchParamConverter</parameter>
         <parameter key="opensoft_codeconversation.converter.pull_request.class">Opensoft\Bundle\CodeConversationBundle\Request\ParamConverter\PullRequestParamConverter</parameter>
     </parameters>
 
@@ -50,6 +52,16 @@
             <tag name="request.param_converter" />
             <argument type="service" id="opensoft_codeconversation.manager.project" />
             <argument>Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface</argument>
+        </service>
+        <service id="opensoft_codeconversation.converter.remote" class="%opensoft_codeconversation.converter.remote.class%">
+            <tag name="request.param_converter" />
+            <argument type="service" id="opensoft_codeconversation.manager.remote" />
+            <argument>Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface</argument>
+        </service>
+        <service id="opensoft_codeconversation.converter.branch" class="%opensoft_codeconversation.converter.branch.class%">
+            <tag name="request.param_converter" />
+            <argument type="service" id="opensoft_codeconversation.manager.branch" />
+            <argument>Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface</argument>
         </service>
 
         <service id="opensoft_codeconversation.converter.pull_request" class="%opensoft_codeconversation.converter.pull_request.class%">

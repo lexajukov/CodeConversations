@@ -32,6 +32,17 @@ interface BranchInterface
      */
     public function getName();
 
+
+    /**
+     * @param string $slug
+     */
+    public function setSlug($slug);
+
+    /**
+     * @return string
+     */
+    public function getSlug();
+
     /**
      * @param RemoteInterface $remote
      */

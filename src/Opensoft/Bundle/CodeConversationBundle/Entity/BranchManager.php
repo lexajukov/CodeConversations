@@ -56,6 +56,22 @@ class BranchManager extends BaseBranchManager
         return $this->repository->findBy($criteria, $order);
     }
 
+
+    public function findRemoteByProjectSlugAndRemoteSlugAndBranchSlug($projectSlug, $remoteSlug, $branchSlug)
+    {
+        return $this->repository->createQueryBuilder('b')
+                ->join('b.remote', 'r')
+                ->join('r.project', 'p')
+                ->where('r.slug = :remoteSlug')
+                ->andWhere('p.slug = :projectSlug')
+                ->andWhere('b.slug = :branchSlug')
+                ->setParameter('branchSlug', $branchSlug)
+                ->setParameter('remoteSlug', $remoteSlug)
+                ->setParameter('projectSlug', $projectSlug)
+                ->getQuery()
+                ->getOneOrNullResult();
+    }
+
     /**
      * @return \Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface[]
      */

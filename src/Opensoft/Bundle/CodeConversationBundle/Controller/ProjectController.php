@@ -10,12 +10,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\CommitCommentFormType;
 use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
+use Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface;
+use Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequest;
-use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestTimeline;
 use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
 
 /**
  * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
+ * @ParamConverter("remote", class="Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface")
+ * @ParamConverter("branch", class="Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface")
  */
 class ProjectController extends Controller
 {
@@ -44,33 +47,51 @@ class ProjectController extends Controller
      */
     public function redirectAction(ProjectInterface $project)
     {
-        list($remoteName, $branchName) = explode("/", $this->getRequest()->get('remotebranch'));
+        list($remoteSlug, $branchSlug) = explode("/", $this->getRequest()->get('remotebranch'));
         return $this->redirect($this->generateUrl('opensoft_codeconversation_project_show_1', array(
             'projectSlug' => $project->getSlug(),
-            'remote' => $remoteName,
-            'branchName' => $branchName
+            'remoteSlug' => $remoteSlug,
+            'branchSlug' => $branchSlug
         )));
     }
 
     /**
      * @Route("/{projectSlug}")
-     * @Route("/{projectSlug}/tree/{remote}/{branchName}")
+     * @Route("/{projectSlug}/tree/{remoteSlug}/{branchSlug}")
      * @Template()
      */
-    public function showAction(ProjectInterface $project, $remote = null, $branchName = null)
+    public function showAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null)
     {
         $em = $this->get('doctrine')->getEntityManager();
-        
-        if ($branchName !== null && $remote !== null) {
-            /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
-            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($remote . '/' . $branchName);
-        } else {
-            $branch = $project->getDefaultRemote()->getHeadBranch();
+
+        if (null === $remote) {
+            $remote = $project->getDefaultRemote();
         }
+
+        if (null === $branch) {
+            $branch = $remote->getHeadBranch();
+        }
+        
+//        if ($branchName !== null && $remote !== null) {
+//            /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
+//            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($remote . '/' . $branchName);
+//        } else {
+//            $branch = $project->getDefaultRemote()->getHeadBranch();
+//        }
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
+        $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
+
+        $recentCommits = $repository->getCommits($remote->getName().'/'.$branch->getName());
 
         $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
 
-        return array('project' => $project, 'branch' => $branch, 'openPullRequests' => $openPullRequests);
+        return array(
+            'project' => $project,
+            'remote' => $remote,
+            'branch' => $branch,
+            'recentCommits' => $recentCommits,
+            'openPullRequests' => $openPullRequests
+        );
     }
     /**
      * @Route("/{projectSlug}/commits")
