@@ -13,7 +13,7 @@
     <services>
         <service id="opensoft_codeconversation.validator.branch_point" class="%opensoft_codeconversation.validator.branch_point.class%">
             <tag name="validator.constraint_validator" alias="opensoft_codeconversation.validator.branch_point" />
-            <argument type="service" id="opensoft_codeconversation.source_code.repository" />
+            <argument type="service" id="opensoft_codeconversation.repository_manager" />
         </service>
 
         <service id="opensoft_codeconversation.validator.one_pull_request_per_branch" class="%opensoft_codeconversation.validator.one_pull_request_per_branch.class%">

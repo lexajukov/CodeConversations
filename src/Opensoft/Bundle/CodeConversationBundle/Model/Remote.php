@@ -10,8 +10,6 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
-use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
-
 /**
  *
  *
@@ -35,18 +33,6 @@ class Remote implements RemoteInterface
 
     protected $headBranch;
 
-    protected $repo;
-
-
-    public function setSourceCodeRepository(RepositoryInterface $repo)
-    {
-        $this->repo = $repo;
-    }
-
-    public function getSourceCodeRepository()
-    {
-        return $this->repo;
-    }
 
     public function setId($id)
     {

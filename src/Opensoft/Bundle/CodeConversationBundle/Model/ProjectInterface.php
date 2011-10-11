@@ -49,6 +49,13 @@ interface ProjectInterface extends StreamableInterface
      */
     public function getSlug();
 
+    /**
+     * @return RemoteInterface
+     */
+    public function getDefaultRemote();
+    
+    public function setDefaultRemote(RemoteInterface $remote);
+
     public function setRemotes($remotes);
 
     public function addRemote(RemoteInterface $remote);

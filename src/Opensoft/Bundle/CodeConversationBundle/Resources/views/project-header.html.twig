@@ -11,15 +11,15 @@
             <td>
                 <form style="display: inline;" method="POST" action="{{ path('opensoft_codeconversation_project_redirect', {'projectSlug': project.slug}) }}">
                     <span>Branch</span>
-                    <select name="branchName" type="select" onchange="this.form.submit();">
-                        {% for branch in project.branches %}
-                            {% if branch.name == app.request.get('branchName') %}
-                                <option value="{{ branch.name }}" selected="selected">{{ branch.name }}</option>
-                            {% elseif not app.request.attributes.has('branchName') and branch.name == project.headBranch.name %}
-                                <option value="{{ branch.name }}" selected="selected">{{ branch.name }}</option>
-                            {% else %}
-                                <option value="{{ branch.name }}">{{ branch.name }}</option>
-                            {% endif %}
+                    <select name="remotebranch" type="select" onchange="this.form.submit();">
+                        {% for remote in project.remotes %}
+                            {% for branch in remote.branches %}
+                                {% if branch.name == app.request.get('remotebranch') %}
+                                    <option value="{{ remote.name }}/{{ branch.name }}" selected="selected">{{ remote.name }}/{{ branch.name }}</option>
+                                {% else %}
+                                    <option value="{{ remote.name }}/{{ branch.name }}">{{ remote.name }}/{{ branch.name }}</option>
+                                {% endif %}
+                            {% endfor %}
                         {% endfor %}
                     </select>
                 </form>

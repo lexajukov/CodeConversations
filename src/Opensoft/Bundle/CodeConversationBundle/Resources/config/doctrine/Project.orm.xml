@@ -22,6 +22,10 @@
 
         <one-to-many target-entity="PullRequest" mapped-by="project" field="pullRequests" />
 
+        <many-to-one target-entity="Remote" field="defaultRemote">
+            <join-column name="defaultremote_id" nullable="true" />
+        </many-to-one>
+
     </entity>
 
 </doctrine-mapping>

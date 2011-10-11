@@ -7,14 +7,14 @@
     <ul class="tabs" data-tabs="tabs" >
         <li class="active"><a href="#recent-commits">Recent Commits</a></li>
         <li><a href="#pull-requests">Active Pull Requests ({{ openPullRequests|length|default(0) }})</a></li>
-        <li><a href="#branches">Branches ({{ project.branches|length|default(0) }})</a></li>
+        <li><a href="#branches">Remotes ({{ project.remotes|length|default(0) }})</a></li>
     </ul>
 
     <div class="pill-content">
         <div class="active" id="recent-commits">
             <h2>Recent commits on <span class="label">{{ branch.name }}</span></h2>
 
-            {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': project.recentCommits(branch.name)} %}
+            {#{% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': project.recentCommits(branch.name)} %}#}
         </div>
 
         <div id="pull-requests">
@@ -39,6 +39,7 @@
             <table class="zebra-striped">
                 <thead>
                     <tr>
+                        <th>Remote</th>
                         <th>Branch name</th>
                         <th>Enabled</th>
                         <th>Actions</th>
@@ -46,17 +47,20 @@
                 </thead>
 
                 <tbody>
-                    {% for branch in project.branches %}
+                    {% for remote in project.remotes%}
+                    {% for branch in remote.branches %}
                         <tr>
+                            <td>{{ remote.name }}</td>
                             <td>{{ branch.name }}</td>
                             <td>{{ branch.enabled ? 'Yes' : 'No' }}</td>
                             <td>
                                 {% if branch.enabled %}
-                                <a class="btn" href="{{ path('opensoft_codeconversation_project_show_1', {'projectSlug': project.slug, 'branchName': branch.name}) }}">Switch to branch</a>
+                                <a class="btn" href="{{ path('opensoft_codeconversation_project_show_1', {'projectSlug': project.slug, 'remote': remote.name, 'branchName': branch.name}) }}">Switch to branch</a>
                                 <a href="{{ path('opensoft_codeconversation_pullrequest_create', {'projectSlug': project.slug }) }}" class="btn primary">Open Pull Request</a>
                                 {% endif %}
                             </td>
                         </tr>
+                    {% endfor %}
                     {% endfor %}
                 </tbody>
 

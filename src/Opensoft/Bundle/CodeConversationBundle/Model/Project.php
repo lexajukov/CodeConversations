@@ -6,8 +6,6 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
-use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
-
 /**
  *
  *
@@ -31,27 +29,17 @@ class Project implements ProjectInterface
     protected $slug;
 
     /**
-     * @var string
-     */
-    protected $url;
-
-    /**
-     * @var string
-     */
-    protected $username;
-
-    /**
-     * @var string
-     */
-    protected $password;
-
-    /**
-     * @var Remote[]
+     * @var RemoteInterface[]
      */
     protected $remotes;
 
     /**
-     * @var PullRequest[]
+     * @var RemoteInterface
+     */
+    protected $defaultRemote;
+
+    /**
+     * @var PullRequestInterface[]
      */
     protected $pullRequests;
 
@@ -163,4 +151,22 @@ class Project implements ProjectInterface
     {
         return $this->remotes;
     }
+
+    /**
+     * @param \Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface $defaultRemote
+     */
+    public function setDefaultRemote(RemoteInterface $defaultRemote)
+    {
+        $this->defaultRemote = $defaultRemote;
+    }
+
+    /**
+     * @return \Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface
+     */
+    public function getDefaultRemote()
+    {
+        return $this->defaultRemote;
+    }
+
+
 }

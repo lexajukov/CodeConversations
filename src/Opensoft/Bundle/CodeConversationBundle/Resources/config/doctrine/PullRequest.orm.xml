@@ -33,7 +33,7 @@
 
         <many-to-one target-entity="Branch" field="destinationBranch" />
 
-        <many-to-one target-entity="User" field="initiatedBy" />
+        <many-to-one target-entity="User" field="author" />
 
         <!--<gedmo:loggable />-->
 

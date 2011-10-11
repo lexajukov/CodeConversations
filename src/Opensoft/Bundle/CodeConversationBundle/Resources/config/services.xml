@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="opensoft_codeconversation.git.repository.class">Opensoft\Bundle\CodeConversationBundle\SourceCode\GitRepository</parameter>
+        <parameter key="opensoft_codeconversation.repository_manager.class">Opensoft\Bundle\CodeConversationBundle\Git\RepositoryManager</parameter>
 
         <parameter key="opensoft_codeconversation.manager.project.class">Opensoft\Bundle\CodeConversationBundle\Entity\ProjectManager</parameter>
         <parameter key="opensoft_codeconversation.manager.remote.class">Opensoft\Bundle\CodeConversationBundle\Entity\RemoteManager</parameter>
@@ -18,9 +18,7 @@
 
     <services>
 
-        <service id="opensoft_codeconversation.source_code.repository" alias="opensoft_codeconversation.git.repository" />
-
-        <service id="opensoft_codeconversation.git.repository" class="%opensoft_codeconversation.git.repository.class%">
+        <service id="opensoft_codeconversation.repository_manager" class="%opensoft_codeconversation.repository_manager.class%">
             <argument>%kernel.root_dir%/GitRepositories</argument>
             <argument>/usr/bin/git</argument>
         </service>
@@ -42,7 +40,6 @@
         </service>
 
         <service id="opensoft_codeconversation.manager.pull_request" class="%opensoft_codeconversation.manager.pull_request.class%">
-            <argument type="service" id="opensoft_codeconversation.source_code.repository" />
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument>Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest</argument>
         </service>

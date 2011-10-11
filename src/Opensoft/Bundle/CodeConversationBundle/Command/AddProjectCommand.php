@@ -39,30 +39,37 @@ class AddProjectCommand extends BaseCommand
         $project = $projectManager->createProject();
         $project->setName($input->getArgument('name'));
 
+        $projectManager->updateProject($project);
+
         $remote = $remoteManager->createRemote();
         $remote->setName('origin'); // new projects always get a remote named origin...
         $remote->setUrl($input->getArgument('url'));
         $remote->setUsername($input->getOption('username'));
         $remote->setPassword($input->getOption('password'));
         $remote->setProject($project);
-
-        $project->addRemote($remote);
-
-        /** @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $repo  */
-        $repo = $this->getContainer()->get('opensoft_codeconversation.source_code.repository');
-        $repo->init($project, function ($type, $buffer) use ($output) {
-            if ('err' === $type) {
-                $output->write(str_replace("\n", "\nERR| ", $buffer));
-            } else {
-                $output->write(str_replace("\n", "\nOUT| ", $buffer));
-            }
-        });
-
-        $projectManager->synchronizeBranches($repo, $project);
-
+        
         $remoteManager->updateRemote($remote);
+
+//        $project->addRemote($remote);
+        $project->setDefaultRemote($remote);
+
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\RepositoryManager $repoManager  */
+        $repoManager = $this->getContainer()->get('opensoft_codeconversation.repository_manager');
+
         $projectManager->updateProject($project);
+
+        $repository = $repoManager->getRepository($project);
+        $this->synchronizeBranches($repository, $project);
+
 
         $output->writeln(strtr("Project <info>%project%</info> created!", array('%project%' => $project->getName())));
     }
+
+//    $repo->init($project, $remote, function ($type, $buffer) use ($output) {
+//            if ('err' === $type) {
+//                $output->write(str_replace("\n", "\nERR| ", $buffer));
+//            } else {
+//                $output->write(str_replace("\n", "\nOUT| ", $buffer));
+//            }
+//        });
 }

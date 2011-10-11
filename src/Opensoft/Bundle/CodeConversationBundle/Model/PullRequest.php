@@ -123,30 +123,6 @@ class PullRequest implements PullRequestInterface
         return $this->comments;
     }
 
-    public function setCommits(array $commits)
-    {
-        $this->commits = array();
-        foreach ($commits as $commit) {
-            $this->addCommit($commit);
-        }
-    }
-
-    public function addCommit(CommitInterface $commit)
-    {
-        $this->commits[] = $commit;
-    }
-
-    public function getCommits()
-    {
-        if (empty($this->commits)) {
-            $repo = $this->getProject()->getSourceCodeRepository();
-            $mergeBase = $repo->mergeBase($this->getSourceBranch()->getName(), $this->getDestinationBranch()->getName());
-            $this->setCommits($repo->fetchCommits($mergeBase, $this->getSourceBranch()->getName()));
-        }
-
-        return $this->commits;
-    }
-
     /**
      * @param \DateTime $createdAt
      */
@@ -214,7 +190,7 @@ class PullRequest implements PullRequestInterface
     /**
      * @param \Opensoft\Bundle\CodeConversationBundle\Entity\User $author
      */
-    public function setAuthor($author)
+    public function setAuthor(UserInterface $author)
     {
         $this->author = $author;
     }

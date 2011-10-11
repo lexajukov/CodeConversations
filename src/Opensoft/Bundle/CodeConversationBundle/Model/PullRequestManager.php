@@ -14,13 +14,6 @@ use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
  */
 abstract class PullRequestManager implements PullRequestManagerInterface
 {
-    protected $sourceCodeRepository;
-
-    public function __construct(RepositoryInterface $sourceCodeRepo)
-    {
-        $this->sourceCodeRepository = $sourceCodeRepo;
-    }
-    
     public function createPullRequest()
     {
         $class = $this->getClass();

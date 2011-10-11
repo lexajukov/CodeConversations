@@ -49,3 +49,6 @@ AnnotationRegistry::registerFile(__DIR__.'/../vendor/doctrine/lib/Doctrine/ORM/M
 require_once __DIR__.'/../vendor/swiftmailer/lib/classes/Swift.php';
 Swift::registerAutoload(__DIR__.'/../vendor/swiftmailer/lib/swift_init.php');
 
+// Require php-git-repo
+require_once(__DIR__.'/../vendor/php-git-repo/lib/PHPGit/PHPGit_Repository.php');
+

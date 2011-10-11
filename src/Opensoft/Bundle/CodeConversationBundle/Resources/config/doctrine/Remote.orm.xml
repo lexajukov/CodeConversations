@@ -14,16 +14,16 @@
 
         <field name="url" type="text" />
 
-        <field name="username" type="text" />
+        <field name="username" type="text" nullable="true" />
 
-        <field name="password" type="text" />
+        <field name="password" type="text" nullable="true" />
 
-        <many-to-one target-entity="Branch" field="branches" />
+        <one-to-many target-entity="Branch" field="branches" mapped-by="remote" />
 
         <many-to-one target-entity="Project" field="project" />
 
         <many-to-one target-entity="Branch" field="headBranch">
-            <join-column name="headbranch_id" nullable="false" />
+            <join-column name="headbranch_id" nullable="true" />
         </many-to-one>
 
     </entity>

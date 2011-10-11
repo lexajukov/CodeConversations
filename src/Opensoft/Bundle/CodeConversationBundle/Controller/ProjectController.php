@@ -44,8 +44,12 @@ class ProjectController extends Controller
      */
     public function redirectAction(ProjectInterface $project)
     {
-        $branchName = $this->getRequest()->get('branchName');
-        return $this->redirect($this->generateUrl('opensoft_codeconversation_project_show_1', array('projectSlug' => $project->getSlug(), 'branchName' => $branchName)));
+        list($remoteName, $branchName) = explode("/", $this->getRequest()->get('remotebranch'));
+        return $this->redirect($this->generateUrl('opensoft_codeconversation_project_show_1', array(
+            'projectSlug' => $project->getSlug(),
+            'remote' => $remoteName,
+            'branchName' => $branchName
+        )));
     }
 
     /**
@@ -61,7 +65,7 @@ class ProjectController extends Controller
             /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
             $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($remote . '/' . $branchName);
         } else {
-            $branch = $project->getHeadBranch();
+            $branch = $project->getDefaultRemote()->getHeadBranch();
         }
 
         $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));

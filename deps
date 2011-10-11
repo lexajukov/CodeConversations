@@ -88,3 +88,6 @@
 [ActivityStreamBundle]
     git=http://github.com/richardfullmer/ActivityStreamBundle.git
     target=/bundles/Redpanda/Bundle/ActivityStreamBundle
+
+[php-git-repo]
+    git=http://github.com/ornicar/php-git-repo.git

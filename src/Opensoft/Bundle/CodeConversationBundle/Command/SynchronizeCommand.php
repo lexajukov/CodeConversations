@@ -52,19 +52,18 @@ class SynchronizeCommand extends BaseCommand
         foreach ($projects as $project) {
             $output->writeln(strtr('Synchronizing project "<info>%project%</info>...', array('%project%' => $project->getName())));
 
-            $project->initSourceCodeRepo(function ($type, $buffer) use ($output) {
-                if ('err' === $type) {
-                    $output->write(str_replace("\n", "\nERR| ", $buffer));
-                } else {
-                    $output->write(str_replace("\n", "\nOUT| ", $buffer));
-                }
-            });
 
-            $project->synchronizeBranches();
+
+            /** @var \Opensoft\Bundle\CodeConversationBundle\Git\RepositoryManager $repoManager  */
+            $repoManager = $this->getContainer()->get('opensoft_codeconversation.repository_manager');
+
+            $repository = $repoManager->getRepository($project);
+
+            $this->synchronizeBranches($repository, $project);
 
             // Loop through pull requests and check for "merged" pull requests (ones with zero commit difference?)
 
-            $projectManager->updateProject($project);
+//            $projectManager->updateProject($project);
 
             $output->writeln('');
             $output->writeln(strtr('Synchronization complete "<info>%project%</info>"', array('%project%' => $project->getName())));
