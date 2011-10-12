@@ -115,7 +115,7 @@ class Repository
 
     public function showCommit($object)
     {
-        $command = "show -c -t --pretty=format:'%format%' %object%";
+        $command = "show --pretty=format:'%format%' %object%";
         $parameters = array('%format%' => '%H|%T|%an|%ae|%ad|%cn|%ce|%cd|%P|%s%n%b', '%object%' => $object);
         
         $output = explode("\n", $this->repo->git(strtr($command, $parameters)));
@@ -142,7 +142,7 @@ class Repository
             }
 
             $i++;
-        } while($i < (count($output) - 1) && strpos($output[$i], 'diff --git') !== 0);
+        } while($i < (count($output) - 1) && strpos($output[$i], 'diff --git') !== 0 && strpos($output[$i], 'diff --cc') !== 0);
 
         $commit->setMessage($message . "\n" . $subMessage);
 
@@ -234,7 +234,7 @@ class Repository
             $line = $output[$i++];
 
             // start a new Diff object
-            if (strpos($line, 'diff --git ') === 0) {
+            if (strpos($line, 'diff --git ') === 0 || strpos($line, 'diff --cc') === 0) {
 //                print_r($i . "\n");
 
                 // Clean up old diff object, if there is one
@@ -254,9 +254,10 @@ class Repository
 
                 $diffFile = new FileDiff();
 
-                list($srcFileName, $dstFileName) = explode(" ", trim(substr($line, 11)));
-                $diffFile->setSrcPath(substr($srcFileName, 2));
-                $diffFile->setDstPath(substr($dstFileName,2));
+                // COMMENTED OUT LINES BREAK diff --cc (combined diff)
+//                list($srcFileName, $dstFileName) = explode(" ", trim(substr($line, 11)));
+//                $diffFile->setSrcPath(substr($srcFileName, 2));
+//                $diffFile->setDstPath(substr($dstFileName,2));
 
 //                // Parse extended header lines
                 do {
@@ -288,10 +289,6 @@ class Repository
                         $diffFile->setStatus(FileDiff::STATUS_RENAMING);
                     } elseif (strpos($line, 'index ') === 0) {
                         if (strpos(substr($line, 6), ' ') > 0) {
-//                            print_r($line);
-//                            print_r(substr($line, 6));
-//                            print_r(explode(" ", substr($line, 6)));
-//                            die();
                             list($hash, $mode) = explode(" ", substr($line, 6));
                             $diffFile->setSrcMode($mode);
                             $diffFile->setDstMode($mode);
