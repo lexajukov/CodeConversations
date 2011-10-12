@@ -11,6 +11,7 @@
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
 use Opensoft\Bundle\CodeConversationBundle\Timeline\EventInterface;
+use Redpanda\Bundle\ActivityStreamBundle\Streamable\StreamableInterface;
 
 /**
  *
@@ -173,6 +174,4 @@ class Commit implements CommitInterface, EventInterface
     {
         return $this->diff;
     }
-
-
 }

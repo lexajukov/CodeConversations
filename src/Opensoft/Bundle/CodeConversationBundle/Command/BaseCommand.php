@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface;
+use Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface;
 use Opensoft\Bundle\CodeConversationBundle\Git\Repository;
 use Opensoft\Bundle\CodeConversationBundle\Entity\Branch;
 
@@ -53,7 +54,13 @@ abstract class BaseCommand extends ContainerAwareCommand
 
                         $output->writeln('>>> <comment>'.$remote->getName().'/'.$knownBranch->getName().'</comment> already being tracked');
 
-                        $knownBranch->setTip($repo->getTip($knownBranch->getFullName()));
+                        $tip = $repo->getTip($knownBranch->getFullName());
+
+                        if ($knownBranch->getTip() != $tip) {
+                            $this->recordBranchActivity($output, $repo, $knownBranch, $tip);
+                        }
+
+                        $knownBranch->setTip($tip);
                         $branchManager->updateBranch($knownBranch);
 
                         continue;
@@ -92,6 +99,65 @@ abstract class BaseCommand extends ContainerAwareCommand
             }
 
             $remoteManager->updateRemote($remote);
+        }
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repo
+     * @param \Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface $branch
+     * @param string $newTip
+     */
+    public function recordBranchActivity(OutputInterface $output, Repository $repo, BranchInterface $branch, $newTip)
+    {
+        // loop through commits from branch->getTip() to $newTip
+        $commits = $repo->getCommits($branch->getTip(), $newTip);
+        if (!empty($commits)) {
+
+            /** @var \Redpanda\Bundle\ActivityStreamBundle\Entity\ActionManager $activityManager  */
+            $activityManager = $this->getContainer()->get('activity_stream.action_manager');
+
+            /** @var \FOS\UserBundle\Entity\UserManager $userManager  */
+            $userManager = $this->getContainer()->get('fos_user.user_manager');
+
+            $project = $branch->getRemote()->getProject();
+
+            $userCommits = array();
+            foreach ($commits as $commit) {
+
+                $user = $userManager->findUserBy(array('gitAlias' => $commit->getCommitterName()));
+
+                if ($user) {
+
+                    $username = $user->getUsername();
+
+                    $userCommits[$username]['user'] = $user;
+                    if (!isset($userCommits[$username]['count'])) {
+                        $userCommits[$username]['count'] = 0;
+                    }
+                    $userCommits[$username]['count'] += 1;
+
+                }
+            }
+
+            foreach ($userCommits as $username => $userDefinition) {
+                $action = $activityManager->createAction();
+
+                $action->setActor($userDefinition['user']);
+                if ($userDefinition['count'] == 1) {
+                    $action->setVerb(sprintf('pushed %d commit to', $userDefinition['count']));
+                } else {
+                    $action->setVerb(sprintf('pushed %d commits to', $userDefinition['count']));
+                }
+                $action->setTarget($branch);
+                // Stupid proxy object gets put here... short circuit that....
+                $action->setTargetType('Opensoft\Bundle\CodeConversationBundle\Entity\Branch');
+                $action->setActionObject($project);
+
+                $output->writeln('>>>> recording ' . $userDefinition['count'] . ' commits for user ' . $username);
+
+                $activityManager->updateAction($action);
+            }
         }
     }
 }

@@ -5,22 +5,19 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
+use Redpanda\Bundle\ActivityStreamBundle\Streamable\StreamableInterface;
+
 /**
  *
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
-interface BranchInterface
+interface BranchInterface extends StreamableInterface
 {
     /**
      * @param int $id
      */
     public function setId($id);
-
-    /**
-     * @return int
-     */
-    public function getId();
 
     /**
      * @param string $name

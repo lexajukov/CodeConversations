@@ -125,4 +125,30 @@ class Branch implements BranchInterface
         return $this->tip;
     }
 
+    /**
+     * Return an array for the form
+     *
+     * array(
+     *   'route' => $routeName,
+     *   'parameters' => array(key => value, ...)
+     * )
+     *
+     * @return array
+     */
+    public function getAbsolutePathParams()
+    {
+        return array(
+            'route' => 'opensoft_codeconversation_project_commits_1',
+            'parameters' => array(
+                'projectName' => $this->getRemote()->getProject()->getName(),
+                'remoteName' => $this->getRemote()->getName(),
+                'branchName' => $this->getName(),
+            )
+        );
+    }
+
+    public function __toString()
+    {
+        return $this->getFullName();
+    }
 }

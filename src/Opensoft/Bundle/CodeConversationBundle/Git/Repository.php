@@ -67,7 +67,7 @@ class Repository
      * @param string $since
      * @param string|null $until
      * @param limit|null $limit
-     * @return \Opensot\Bundle\CodeConversationBundle\Model\Commit[]
+     * @return \Opensoft\Bundle\CodeConversationBundle\Model\Commit[]
      */
     public function getCommits($since, $until = null, $limit = null)
     {
