@@ -14,7 +14,14 @@ class DefaultController extends Controller
      */
     public function homepageAction()
     {
-        return array('projects' => $this->getProjectManager()->findProjects());
+        /** @var \Redpanda\Bundle\ActivityStreamBundle\Model\ActionManagerInterface $activityManager **/
+        $activityManager = $this->container->get('activity_stream.action_manager');
+        $stream = $activityManager->findStreamBy(array(), array('createdAt' => 'DESC'));
+
+        return array(
+            'projects' => $this->getProjectManager()->findProjects(),
+            'siteStream' => $stream
+        );
     }
 
     /**

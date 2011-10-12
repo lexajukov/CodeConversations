@@ -19,7 +19,10 @@
             </table>
         </div>
         <div class="span8">
-            <h3>Activity</h3>
+            <h3>Site Activity</h3>
+            {% for event in siteStream %}
+                {% include 'OpensoftCodeConversationBundle::action.html.twig' with {'action': event} %}
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
