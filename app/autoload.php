@@ -12,8 +12,6 @@ $loader->registerNamespaces(array(
     'Knp'              => __DIR__.'/../vendor/bundles',
     'Ornicar'          => __DIR__.'/../vendor/bundles',
     'Redpanda'         => __DIR__.'/../vendor/bundles',
-    'Stof'             => __DIR__.'/../vendor/bundles',
-    'Gedmo'            => __DIR__.'/../vendor/gedmo-doctrine-extensions/lib',
     'Doctrine\\Common' => __DIR__.'/../vendor/doctrine-common/lib',
     'Doctrine\\DBAL'   => __DIR__.'/../vendor/doctrine-dbal/lib',
     'Doctrine'         => __DIR__.'/../vendor/doctrine/lib',
