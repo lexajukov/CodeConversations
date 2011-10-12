@@ -81,7 +81,7 @@ class ProjectController extends Controller
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
         $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
 
-        $recentCommits = $repository->getCommits($remote->getName().'/'.$branch->getName());
+        $recentCommits = $repository->getCommits($remote->getName().'/'.$branch->getName(), null, 1);
 
         $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
 
@@ -89,29 +89,48 @@ class ProjectController extends Controller
             'project' => $project,
             'remote' => $remote,
             'branch' => $branch,
-            'recentCommits' => $recentCommits,
-            'openPullRequests' => $openPullRequests
+            'recentCommit' => $recentCommits[0],
+            'openPullRequests' => $openPullRequests,
+            'readme' => $repository->getFileAtCommit($recentCommits[0]->getId(), 'README.md')
         );
     }
     /**
      * @Route("/{projectSlug}/commits")
-     * @Route("/{projectSlug}/tree/{branchName}/commits", requirements={"branchName" = ".+"})
+     * @Route("/{projectSlug}/tree/{remoteSlug}/{branchSlug}/commits")
      * @Template()
      */
-    public function commitsAction(ProjectInterface $project, $branchName = null)
+    public function commitsAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null)
     {
-        $em = $this->get('doctrine')->getEntityManager();
 
-        if ($branchName !== null) {
-            /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
-            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($branchName);
-        } else {
-            $branch = $project->getHeadBranch();
+        if (null === $remote) {
+            $remote = $project->getDefaultRemote();
+        }
+
+        if (null === $branch) {
+            $branch = $remote->getHeadBranch();
+        }
+
+//        $em = $this->get('doctrine')->getEntityManager();
+//
+//        if ($branchName !== null) {
+//            /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
+//            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($branchName);
+//        } else {
+//            $branch = $project->getHeadBranch();
+//        }
+
+
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
+        $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
+
+        $commits = array();
+        foreach ($repository->getCommits($remote->getName().'/'.$branch->getName(), null, 50) as $commit) {
+            $commits[date("F j, Y", $commit->getCommittedDate()->getTimestamp())][] = $commit;
         }
 
 //        $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
 
-        return array('project' => $project, 'branch' => $branch);
+        return array('project' => $project, 'remote' => $remote, 'branch' => $branch, 'commits' => $commits);
     }
 
     /**
@@ -122,7 +141,11 @@ class ProjectController extends Controller
     {
         $em = $this->get('doctrine')->getEntityManager();
 
-        $commit = $project->getCommit($sha1);
+
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
+        $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
+
+        $commit = $repository->showCommit($sha1);
 
         $form = $this->createForm(new CommitCommentFormType(), new CommitComment());
         $comments = $em->getRepository('OpensoftCodeConversationBundle:CommitComment')->findBy(array('commitSha1' => $sha1));
@@ -136,6 +159,9 @@ class ProjectController extends Controller
      */
     public function fileAction(ProjectInterface $project, $sha1, $filepath)
     {
-        return array('file' => $project->getFileAtCommit($sha1, $filepath));
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
+        $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
+
+        return array('project' => $project, 'file' => explode("\n", $repository->getFileAtCommit($sha1, $filepath)));
     }
 }

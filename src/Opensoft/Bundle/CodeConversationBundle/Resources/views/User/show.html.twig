@@ -8,11 +8,18 @@
 
         <img src="{{ gravatar(user.email) }}" alt="My gravatar image" />
         <p>Show more user data here that other people should see...</p>
+
+        {% if user.username == app.user.username %}
+            <div class="actions">
+                <a class="btn primary" href="{{ path('fos_user_profile_edit') }}">Edit my profile</a>
+            </div>
+        {% endif %}
+
     </div>
     <div class="span6">
         <h3>Activity Stream</h3>
         {% for event in stream %}
-            {{ activity_stream_get_action(event) }}
+            {% include 'OpensoftCodeConversationBundle::action.html.twig' with {'action': event} %}
         {% endfor %}
     </div>
 </div>

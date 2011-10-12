@@ -38,6 +38,9 @@ abstract class BaseCommand extends ContainerAwareCommand
 
         foreach ($remotes as $remote) {
             $output->writeln('>> Syncing Remote <info>' . $remote->getName() . '</info>');
+
+            $repo->fetch($remote);
+
             $knownBranches = $remote->getBranches();
             $remoteBranches = $repo->getRemoteBranches();
 
@@ -69,7 +72,6 @@ abstract class BaseCommand extends ContainerAwareCommand
                     continue;
                 }
 
-                // TODO - move to a branch manager
                 $branch = $branchManager->createBranch();
                 $branch->setName(str_replace($remote->getName().'/', '', $newBranch));
                 $branch->setRemote($remote);

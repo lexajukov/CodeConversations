@@ -5,8 +5,15 @@
     {% include 'OpensoftCodeConversationBundle::project-header.html.twig' with {'project': project} %}
 
     <div id="recent-commits">
-        <h2>Recent commits on <span class="label">{{ branch.name }}</span></h2>
+        <h2>Recent commits on <span class="label">{{ remote.name }}/{{ branch.name }}</span></h2>
 
-        {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': project.recentCommits(branch.name)} %}
+        {% for date, datedCommits in commits %}
+            <div class="row">
+                <div class="span3"><h5>{{ date }}</h5></div>
+                <div class="span13">
+                    {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': datedCommits} %}
+                </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

@@ -120,5 +120,9 @@ class Branch implements BranchInterface
         return $this->slug;
     }
 
+    public function getFullName()
+    {
+        return $this->getRemote()->getName().'/'.$this->name;
+    }
 
 }

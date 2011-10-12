@@ -12,15 +12,15 @@
         {% endif %}
     </span>
     <span>
-        {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': pullRequest.initiatedBy} %}
-         wants someone to merge code from <span class="label">{{ pullRequest.sourceBranch.name }}</span>
-         to <span class="label">{{ pullRequest.destinationBranch.name}}</span> ASAP!
+        {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': pullRequest.author} %}
+         wants someone to merge code from <span class="label">{{ pullRequest.sourceBranch.fullName }}</span>
+         to <span class="label">{{ pullRequest.destinationBranch.fullName }}</span> ASAP!
     </span>
     <hr />
 
     <ul class="tabs" data-tabs="tabs" >
         <li class="active"><a href="#code-conversation">Code Conversation</a></li>
-        <li><a href="#commits">Commits ({{ pullRequest.commits|length|default(0) }})</a></li>
+        <li><a href="#commits">Commits ({{ commits|length|default(0) }})</a></li>
         <li><a href="#full-diff">Full Diff ({{ fullDiff.fileDiffs|length|default(0) }} files)</a></li>
     </ul>
 
@@ -43,8 +43,8 @@
                 </tbody>
             </table>
 
-            {% if pullRequest.eventTimeline %}
-                {% for item in pullRequest.eventTimeline %}
+            {% if eventTimeline %}
+                {% for item in eventTimeline %}
                     {% if item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Model\\Commit' %}
                         {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': item } %}
                     {% elseif item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequestComment' %}
@@ -58,7 +58,7 @@
             <h2>Activity stream</h2>
             {% if stream %}
                 {% for event in stream %}
-                    {{ activity_stream_get_action(event) }}
+                    {% include 'OpensoftCodeConversationBundle::action.html.twig' with {'action': event} %}
                 {% endfor %}
             {% endif %}
 
@@ -96,7 +96,7 @@
         </div>
 
         <div id="commits">
-            {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': pullRequest.commits} %}
+            {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': commits} %}
         </div>
 
 

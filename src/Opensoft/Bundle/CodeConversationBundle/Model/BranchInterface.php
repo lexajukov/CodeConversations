@@ -32,6 +32,8 @@ interface BranchInterface
      */
     public function getName();
 
+    public function getFullName();
+
 
     /**
      * @param string $slug

@@ -13,11 +13,13 @@ use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestCommentFormType;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequest;
-use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestTimeline;
+use Opensoft\Bundle\CodeConversationBundle\Timeline\EventTimeline;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment;
 
 /**
  * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
+ * @ParamConverter("remote", class="Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface")
+ * @ParamConverter("branch", class="Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface")
  * @ParamConverter("pullRequest", class="Opensoft\Bundle\CodeConversationBundle\Model\PullRequestInterface")
  */
 class PullRequestController extends Controller
@@ -41,7 +43,7 @@ class PullRequestController extends Controller
         $pullRequest = $pullRequestManager->createPullRequest();
         $pullRequest->setProject($project);
         $pullRequest->setCreatedAt(new \DateTime());
-        $pullRequest->setInitiatedBy($this->container->get('security.context')->getToken()->getUser());
+        $pullRequest->setAuthor($this->container->get('security.context')->getToken()->getUser());
         $pullRequest->setStatus(PullRequest::STATUS_OPEN);
 
         $form = $this->createForm(new PullRequestFormType($project), $pullRequest);
@@ -84,31 +86,29 @@ class PullRequestController extends Controller
      */
     public function viewAction(ProjectInterface $project, PullRequestInterface $pullRequest)
     {
-        $em = $this->getDoctrine()->getEntityManager();
-
-        /** @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepo  */
-        $sourceCodeRepo = $this->get('opensoft_codeconversation.source_code.repository');
-        $sourceCodeRepo->init($project);
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\RepositoryManager $repositoryManager */
+        $repositoryManager = $this->get('opensoft_codeconversation.repository_manager');
+        $repository = $repositoryManager->getRepository($project);
 //
 //        print_r($project->getName());
 //        die();
 
-        $mergeBase = $sourceCodeRepo->mergeBase($pullRequest->getSourceBranch()->getName(), $pullRequest->getDestinationBranch()->getName());
+        $mergeBase = $repository->getMergeBase($pullRequest->getSourceBranch()->getFullName(), $pullRequest->getDestinationBranch()->getFullName());
 //        print_r($mergeBase);
 //        die();
-        $fullDiff = $sourceCodeRepo->unifiedDiff($mergeBase, $pullRequest->getSourceBranch()->getName());
-//        $commits = $sourceCodeRepo->fetchCommits($mergeBase, $pullRequest->getSourceBranch()->getName());
+        $fullDiff = $repository->getDiff($mergeBase, $pullRequest->getSourceBranch()->getFullName());
+        $commits = $repository->getCommits($mergeBase, $pullRequest->getSourceBranch()->getFullName());
 
 //        $timeline = $pullRequest->getEventTimeline();
 
-//        $timeline = new PullRequestTimeline();
-//        foreach ($commits as $commit) {
-//            $timeline->add($commit->getTimestamp(), $commit);
-//        }
-//        foreach ($pullRequest->getComments() as $comment)
-//        {
-//            $timeline->add($comment->getCreatedAt(), $comment);
-//        }
+        $timeline = new EventTimeline();
+        foreach ($commits as $commit) {
+            $timeline->insert($commit);
+        }
+        foreach ($pullRequest->getComments() as $comment)
+        {
+            $timeline->insert($comment);
+        }
 
 
         /** @var \Redpanda\Bundle\ActivityStreamBundle\Entity\ActionManager $activityManager  */
@@ -128,6 +128,8 @@ class PullRequestController extends Controller
         return array(
             'project' => $project,
             'pullRequest' => $pullRequest,
+            'eventTimeline' => $timeline,
+            'commits' => $commits, 
             'form' => $form->createView(),
             'fullDiff' => $fullDiff,
             'stream' => $stream,

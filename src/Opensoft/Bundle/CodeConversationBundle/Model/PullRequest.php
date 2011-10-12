@@ -71,11 +71,6 @@ class PullRequest implements PullRequestInterface
     protected $comments;
 
     /**
-     * @var \Opensoft\Bundle\CodeConversationBundle\Model\Commit[]
-     */
-    protected $commits = array();
-
-    /**
      * Github concept of a comment thread about a specific line of code
      *
      * @var
@@ -86,20 +81,6 @@ class PullRequest implements PullRequestInterface
      * @var \DateTime
      */
     protected $createdAt;
-
-    public function getEventTimeline()
-    {
-        $timeline = new EventTimeline();
-
-        foreach ($this->getComments() as $comment) {
-            $timeline->insert($comment);
-        }
-        foreach ($this->getCommits() as $commit) {
-            $timeline->insert($commit);
-        }
-
-        return $timeline;
-    }
 
 
     public function setComments(array $comments)

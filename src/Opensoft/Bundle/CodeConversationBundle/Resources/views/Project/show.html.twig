@@ -4,73 +4,12 @@
 
     {% include 'OpensoftCodeConversationBundle::project-header.html.twig' with {'project': project} %}
 
-    <ul class="tabs" data-tabs="tabs" >
-        <li class="active"><a href="#recent-commits">Recent Commits</a></li>
-        <li><a href="#pull-requests">Active Pull Requests ({{ openPullRequests|length|default(0) }})</a></li>
-        <li><a href="#branches">Remotes ({{ project.remotes|length|default(0) }})</a></li>
-    </ul>
+    {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': recentCommit} %}
 
-    <div class="pill-content">
-        <div class="active" id="recent-commits">
-            <h2>Recent commits on <span class="label">{{ branch.name }}</span></h2>
+    <h4>README.md</h4>
+    <table>
+        <tr><td>{{ readme|markdown|nl2br }}</td></tr>
+    </table>
 
-            {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': recentCommits} %}
-        </div>
 
-        <div id="pull-requests">
-            <span class="pull-request-title title" style="font-size: larger; font-weight: bold;">Pull Requests</span>
-            <a href="{{ path('opensoft_codeconversation_pullrequest_create', {'projectSlug': project.slug }) }}" class="btn primary pull-right">Open Pull Request</a>
-            <br />
-            {% if openPullRequests|length > 0 %}
-                {% include 'OpensoftCodeConversationBundle:PullRequest:table-list.html.twig' with {'pullRequests': openPullRequests} %}
-                <p>
-                    Want to see <a href="{{ path('opensoft_codeconversation_pullrequest_list', {'projectSlug': project.slug}) }}">all pull requests</a> for {{ project.name }}?
-                </p>
-            {% else %}
-                <p>
-                    There are no open pull requests for {{ project.name }}.
-                </p>
-            {% endif %}
-        </div>
-
-        <div id="branches">
-            <h2>{{ project.name }} branches</h2>
-
-            <table class="zebra-striped">
-                <thead>
-                    <tr>
-                        <th>Remote</th>
-                        <th>Branch name</th>
-                        <th>Enabled</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for remote in project.remotes%}
-                    {% for branch in remote.branches %}
-                        <tr>
-                            <td>{{ remote.name }}</td>
-                            <td>{{ branch.name }}</td>
-                            <td>{{ branch.enabled ? 'Yes' : 'No' }}</td>
-                            <td>
-                                {% if branch.enabled %}
-                                <a class="btn" href="{{ path('opensoft_codeconversation_project_show_1', {'projectSlug': project.slug, 'remoteSlug': remote.slug, 'branchSlug': branch.slug}) }}">Switch to branch</a>
-                                <a href="{{ path('opensoft_codeconversation_pullrequest_create', {'projectSlug': project.slug }) }}" class="btn primary">Open Pull Request</a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    {% endfor %}
-                </tbody>
-
-            </table>
-        </div>
-    </div>
-
-{% endblock %}
-
-{% block javascripts %}
-{{ parent() }}
-<script src="{{ asset('bundles/opensoftcodeconversation/js/bootstrap-tabs.1.3.0.js')}}"></script>
 {% endblock %}

@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th>
-                <h3>{{ project.name }}</h3>
+                <h3><a href="{{ path('opensoft_codeconversation_project_show', {'projectSlug': project.slug}) }}">{{ project.name }}</a></h3>
             </th>
         </tr>
     </thead>
@@ -14,7 +14,7 @@
                     <select name="remotebranch" type="select" onchange="this.form.submit();">
                         {% for remote in project.remotes %}
                             {% for branch in remote.branches %}
-                                {% if branch.name == app.request.get('remotebranch') %}
+                                {% if remote.slug == app.request.get('remoteSlug') and branch.slug == app.request.get('branchSlug') %}
                                     <option value="{{ remote.name }}/{{ branch.name }}" selected="selected">{{ remote.name }}/{{ branch.name }}</option>
                                 {% else %}
                                     <option value="{{ remote.name }}/{{ branch.name }}">{{ remote.name }}/{{ branch.name }}</option>
@@ -23,7 +23,7 @@
                         {% endfor %}
                     </select>
                 </form>
-                <a class="btn" href="{{ path('opensoft_codeconversation_project_show', {'projectSlug': project.slug}) }}">Commits</a></li>
+                <a class="btn" href="{{ path('opensoft_codeconversation_project_commits', {'projectSlug': project.slug}) }}">Commits</a></li>
                 <a class="btn" href="{{ path('opensoft_codeconversation_pullrequest_list', {'projectSlug': project.slug}) }}">Active Pull Requests (0)</a>
             </td>
         </tr>

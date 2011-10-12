@@ -20,12 +20,12 @@ interface PullRequestInterface extends StreamableInterface
     public function setId($id);
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment[]
+     * @param \Opensoft\Bundle\CodeConversationBundle\Model\PullRequestComment[]
      */
     public function setComments(array $comments);
 
     /**
-     * @return \Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment[]
+     * @return \Opensoft\Bundle\CodeConversationBundle\Model\PullRequestComment[]
      */
     public function getComments();
 
@@ -50,42 +50,42 @@ interface PullRequestInterface extends StreamableInterface
     public function getDescription();
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $destinationBranch
+     * @param \Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface $destinationBranch
      */
     public function setDestinationBranch($destinationBranch);
 
     /**
-     * @return \Opensoft\Bundle\CodeConversationBundle\Entity\Branch
+     * @return \Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface
      */
     public function getDestinationBranch();
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\User $author
+     * @param \Opensoft\Bundle\CodeConversationBundle\Model\UserInterface $author
      */
     public function setAuthor(UserInterface $author);
 
     /**
-     * @return \Opensoft\Bundle\CodeConversationBundle\Entity\User
+     * @return \Opensoft\Bundle\CodeConversationBundle\Model\UserInterface
      */
     public function getAuthor();
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\Project $project
+     * @param \Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface $project
      */
     public function setProject($project);
 
     /**
-     * @return \Opensoft\Bundle\CodeConversationBundle\Entity\Project
+     * @return \Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface
      */
     public function getProject();
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $sourceBranch
+     * @param \Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface $sourceBranch
      */
     public function setSourceBranch($sourceBranch);
 
     /**
-     * @return \Opensoft\Bundle\CodeConversationBundle\Entity\Branch
+     * @return \Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface
      */
     public function getSourceBranch();
 

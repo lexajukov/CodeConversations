@@ -81,11 +81,11 @@ class CommentController extends Controller
      */
     public function postCommitCommentAction(ProjectInterface $project, $sha1)
     {
-        /** @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepo  */
-        $sourceCodeRepo = $this->get('opensoft_codeconversation.source_code.repository');
-        $sourceCodeRepo->init($project);
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\RepositoryManager $repositoryManager  */
+        $repositoryManager = $this->get('opensoft_codeconversation.repository_manager');
+        $repository = $repositoryManager->getRepository($project);
 
-        $commit = $sourceCodeRepo->fetchCommit($sha1);
+        $commit = $repository->showCommit($sha1);
 
         if (!$commit) {
             throw $this->createNotFoundException("Commit $sha1 could not be found");

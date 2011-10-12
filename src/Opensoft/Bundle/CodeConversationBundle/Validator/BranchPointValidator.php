@@ -12,8 +12,7 @@ namespace Opensoft\Bundle\CodeConversationBundle\Validator;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
-use Opensoft\Bundle\CodeConversationBundle\Exception\BuildException;
+use Opensoft\Bundle\CodeConversationBundle\Git\RepositoryManager;
 
 /**
  *
@@ -23,16 +22,16 @@ use Opensoft\Bundle\CodeConversationBundle\Exception\BuildException;
 class BranchPointValidator extends ConstraintValidator
 {
     /**
-     * @var \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface
+     * @var \Opensoft\Bundle\CodeConversationBundle\Git\RepositoryManager
      */
-    private $sourceCodeRepository;
+    private $repositoryManager;
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepo
+     * @param \Opensoft\Bundle\CodeConversationBundle\Git\RepositoryManager $repositoryManager
      */
-    public function __construct(RepositoryInterface $sourceCodeRepo)
+    public function __construct(RepositoryManager $repositoryManager)
     {
-        $this->sourceCodeRepository = $sourceCodeRepo;
+        $this->repositoryManager = $repositoryManager;
     }
 
     /**
@@ -51,14 +50,15 @@ class BranchPointValidator extends ConstraintValidator
             throw new \RuntimeException('This is a class constraint.');
         }
 
-        
-        $source = $object->getSourceBranch()->getName();
-        $destination = $object->getDestinationBranch()->getName();
-
         try {
-            $this->sourceCodeRepository->init($object->getProject());
-            $common = $this->sourceCodeRepository->mergeBase($source, $destination);
-        } catch (\BuildException $e) {
+            $repository = $this->repositoryManager->getRepository($object->getProject());
+
+
+            $source = $object->getSourceBranch()->getRemote()->getName().'/'.$object->getSourceBranch()->getName();
+            $destination = $object->getDestinationBranch()->getRemote()->getName().'/'.$object->getDestinationBranch()->getName();
+
+            $common = $repository->getMergeBase($source, $destination);
+        } catch (\GitRuntimeException $e) {
             $this->setMessage($constraint->message);
 
             return false;
