@@ -15,8 +15,8 @@
             <gedmo:sluggable />
         </field>
 
-        <field name="slug" type="string" unique="true">
-            <gedmo:slug updatable="false" />
+        <field name="slug" type="string">
+            <gedmo:slug unique="false" updatable="false" />
         </field>
 
         <field name="tip" type="string" nullable="true" />
