@@ -158,22 +158,6 @@ abstract class BaseCommand extends ContainerAwareCommand
 
                 $activityManager->updateAction($action);
             }
-
-
-            $action = $activityManager->createAction();
-            $action->setActor($project);
-            if (count($commits) == 1) {
-                $action->setVerb(sprintf('received %d commit on', count($commits)));
-            } else {
-                $action->setVerb(sprintf('received %d commits on', count($commits)));
-            }
-            $action->setTarget($branch);
-            // Stupid proxy object gets put here... short circuit that....
-            $action->setTargetType('Opensoft\Bundle\CodeConversationBundle\Entity\Branch');
-
-            $output->writeln('>>>> recording ' . count($commits) . ' commits for project ' . $project->getName());
-
-            $activityManager->updateAction($action);
         }
     }
 }
