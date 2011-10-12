@@ -1,19 +1,19 @@
-<table>
+<table cellpadding="0" cellspacing="0" style="border: none; border-radius: 0px;">
     <tbody>
         {% set i = 0 %}
         {% for diff in fullDiff.fileDiffs %}
         <tr>
-            <td>
+            <td style="border-radius: 0px; padding: 3px 3px 4px;">
                 <span class="label">{{ diff.status }}</span>
             </td>
-            <td>
+            <td style="border-left: none; border-radius: 0px; padding: 3px 3px 4px;">
                 <span>
                     {% if diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\FileDiff::STATUS_MODIFICATION") %}
-                        <a href="#diff-{{ i }}">{{ diff.dstPath }}</a>
+                        <a style="color: #555;" href="#diff-{{ i }}">{{ diff.dstPath }}</a>
                     {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\FileDiff::STATUS_ADDITION") %}
-                        <a href="#diff-{{ i }}">{{ diff.dstPath }}</a>
+                        <a style="color: #555;" href="#diff-{{ i }}">{{ diff.dstPath }}</a>
                     {% elseif diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\FileDiff::STATUS_DELETION") %}
-                        <a href="#diff-{{ i }}">{{ diff.srcPath }}</a>
+                        <a style="color: #555;" href="#diff-{{ i }}">{{ diff.srcPath }}</a>
                     {% endif %}
                 </span>
                 <span class="pull-right">

@@ -3,11 +3,11 @@
 {% else %}
     {% set i = 0 %}
     {% for diff in fullDiff.filediffs %}
-        <div id="diff-{{ i }}">
+        <div>
             <table cellpadding="0" cellspacing="0">
                 <thead>
                     <tr>
-                        <th colspan="3" style="background-color: #E0EDFF;">
+                        <th colspan="3" style="background-color: #E0EDFF;" id="diff-{{ i }}">
                             <span>
                                 <span class="label">{{ diff.status }}</span>
                                 {% if diff.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Model\\FileDiff::STATUS_MODIFICATION") %}
