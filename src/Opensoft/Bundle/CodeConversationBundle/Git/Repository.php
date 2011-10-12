@@ -183,7 +183,15 @@ class Repository
     public function getFileAtCommit($sha1, $filepath)
     {
         return $this->repo->git(sprintf('show %s:%s', $sha1, $filepath));
+    }
 
+    /**
+     * @param string $revision
+     * @return string
+     */
+    public function getTip($revision)
+    {
+        return $this->repo->git(sprintf('rev-list --max-count=1 %s', $revision));
     }
 
 

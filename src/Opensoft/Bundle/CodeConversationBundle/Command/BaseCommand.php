@@ -27,6 +27,7 @@ abstract class BaseCommand extends ContainerAwareCommand
     {
         /** @var \Opensoft\Bundle\CodeConversationBundle\Model\BranchManagerInterface $branchManager  */
         $branchManager = $this->getContainer()->get('opensoft_codeconversation.manager.branch');
+
         /** @var \Opensoft\Bundle\CodeConversationBundle\Model\RemoteManagerInterface $remoteManager  */
         $remoteManager = $this->getContainer()->get('opensoft_codeconversation.manager.remote');
 
@@ -52,6 +53,9 @@ abstract class BaseCommand extends ContainerAwareCommand
 
                         $output->writeln('>>> <comment>'.$remote->getName().'/'.$knownBranch->getName().'</comment> already being tracked');
 
+                        $knownBranch->setTip($repo->getTip($knownBranch->getFullName()));
+                        $branchManager->updateBranch($knownBranch);
+
                         continue;
                     } else {
                         $output->writeln('>>> <error>'.$remote->getName().'/'.$knownBranch->getName().'</error> deleted');
@@ -68,13 +72,13 @@ abstract class BaseCommand extends ContainerAwareCommand
                 // set origin/HEAD pointer as default branch
                 if (strpos($newBranch, $remote->getName().'/HEAD -> ') === 0) {
                     $defaultBranchName = str_replace($remote->getName(), '', substr($newBranch, strlen($remote->getName().'/HEAD -> ')));
-                    print_r($defaultBranchName);
                     continue;
                 }
 
                 $branch = $branchManager->createBranch();
                 $branch->setName(str_replace($remote->getName().'/', '', $newBranch));
                 $branch->setRemote($remote);
+                $branch->setTip($repo->getTip($remote->getName()));
 
                 $branchManager->updateBranch($branch);
 

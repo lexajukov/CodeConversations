@@ -85,7 +85,7 @@ class ProjectController extends Controller
      * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
      * @Template()
      */
-    public function showAction(ProjectInterface $project, RemoteInterface $remote, BranchInterface $branch)
+    public function showAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null)
     {
         $em = $this->get('doctrine')->getEntityManager();
 

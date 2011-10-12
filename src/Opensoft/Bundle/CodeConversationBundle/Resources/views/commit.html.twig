@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th style="background-color: #E0EDFF;" colspan="2">
-                {{ commit.message|truncate(80) }}
+                <a style="color: #000000;" href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectSlug': project.slug, 'sha1': commit.id }) }}">{{ commit.message|truncate(80) }}</a>
                 <span class="pull-right">{{ time_diff(commit.committedDate) }}</span>
             </th>
         </tr>

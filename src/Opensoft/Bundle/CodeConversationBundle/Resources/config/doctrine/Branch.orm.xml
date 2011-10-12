@@ -19,6 +19,8 @@
             <gedmo:slug updatable="false" />
         </field>
 
+        <field name="tip" type="string" nullable="true" />
+
         <field name="enabled" type="boolean" />
 
         <many-to-one target-entity="Remote" field="remote" />

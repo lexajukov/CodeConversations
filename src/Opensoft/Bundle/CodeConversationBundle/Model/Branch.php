@@ -27,6 +27,11 @@ class Branch implements BranchInterface
      * @var string
      */
     protected $slug;
+
+    /**
+     * @var string
+     */
+    protected $tip;
     
     /**
      * @var RemoteInterface
@@ -123,6 +128,22 @@ class Branch implements BranchInterface
     public function getFullName()
     {
         return $this->getRemote()->getName().'/'.$this->name;
+    }
+
+    /**
+     * @param string $tip
+     */
+    public function setTip($tip)
+    {
+        $this->tip = $tip;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTip()
+    {
+        return $this->tip;
     }
 
 }

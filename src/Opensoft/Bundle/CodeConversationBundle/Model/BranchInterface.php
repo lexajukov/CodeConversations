@@ -32,8 +32,10 @@ interface BranchInterface
      */
     public function getName();
 
+    /**
+     * @return string
+     */
     public function getFullName();
-
 
     /**
      * @param string $slug
@@ -64,4 +66,8 @@ interface BranchInterface
      * @return \Boolean
      */
     public function isEnabled();
+
+    public function getTip();
+
+    public function setTip($tip);
 }
