@@ -26,31 +26,17 @@ class ProjectParamConverter implements ParamConverterInterface
     protected $projectManager;
 
     /**
-     * @var \Opensoft\Bundle\CodeConversationBundle\Model\RemoteManagerInterface
-     */
-    protected $remoteManager;
-
-    /**
-     * @var \Opensoft\Bundle\CodeConversationBundle\Model\BranchManagerInterface
-     */
-    protected $branchManager;
-
-    /**
      * @var string
      */
     protected $class;
 
     /**
      * @param \Opensoft\Bundle\CodeConversationBundle\Model\ProjectManagerInterface $projectManager
-     * @param \Opensoft\Bundle\CodeConversationBundle\Model\RemoteManagerInterface $remoteManager
-     * @param \Opensoft\Bundle\CodeConversationBundle\Model\BranchManagerInterface $branchManager
      * @param string $class
      */
-    public function __construct(ProjectManagerInterface $projectManager, RemoteManagerInterface $remoteManager, BranchManagerInterface $branchManager, $class)
+    public function __construct(ProjectManagerInterface $projectManager, $class)
     {
         $this->projectManager = $projectManager;
-        $this->remoteManager = $remoteManager;
-        $this->branchManager = $branchManager;
         $this->class = $class;
     }
 
@@ -73,40 +59,6 @@ class ProjectParamConverter implements ParamConverterInterface
         }
 
         $request->attributes->set($configuration->getName(), $project);
-
-
-        if ($request->attributes->has('remoteSlug')) {
-            $slug = $request->attributes->get('remoteSlug');
-            $remote = $this->remoteManager->findRemotesBy(array('project' => $project->getId(), 'slug' => $slug));
-            $remote = $remote[0];
-
-            if (null === $remote) {
-                throw new NotFoundHttpException(sprintf('Remote with slug "%s" was not found.', $slug));
-            }
-
-            $request->attributes->set('remote', $remote);
-        } else {
-            $remote = $project->getDefaultRemote();
-            $request->attributes->set('remote', $remote);
-        }
-
-
-        if ($request->attributes->has('branchSlug')) {
-            $slug = $request->attributes->get('branchSlug');
-            $branch = $this->branchManager->findBranchesBy(array('remote' => $remote->getId(), 'slug' => $slug));
-            $branch = $branch[0];
-
-            if (null === $remote) {
-                throw new NotFoundHttpException(sprintf('Branch with slug "%s" was not found.', $slug));
-            }
-
-            $request->attributes->set('branch', $branch);
-        } else {
-            $branch = $remote->getHeadBranch();
-            $request->attributes->set('branch', $branch);
-        }
-
-
     }
 
     /**

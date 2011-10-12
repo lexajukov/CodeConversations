@@ -8,12 +8,52 @@
         <h2>Recent commits on <span class="label">{{ remote.name }}/{{ branch.name }}</span></h2>
 
         {% for date, datedCommits in commits %}
-            <div class="row">
-                <div class="span3"><h5>{{ date }}</h5></div>
-                <div class="span13">
-                    {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': datedCommits} %}
-                </div>
-            </div>
+            <table class="zebra-striped">
+                <thead>
+                    <tr>
+                        <th colspan="2" style="background-color: #E0EDFF;" >{{ date }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for commit in datedCommits %}
+                    <tr>
+                        <td>
+                            <div>
+                                <div class="pull-left">
+                                    {% if git_author_exists(commit.authorName) %}
+                                        {% set user = git_author(commit.authorName) %}
+                                        <img style="margin: 0px 0px -4px 0px; padding-right: 6px;" src="{{ gravatar(user.email, 40) }}" />
+                                    {% else %}
+                                        <img style="margin: 0px 0px -4px 0px; padding-right: 6px;" src="{{ gravatar(commit.authorEmail, 40) }}" />
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <div>
+                                        <a style="color: black;" href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectSlug': project.slug, 'sha1': commit.id }) }}">
+                                            <strong>{{ commit.message|truncate(80) }}</strong>
+                                        </a>
+                                    </div>
+                                    <div class="help-block">
+                                        {% if git_author_exists(commit.authorName) %}
+                                            {% set user = git_author(commit.authorName) %}
+                                            <a style="text-decoration: none; color: #777" href="{{ path('opensoft_codeconversation_user_show', {'usernameCanonical': user.usernameCanonical}) }}">{{ user.username }}</a>
+                                        {% else %}
+                                            <span style="text-decoration: none; color: #777" >{{ commit.authorName }}</span>
+                                        {% endif %}
+                                        authored {{ time_diff(commit.authoredDate) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="border-left: none; text-align: right;">
+                            <a class="btn smaller" style="font-family: monospace; font-size: smaller;" href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectSlug': project.slug, 'sha1': commit.id }) }}">
+                                {{ "%.10s"|format(commit.id) }}
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         {% endfor %}
     </div>
 {% endblock %}
