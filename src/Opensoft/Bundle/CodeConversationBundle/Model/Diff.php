@@ -17,6 +17,20 @@ class Diff implements DiffInterface
      */
     protected $fileDiffs = array();
 
+    protected $insertions;
+
+    protected $deletions;
+
+    public function getInsertions()
+    {
+        return $this->insertions;
+    }
+
+    public function getDeletions()
+    {
+        return $this->deletions;
+    }
+
     /**
      * @return FileDiffInterface[]
      */
@@ -30,6 +44,9 @@ class Diff implements DiffInterface
      */
     public function addFileDiff(FileDiffInterface $fileDiff)
     {
+        $this->insertions += $fileDiff->getInsertions();
+        $this->deletions += $fileDiff->getDeletions();
+
         $this->fileDiffs[] = $fileDiff;
     }
 

@@ -105,6 +105,11 @@
                         <span style="font-size: large;" class="label important">Closed</span>
                     {% endif %}
                 </div>
+                <hr />
+                <div>
+                    <div style="color: green;">+ {{ fullDiff.insertions }} insertions</div>
+                    <div style="color: red;">- {{ fullDiff.deletions}} deletions</div>
+                </div>
 
                 <hr />
                 <a class="small" href="{{ path('opensoft_codeconversation_pullrequest_list', {'projectSlug': project.slug}) }}">All pull requests</a>

@@ -49,4 +49,8 @@ interface FileDiffInterface
     public function addFileDiffChunk(FileDiffChunkInterface $diffChunk);
 
     public function getFileDiffChunks();
+
+    public function getInsertions();
+
+    public function getDeletions();
 }

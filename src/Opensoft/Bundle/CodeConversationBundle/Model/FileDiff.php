@@ -137,4 +137,14 @@ class FileDiff implements FileDiffInterface
     {
         return $this->fileDiffChunk;
     }
+
+    public function getInsertions()
+    {
+        return $this->insertions;
+    }
+
+    public function getDeletions()
+    {
+        return $this->deletions;
+    }
 }

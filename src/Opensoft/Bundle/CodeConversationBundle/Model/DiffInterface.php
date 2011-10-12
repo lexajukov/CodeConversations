@@ -12,6 +12,11 @@ namespace Opensoft\Bundle\CodeConversationBundle\Model;
  */
 interface DiffInterface
 {
+
+    public function getInsertions();
+
+    public function getDeletions();
+
     /**
      * @return FileDiffInterface[]
      */
