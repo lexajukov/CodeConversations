@@ -115,11 +115,14 @@ class ProjectController extends Controller
             $readme = null;
         }
 
+        $tree = $repository->getTree($branch->getFullName());
+
 
         return array(
             'project' => $project,
             'remote' => $remote,
             'branch' => $branch,
+            'tree' => $tree,
             'recentCommit' => $recentCommits[0],
             'readme' => $readme
         );

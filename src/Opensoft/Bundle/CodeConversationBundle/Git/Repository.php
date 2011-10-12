@@ -194,6 +194,28 @@ class Repository
         return $this->repo->git(sprintf('rev-list --max-count=1 %s', $revision));
     }
 
+    public function getTree($treeish, $path = null)
+    {
+        $objects = array();
+        $output = $this->repo->git(sprintf('ls-tree %s', $treeish));
+        if (!empty($output)) {
+            foreach (explode("\n", $output) as $line) {
+                $info = explode("\t", $line);
+                $definition = explode(" ", $info[0]);
+
+                $object = array();
+                $object['mode'] = $definition[0];
+                $object['type'] = $definition[1];
+                $object['object'] = $definition[2];
+                $object['file'] = $info[1];
+
+                $objects[] = $object;
+            }
+        }
+
+        return $objects;
+    }
+
 
     /**
      * @param array 

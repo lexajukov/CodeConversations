@@ -6,6 +6,28 @@
 
     {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': recentCommit} %}
 
+    <h4>Code</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Mode</th>
+                <th>Type</th>
+                <th>Object</th>
+                <th>File</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in tree %}
+            <tr>
+                <td>{{ item.mode }}</td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.object }}</td>
+                <td>{{ item.file }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
     <h4>README.md</h4>
     <table>
         <tr><td>{{ readme|markdown|nl2br }}</td></tr>
