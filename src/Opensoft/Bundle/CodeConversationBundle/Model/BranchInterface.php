@@ -38,16 +38,6 @@ interface BranchInterface
     public function getFullName();
 
     /**
-     * @param string $slug
-     */
-    public function setSlug($slug);
-
-    /**
-     * @return string
-     */
-    public function getSlug();
-
-    /**
      * @param RemoteInterface $remote
      */
     public function setRemote(RemoteInterface $remote);

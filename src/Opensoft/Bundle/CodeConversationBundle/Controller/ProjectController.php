@@ -14,6 +14,7 @@ use Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequest;
 use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
+use GitRuntimeException;
 
 /**
  *
@@ -40,7 +41,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project-header/{projectSlug}/tree/{remoteSlug}/{branchSlug}")
+     * @Route("/project-header/{projectName}/tree/{remoteName}/{branchName}")
      * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
      * @Template()
      */
@@ -66,22 +67,22 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{projectSlug}/redirect")
+     * @Route("/{projectName}/redirect")
      * @Method("POST")
      */
     public function redirectAction(ProjectInterface $project)
     {
-        list($remoteSlug, $branchSlug) = explode("/", $this->getRequest()->get('remotebranch'));
+        list($remoteName, $branchName) = explode("/", $this->getRequest()->get('remotebranch'));
         return $this->redirect($this->generateUrl('opensoft_codeconversation_project_show_1', array(
-            'projectSlug' => $project->getSlug(),
-            'remoteSlug' => $remoteSlug,
-            'branchSlug' => $branchSlug
+            'projectName' => $project->getName(),
+            'remoteName' => $remoteName,
+            'branchName' => $branchName
         )));
     }
 
     /**
-     * @Route("/{projectSlug}")
-     * @Route("/{projectSlug}/tree/{remoteSlug}/{branchSlug}")
+     * @Route("/{projectName}")
+     * @Route("/{projectName}/tree/{remoteName}/{branchName}")
      * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
      * @Template()
      */
@@ -108,18 +109,24 @@ class ProjectController extends Controller
 
         $recentCommits = $repository->getCommits($remote->getName().'/'.$branch->getName(), null, 1);
 
+        try {
+            $readme = $repository->getFileAtCommit($recentCommits[0]->getId(), 'README.md');
+        } catch(GitRuntimeException $e) {
+            $readme = null;
+        }
+
 
         return array(
             'project' => $project,
             'remote' => $remote,
             'branch' => $branch,
             'recentCommit' => $recentCommits[0],
-            'readme' => $repository->getFileAtCommit($recentCommits[0]->getId(), 'README.md')
+            'readme' => $readme
         );
     }
     /**
-     * @Route("/{projectSlug}/commits")
-     * @Route("/{projectSlug}/tree/{remoteSlug}/{branchSlug}/commits")
+     * @Route("/{projectName}/commits")
+     * @Route("/{projectName}/tree/{remoteName}/{branchName}/commits")
      * @Template()
      */
     public function commitsAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null)
@@ -157,7 +164,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{projectSlug}/commit/{sha1}")
+     * @Route("/{projectName}/commit/{sha1}")
      * @Template()
      */
     public function viewCommitAction(ProjectInterface $project, $sha1)
@@ -177,7 +184,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{projectSlug}/commit/{sha1}/{filepath}", requirements={"filepath" = ".+"})
+     * @Route("/{projectName}/commit/{sha1}/{filepath}", requirements={"filepath" = ".+"})
      * @Template()
      */
     public function fileAction(ProjectInterface $project, $sha1, $filepath)

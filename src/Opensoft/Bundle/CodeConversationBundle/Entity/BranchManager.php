@@ -57,17 +57,17 @@ class BranchManager extends BaseBranchManager
     }
 
 
-    public function findRemoteByProjectSlugAndRemoteSlugAndBranchSlug($projectSlug, $remoteSlug, $branchSlug)
+    public function findBranchByProjectNameAndRemoteNameAndBranchName($projectName, $remoteName, $branchName)
     {
         return $this->repository->createQueryBuilder('b')
                 ->join('b.remote', 'r')
                 ->join('r.project', 'p')
-                ->where('r.slug = :remoteSlug')
-                ->andWhere('p.slug = :projectSlug')
-                ->andWhere('b.slug = :branchSlug')
-                ->setParameter('branchSlug', $branchSlug)
-                ->setParameter('remoteSlug', $remoteSlug)
-                ->setParameter('projectSlug', $projectSlug)
+                ->where('r.name = :remoteName')
+                ->andWhere('p.name = :projectName')
+                ->andWhere('b.name = :branchName')
+                ->setParameter('branchName', $branchName)
+                ->setParameter('remoteName', $remoteName)
+                ->setParameter('projectName', $projectName)
                 ->getQuery()
                 ->getOneOrNullResult();
     }

@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Requires projectSlug and remoteSlug to be set
+ * Requires projectName and remoteName to be set
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
@@ -45,16 +45,16 @@ class RemoteParamConverter implements ParamConverterInterface
      */
     function apply(Request $request, ConfigurationInterface $configuration)
     {
-        if (!$request->attributes->has('projectSlug') || !$request->attributes->has('remoteSlug')) {
+        if (!$request->attributes->has('projectName') || !$request->attributes->has('remoteName')) {
             return;
         }
 
-        $projectSlug = $request->attributes->get('projectSlug');
-        $remoteSlug = $request->attributes->get('remoteSlug');
-        $remote = $this->remoteManager->findRemoteByProjectSlugAndRemoteSlug($projectSlug, $remoteSlug);
+        $projectName = $request->attributes->get('projectName');
+        $remoteName = $request->attributes->get('remoteName');
+        $remote = $this->remoteManager->findRemoteByProjectNameAndRemoteName($projectName, $remoteName);
 
         if (null === $remote) {
-            throw new NotFoundHttpException(sprintf('Remote with slug "%s" was not found for project "%s"', $remoteSlug, $projectSlug));
+            throw new NotFoundHttpException(sprintf('Remote with name "%s" was not found for project "%s"', $remoteName, $projectName));
         }
 
         $request->attributes->set($configuration->getName(), $remote);

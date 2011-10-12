@@ -20,10 +20,10 @@ interface ProjectManagerInterface
     public function createProject();
 
     /**
-     * @param string $slug
+     * @param string $name
      * @return ProjectInterface
      */
-    public function findProjectBySlug($slug);
+    public function findProjectByName($name);
 
     /**
      * @param array $criteria

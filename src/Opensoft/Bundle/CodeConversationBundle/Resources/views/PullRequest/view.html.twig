@@ -18,7 +18,7 @@
              to <span class="label">{{ pullRequest.destinationBranch.fullName }}</span> ASAP!
         </span>
         <span class="pull-right">
-            <a href="{{ path('opensoft_codeconversation_pullrequest_view', {'projectSlug': project.slug, 'pullId': pullRequest.id} )}}">#{{ pullRequest.id }}</a>
+            <a href="{{ path('opensoft_codeconversation_pullrequest_view', {'projectName': project.name, 'pullId': pullRequest.id} )}}">#{{ pullRequest.id }}</a>
         </span>
     </div>
     <hr />
@@ -70,7 +70,7 @@
                 <hr />
                 <h4>Comment on this pull request</h4>
 
-                <form action="{{ path('opensoft_codeconversation_comment_postprcomment', {'projectSlug': project.slug, 'pullId': pullRequest.id }) }}" {{ form_enctype(form) }} method="POST">
+                <form action="{{ path('opensoft_codeconversation_comment_postprcomment', {'projectName': project.name, 'pullId': pullRequest.id }) }}" {{ form_enctype(form) }} method="POST">
                     <fieldset>
                         {{ form_errors(form) }}
 
@@ -112,7 +112,7 @@
                 </div>
 
                 <hr />
-                <a class="small" href="{{ path('opensoft_codeconversation_pullrequest_list', {'projectSlug': project.slug}) }}">All pull requests</a>
+                <a class="small" href="{{ path('opensoft_codeconversation_pullrequest_list', {'projectName': project.name}) }}">All pull requests</a>
             </div>
 
         </div>

@@ -11,7 +11,7 @@
 
 
     <div>
-      <form action="{{ path('opensoft_codeconversation_pullrequest_create', {'projectSlug': project.slug }) }}" {{ form_enctype(form) }} method="POST">
+      <form action="{{ path('opensoft_codeconversation_pullrequest_create', {'projectName': project.name }) }}" {{ form_enctype(form) }} method="POST">
         <fieldset>
             {{ form_errors(form) }}
 

@@ -40,16 +40,6 @@ interface ProjectInterface extends StreamableInterface
     public function getPullRequests();
 
     /**
-     * @param string $slug
-     */
-    public function setSlug($slug);
-
-    /**
-     * @return string
-     */
-    public function getSlug();
-
-    /**
      * @return RemoteInterface
      */
     public function getDefaultRemote();

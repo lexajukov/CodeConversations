@@ -29,7 +29,7 @@
                                 </div>
                                 <div>
                                     <div>
-                                        <a style="color: black;" href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectSlug': project.slug, 'sha1': commit.id }) }}">
+                                        <a style="color: black;" href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': commit.id }) }}">
                                             <strong>{{ commit.message|truncate(80) }}</strong>
                                         </a>
                                     </div>
@@ -46,7 +46,7 @@
                             </div>
                         </td>
                         <td style="border-left: none; text-align: right;">
-                            <a class="btn smaller" style="font-family: monospace; font-size: smaller;" href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectSlug': project.slug, 'sha1': commit.id }) }}">
+                            <a class="btn smaller" style="font-family: monospace; font-size: smaller;" href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': commit.id }) }}">
                                 {{ "%.10s"|format(commit.id) }}
                             </a>
                         </td>

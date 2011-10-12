@@ -20,7 +20,7 @@
                             </span>
                             {% if commit is defined %}
                             <span class="pull-right">
-                                <a href="{{ path('opensoft_codeconversation_project_file', {'projectSlug': project.slug, 'sha1': commit.id, 'filepath': diff.dstPath }) }}">view file</a>
+                                <a href="{{ path('opensoft_codeconversation_project_file', {'projectName': project.name, 'sha1': commit.id, 'filepath': diff.dstPath }) }}">view file</a>
                             </span>
                             {% endif %}
                         </th>

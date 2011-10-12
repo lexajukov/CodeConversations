@@ -2,19 +2,19 @@
     <thead>
         <tr>
             <th>
-                <h3><a href="{{ path('opensoft_codeconversation_project_show', {'projectSlug': project.slug}) }}">{{ project.name }}</a></h3>
+                <h3><a href="{{ path('opensoft_codeconversation_project_show', {'projectName': project.name}) }}">{{ project.name }}</a></h3>
             </th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>
-                <form style="display: inline;" method="POST" action="{{ path('opensoft_codeconversation_project_redirect', {'projectSlug': project.slug}) }}">
+                <form style="display: inline;" method="POST" action="{{ path('opensoft_codeconversation_project_redirect', {'projectName': project.name}) }}">
                     <span>Branch</span>
                     <select name="remotebranch" type="select" onchange="this.form.submit();">
                         {% for projectRemote in project.remotes %}
                             {% for projectBranch in projectRemote.branches %}
-                                {% if projectRemote.slug == remote.slug and projectBranch.slug == branch.slug %}
+                                {% if projectRemote.name == remote.name and projectBranch.name == branch.name %}
                                     <option value="{{ projectBranch.fullName }}" selected="selected">{{ projectBranch.fullName }}</option>
                                 {% else %}
                                     <option value="{{ projectBranch.fullName }}">{{ projectBranch.fullName }}</option>
@@ -23,8 +23,8 @@
                         {% endfor %}
                     </select>
                 </form>
-                <a class="btn" href="{{ path('opensoft_codeconversation_project_commits', {'projectSlug': project.slug}) }}">Commits</a></li>
-                <a class="btn" href="{{ path('opensoft_codeconversation_pullrequest_list', {'projectSlug': project.slug}) }}">Active Pull Requests ({{ openPullRequests|length|default(0) }})</a>
+                <a class="btn" href="{{ path('opensoft_codeconversation_project_commits', {'projectName': project.name}) }}">Commits</a></li>
+                <a class="btn" href="{{ path('opensoft_codeconversation_pullrequest_list', {'projectName': project.name}) }}">Active Pull Requests ({{ openPullRequests|length|default(0) }})</a>
             </td>
         </tr>
     </tbody>

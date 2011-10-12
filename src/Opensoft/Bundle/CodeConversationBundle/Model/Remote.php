@@ -21,8 +21,6 @@ class Remote implements RemoteInterface
 
     protected $name;
 
-    protected $slug;
-
     protected $url;
 
     protected $username;
@@ -54,16 +52,6 @@ class Remote implements RemoteInterface
     public function getName()
     {
         return $this->name;
-    }
-
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-    }
-
-    public function getSlug()
-    {
-        return $this->slug;
     }
 
     public function setUrl($url)

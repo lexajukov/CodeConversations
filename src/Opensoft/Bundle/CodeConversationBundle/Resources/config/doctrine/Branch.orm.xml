@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
       xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           http://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Opensoft\Bundle\CodeConversationBundle\Entity\Branch" table="branches">
 
+        <unique-constraints>
+            <unique-constraint columns="remote_id,name"/>
+        </unique-constraints>
+        
         <id name="id" type="integer">
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="name" type="string">
-            <gedmo:sluggable />
-        </field>
-
-        <field name="slug" type="string">
-            <gedmo:slug unique="false" updatable="false" />
-        </field>
+        <field name="name" type="string" />
 
         <field name="tip" type="string" nullable="true" />
 
         <field name="enabled" type="boolean" />
 
-        <many-to-one target-entity="Remote" field="remote" />
+        <many-to-one target-entity="Remote" field="remote">
+            <join-column name="remote_id" />
+        </many-to-one>
 
     </entity>
 

@@ -29,6 +29,13 @@ interface BranchManagerInterface
     public function findBranches();
 
     /**
+     * @param string $projectName
+     * @param string $remoteName
+     * @param string $branchName
+     */
+    public function findBranchByProjectNameAndRemoteNameAndBranchName($projectName, $remoteName, $branchName);
+
+    /**
      * @param BranchInterface $branch
      */
     public function updateBranch(BranchInterface $branch);

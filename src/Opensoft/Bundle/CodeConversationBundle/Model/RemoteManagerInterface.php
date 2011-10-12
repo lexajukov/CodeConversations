@@ -26,9 +26,16 @@ interface RemoteManagerInterface
     public function findRemotesBy(array $criteria);
 
     /**
-     * @return ProjectInterface[]
+     * @return RemoteInterface[]
      */
     public function findRemotes();
+
+    /**
+     * @param string $projectName
+     * @param string $remoteName
+     * @return RemoteInterface
+     */
+    public function findRemoteByProjectNameAndRemoteName($projectName, $remoteName);
 
     /**
      * @param RemoteInterface $remote

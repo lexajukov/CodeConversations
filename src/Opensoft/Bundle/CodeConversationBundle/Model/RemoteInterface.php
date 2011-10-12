@@ -41,16 +41,6 @@ interface RemoteInterface
     public function getName();
 
     /**
-     * @param string $slug
-     */
-    public function setSlug($slug);
-
-    /**
-     * @return string
-     */
-    public function getSlug();
-
-    /**
      * @param string $url
      */
     public function setUrl($url);

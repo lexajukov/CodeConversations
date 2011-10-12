@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th style="background-color: #E0EDFF;" colspan="2">
-                <a style="color: #000000;" href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectSlug': project.slug, 'sha1': commit.id }) }}">{{ commit.message|truncate(80) }}</a>
+                <a style="color: #000000;" href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': commit.id }) }}">{{ commit.message|truncate(80) }}</a>
                 <span class="pull-right">{{ time_diff(commit.committedDate) }}</span>
             </th>
         </tr>
@@ -45,12 +45,12 @@
                     tree <span class="sha">{{ commit.tree }}</span>
                 </div>
                 <div class="clearfix">
-                    commit <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectSlug': project.slug, 'sha1': commit.id }) }}" class="sha-block"><span class="sha">{{ commit.id }}</span></a>
+                    commit <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': commit.id }) }}" class="sha-block"><span class="sha">{{ commit.id }}</span></a>
                 </div>
                 <div class="clearfix">
                     {{ commit.parents|length }} parent{% if commit.parents|length > 1%}s{% endif %}
                     {% for id in commit.parents %}
-                        <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectSlug': project.slug, 'sha1': id }) }}" class="sha-block">
+                        <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': id }) }}" class="sha-block">
                             <span class="sha">{{ id }}</span>
                         </a>
                     {% endfor %}

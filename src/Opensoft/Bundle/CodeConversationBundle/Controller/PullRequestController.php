@@ -33,7 +33,7 @@ class PullRequestController extends Controller
     }
 
     /**
-     * @Route("/{projectSlug}/pulls/new")
+     * @Route("/{projectName}/pulls/new")
      * @Template()
      */
     public function createAction(ProjectInterface $project)
@@ -72,7 +72,7 @@ class PullRequestController extends Controller
 
                 $this->get('session')->setFlash('success', 'Pull request engaged.');
 
-                return $this->redirect($this->generateUrl('opensoft_codeconversation_pullrequest_view', array('pullId' => $pullRequest->getId(), 'projectSlug' => $project->getSlug())));
+                return $this->redirect($this->generateUrl('opensoft_codeconversation_pullrequest_view', array('pullId' => $pullRequest->getId(), 'projectName' => $project->getName())));
             }
         }
 
@@ -80,7 +80,7 @@ class PullRequestController extends Controller
     }
 
     /**
-     * @Route("/{projectSlug}/pulls")
+     * @Route("/{projectName}/pulls")
      * @Template()
      */
     public function listAction(ProjectInterface $project)
@@ -89,7 +89,7 @@ class PullRequestController extends Controller
     }
 
     /**
-     * @Route("/{projectSlug}/pull/{pullId}")
+     * @Route("/{projectName}/pull/{pullId}")
      * @Template()
      */
     public function viewAction(ProjectInterface $project, PullRequestInterface $pullRequest)

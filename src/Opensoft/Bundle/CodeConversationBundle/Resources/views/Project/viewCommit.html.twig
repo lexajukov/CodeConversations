@@ -27,7 +27,7 @@
 
     <h4>Comment on this commit</h4>
 
-    <form action="{{ path('opensoft_codeconversation_comment_postcommitcomment', {'projectSlug': project.slug, 'sha1': commit.id }) }}" {{ form_enctype(form) }} method="POST">
+    <form action="{{ path('opensoft_codeconversation_comment_postcommitcomment', {'projectName': project.name, 'sha1': commit.id }) }}" {{ form_enctype(form) }} method="POST">
         <fieldset>
             {{ form_errors(form) }}
 

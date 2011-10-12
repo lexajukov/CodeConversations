@@ -4,7 +4,7 @@
             {##}
             <tr>
                 <td style="border-left: none;">
-                    <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectSlug': project.slug, 'sha1': commit.id }) }}">
+                    <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': commit.id }) }}">
                         {{ commit.id|truncate(6) }}
                     </a>
                 </td>
@@ -18,7 +18,7 @@
                     {% endif %}
                 </td>
                 <td style="border-left: none;">
-                    <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectSlug': project.slug, 'sha1': commit.id }) }}">
+                    <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': commit.id }) }}">
                         {{ commit.message|truncate(80) }}
                     </a>
                 </td>

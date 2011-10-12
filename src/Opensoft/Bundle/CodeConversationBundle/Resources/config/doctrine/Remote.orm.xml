@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
       xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           http://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="Opensoft\Bundle\CodeConversationBundle\Entity\Remote" table="remotes">
 
+        <unique-constraints>
+            <unique-constraint columns="project_id,name"/>
+        </unique-constraints>
+
         <id name="id" type="integer">
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="name" type="string">
-            <gedmo:sluggable />
-        </field>
-
-        <field name="slug" type="string">
-            <gedmo:slug unique="false" updatable="false" />
-        </field>
+        <field name="name" type="string" />
 
         <field name="url" type="text" />
 
@@ -27,7 +24,9 @@
 
         <one-to-many target-entity="Branch" field="branches" mapped-by="remote" />
 
-        <many-to-one target-entity="Project" field="project" />
+        <many-to-one target-entity="Project" field="project">
+            <join-column name="project_id" />
+        </many-to-one>
 
         <many-to-one target-entity="Branch" field="headBranch">
             <join-column name="headbranch_id" nullable="true" />

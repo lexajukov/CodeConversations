@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Requires projectSlug, remoteSlug and branchSlug to be set
+ * Requires projectName, remoteName and branchName to be set
  *
  * @author Richard Fullmer <richard.fullmer@opensoftdev.com>
  */
@@ -45,17 +45,17 @@ class BranchParamConverter implements ParamConverterInterface
      */
     function apply(Request $request, ConfigurationInterface $configuration)
     {
-        if (!$request->attributes->has('projectSlug') || !$request->attributes->has('remoteSlug') || !$request->attributes->has('branchSlug')) {
+        if (!$request->attributes->has('projectName') || !$request->attributes->has('remoteName') || !$request->attributes->has('branchName')) {
             return;
         }
 
-        $projectSlug = $request->attributes->get('projectSlug');
-        $remoteSlug = $request->attributes->get('remoteSlug');
-        $branchSlug = $request->attributes->get('branchSlug');
-        $branch = $this->branchManager->findRemoteByProjectSlugAndRemoteSlugAndBranchSlug($projectSlug, $remoteSlug, $branchSlug);
+        $projectName = $request->attributes->get('projectName');
+        $remoteName = $request->attributes->get('remoteName');
+        $branchName = $request->attributes->get('branchName');
+        $branch = $this->branchManager->findBranchByProjectNameAndRemoteNameAndBranchName($projectName, $remoteName, $branchName);
 
         if (null === $branch) {
-            throw new NotFoundHttpException(sprintf('Branch with slug "%s" on remote "%s" was not found for project "%s%', $branchSlug, $remoteSlug, $projectSlug));
+            throw new NotFoundHttpException(sprintf('Branch with name "%s" on remote "%s" was not found for project "%s%', $branchName, $remoteName, $projectName));
         }
 
         $request->attributes->set($configuration->getName(), $branch);

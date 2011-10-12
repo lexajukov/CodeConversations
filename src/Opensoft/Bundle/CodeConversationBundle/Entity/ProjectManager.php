@@ -47,12 +47,12 @@ class ProjectManager extends BaseProjectManager
     }
 
     /**
-     * @param string $slug
+     * @param string $name
      * @return \Opensoft\Bundle\CodeConversationBundle\Entity\Project
      */
-    public function findProjectBySlug($slug)
+    public function findProjectByName($name)
     {
-        return $this->entityRepository->findOneBy(array('slug' => $slug));
+        return $this->entityRepository->findOneBy(array('name' => $name));
     }
 
 

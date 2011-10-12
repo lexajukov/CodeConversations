@@ -53,14 +53,14 @@ class RemoteManager extends BaseRemoteManager
         return $this->repository->findBy($criteria, $order);
     }
 
-    public function findRemoteByProjectSlugAndRemoteSlug($projectSlug, $remoteSlug)
+    public function findRemoteByProjectNameAndRemoteName($projectName, $remoteName)
     {
         return $this->repository->createQueryBuilder('r')
                 ->join('r.project', 'p')
-                ->where('r.slug = :remoteSlug')
-                ->andWhere('p.slug = :projectSlug')
-                ->setParameter('remoteSlug', $remoteSlug)
-                ->setParameter('projectSlug', $projectSlug)
+                ->where('r.name = :remoteName')
+                ->andWhere('p.name = :projectName')
+                ->setParameter('remoteName', $remoteName)
+                ->setParameter('projectName', $projectName)
                 ->getQuery()
                 ->getOneOrNullResult();
     }

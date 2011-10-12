@@ -24,11 +24,6 @@ class Project implements ProjectInterface
     protected $name;
 
     /**
-     * @var string
-     */
-    protected $slug;
-
-    /**
      * @var RemoteInterface[]
      */
     protected $remotes;
@@ -94,22 +89,6 @@ class Project implements ProjectInterface
     }
 
     /**
-     * @param string $slug
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
      * Return an array for the form
      *
      * array(
@@ -124,7 +103,7 @@ class Project implements ProjectInterface
         return array(
             'route' => 'opensoft_codeconversation_project_show',
             'parameters' => array(
-                'projectSlug' => $this->getSlug()
+                'projectName' => $this->getName()
             )
         );
     }

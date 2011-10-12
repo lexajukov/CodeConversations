@@ -47,15 +47,15 @@ class ProjectParamConverter implements ParamConverterInterface
      */
     function apply(Request $request, ConfigurationInterface $configuration)
     {
-        if (!$request->attributes->has('projectSlug')) {
+        if (!$request->attributes->has('projectName')) {
             return;
         }
 
-        $slug = $request->attributes->get('projectSlug');
-        $project = $this->projectManager->findProjectBySlug($slug);
+        $name = $request->attributes->get('projectName');
+        $project = $this->projectManager->findProjectByName($name);
 
         if (null === $project) {
-            throw new NotFoundHttpException(sprintf('Project with slug "%s" was not found.', $slug));
+            throw new NotFoundHttpException(sprintf('Project with name "%s" was not found.', $name));
         }
 
         $request->attributes->set($configuration->getName(), $project);
