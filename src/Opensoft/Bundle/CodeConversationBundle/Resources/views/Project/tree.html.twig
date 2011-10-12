@@ -1,42 +1,77 @@
 <table>
     <thead>
         <tr>
-            <th>Mode</th>
-            <th>Type</th>
-            <th>Object</th>
+            <th style="width: 18px;">Type</th>
             <th>File</th>
         </tr>
     </thead>
     <tbody>
-        {% for item in tree %}
+        {% if filepath is defined %}
         <tr>
+            <td></td>
             <td>
-                {{ item.mode }}
-            </td>
-            <td>
-                {{ item.type }}
-            </td>
-            <td>
-                {{ item.object }}
-            </td>
-            <td>
-                {% if filepath is defined %}
-                    {% set builtFilepath = filepath~'/'~item.file%}
-                {% else %}
-                    {% set builtFilepath = item.file%}
-                {% endif%}
+                {% set totalPath = '' %}
+                {% set i = 0 %}
+                {% set pathLength = filepath|length %}
+                {% for path in filepath %}
+                    {% if i < pathLength - 1 %}
+                        {% if i == 0 %}
+                            {% set totalPath = path %}
+                        {% else %}
+                            {% set totalPath = totalPath ~ '/' ~ path %}
+                        {% endif %}
+                        {% set i = i + 1 %}
+                    {% endif %}
+                {% endfor %}
 
-                {% if item.type == 'tree' %}
-                    <a href="{{ path('opensoft_codeconversation_project_tree', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name, 'filepath': builtFilepath}) }}">
-                        {{ item.file }}
-                    </a>
-                {% else %}
-                     <a href="{{ path('opensoft_codeconversation_project_blob', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name, 'filepath': builtFilepath}) }}">
-                        {{ item.file }}
-                    </a>
-                {% endif %}
+                <a href="{{ path('opensoft_codeconversation_project_tree', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name, 'filepath': totalPath}) }}">
+                    ...
+                </a>
             </td>
         </tr>
+        {% endif %}
+
+        {% for item in tree %}
+            {% if item.type == 'tree' %}
+            <tr>
+                <td>
+                    {{ item.type }}
+                </td>
+                <td>
+                    {% if filepath is defined %}
+                        {% set builtFilepath = filepath|join('/')~'/'~item.file%}
+                    {% else %}
+                        {% set builtFilepath = item.file%}
+                    {% endif%}
+
+                    <a href="{{ path('opensoft_codeconversation_project_tree', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name, 'filepath': builtFilepath}) }}">
+                        {{ item.file }}/
+                    </a>
+                </td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+
+
+        {% for item in tree %}
+            {% if item.type == 'blob' %}
+            <tr>
+                <td>
+                    {{ item.type }}
+                </td>
+                <td>
+                    {% if filepath is defined %}
+                        {% set builtFilepath = filepath|join('/')~'/'~item.file%}
+                    {% else %}
+                        {% set builtFilepath = item.file%}
+                    {% endif%}
+
+                    <a href="{{ path('opensoft_codeconversation_project_blob', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name, 'filepath': builtFilepath}) }}">
+                        {{ item.file }}
+                    </a>
+                </td>
+            </tr>
+            {% endif %}
         {% endfor %}
     </tbody>
 </table>

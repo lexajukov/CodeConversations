@@ -209,7 +209,7 @@ class ProjectController extends Controller
             'remote' => $remote,
             'branch' => $branch,
             'recentCommit' => $recentCommits[0],
-            'filepath' => $filepath,
+            'filepath' => explode("/", $filepath),
             'file' => explode("\n", $repository->getFileAtCommit($sha1, $filepath)));
     }
 
@@ -238,7 +238,7 @@ class ProjectController extends Controller
             'remote' => $remote,
             'branch' => $branch,
             'recentCommit' => $recentCommits[0],
-            'filepath' => $filepath,
+            'filepath' => explode("/", $filepath),
             'tree' => $repository->getTree($branch->getFullName(), $filepath)
         );
     }
@@ -266,7 +266,7 @@ class ProjectController extends Controller
             'remote' => $remote,
             'branch' => $branch,
             'recentCommit' => $recentCommits[0],
-            'filepath' => $filepath,
+            'filepath' => explode("/", $filepath),
             'file' => explode("\n", $repository->getFileAtCommit($branch->getFullName(), $filepath))
         );
     }

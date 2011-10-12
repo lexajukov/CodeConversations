@@ -7,9 +7,30 @@
     {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': recentCommit} %}
 
     <h3>
-        <a href="{{ path('opensoft_codeconversation_project_show_1', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name}) }}">{{ project.name }}</a> /
+        <a href="{{ path('opensoft_codeconversation_project_show_1', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name}) }}">{{ project.name }}</a>
         {% if filepath is defined %}
-            {{ filepath }}
+            {#{{ filepath }}#}
+            {% set totalPath = '' %}
+            {% set i = 0 %}
+            {% set pathLength = filepath|length %}
+            {% for path in filepath %}
+                {% if i == 0 %}
+                    {% set totalPath = path %}
+                {% else %}
+                    {% set totalPath = totalPath ~ '/' ~ path %}
+                {% endif %}
+
+
+                {% set i = i + 1 %}
+                /
+                {% if i == pathLength %}
+                    {{ path }}
+                {% else %}
+                    <a href="{{ path('opensoft_codeconversation_project_tree', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name, 'filepath': totalPath}) }}">
+                        {{ path }}
+                    </a>
+                {% endif %}
+            {% endfor %}
         {% endif %}
     </h3>
     
