@@ -230,7 +230,7 @@ class ProjectController extends Controller
 
     /**
      * @Route("/{projectName}/blob/{remoteName}/{branchName}/{filepath}", requirements={"filepath" = ".+"})
-     * @Template()
+     * @Template("OpensoftCodeConversationBundle:Project:show.html.twig")
      */
     public function blobAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null, $filepath)
     {
@@ -244,10 +244,15 @@ class ProjectController extends Controller
 
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
         $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
+        $recentCommits = $repository->getCommits($branch->getFullName(), null, 1);
 
         return array(
             'project' => $project,
-            'file' => explode("\n", $repository->getFileAtCommit($sha1, $filepath))
+            'remote' => $remote,
+            'branch' => $branch,
+            'recentCommit' => $recentCommits[0],
+            'filepath' => $filepath,
+            'file' => explode("\n", $repository->getFileAtCommit($branch->getFullName(), $filepath))
         );
     }
 }

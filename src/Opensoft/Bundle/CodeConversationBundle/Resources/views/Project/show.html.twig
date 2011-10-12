@@ -6,11 +6,24 @@
 
     {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': recentCommit} %}
 
-    {% if filepath is defined %}
-        {% include 'OpensoftCodeConversationBundle:Project:tree.html.twig' with {'tree': tree, 'project': project, 'remote': remote, 'branch': branch, 'filepath': filepath} %}
-    {% else %}
-        {% include 'OpensoftCodeConversationBundle:Project:tree.html.twig' with {'tree': tree, 'project': project, 'remote': remote, 'branch': branch} %}
+    <h3>
+        <a href="{{ path('opensoft_codeconversation_project_show_1', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name}) }}">{{ project.name }}</a> /
+        {% if filepath is defined %}
+            {{ filepath }}
+        {% endif %}
+    </h3>
+    
+    {% if tree is defined %}
+
+        {% if filepath is defined %}
+            {% include 'OpensoftCodeConversationBundle:Project:tree.html.twig' with {'tree': tree, 'project': project, 'remote': remote, 'branch': branch, 'filepath': filepath} %}
+        {% else %}
+            {% include 'OpensoftCodeConversationBundle:Project:tree.html.twig' with {'tree': tree, 'project': project, 'remote': remote, 'branch': branch} %}
+        {% endif %}
+    {% elseif file is defined %}
+        {% include 'OpensoftCodeConversationBundle:Project:file.html.twig' with {'file': file, 'project': project, 'remote': remote, 'branch': branch} %}
     {% endif %}
+
 
     {% if readme is defined %}
     <h4>README.md</h4>

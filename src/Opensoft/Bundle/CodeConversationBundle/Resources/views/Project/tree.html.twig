@@ -1,10 +1,3 @@
-<h3>
-    {{ project.name }} /
-    {% if filepath is defined %}
-        {{ filepath }}
-    {% endif %}
-</h3>
-
 <table>
     <thead>
         <tr>
@@ -38,7 +31,9 @@
                         {{ item.file }}
                     </a>
                 {% else %}
-                    {{ item.file }}
+                     <a href="{{ path('opensoft_codeconversation_project_blob', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name, 'filepath': builtFilepath}) }}">
+                        {{ item.file }}
+                    </a>
                 {% endif %}
             </td>
         </tr>
