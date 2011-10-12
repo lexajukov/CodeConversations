@@ -1,21 +1,25 @@
 {% extends 'OpensoftCodeConversationBundle::layout.html.twig' %}
 
 {% block content %}
-    <div>
-        {% for project in projects %}
-            <div class="project well">
-                <h3>{{ project.name }}</h3>
-
-                <ul>
-                    <li>Remotes - {{ project.remotes|length }}</li>
-                    <li>Pull Requests - {{ project.pullRequests|length }}</li>
-                </ul>
-
-                <div class="actions">
-                    <a href="{{ path('opensoft_codeconversation_project_show', {'projectName': project.name }) }}" class="btn">Show Project</a>
-                    <a href="{{ path('opensoft_codeconversation_pullrequest_create', {'projectName': project.name }) }}" class="btn">Create Pull Request</a>
-                </div>
-            </div>
-        {% endfor %}
+    <div class="row">
+        <div class="span8">
+            <table>
+                <thead>
+                    <tr>
+                        <th>All Projects</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr>
+                        <td><a href="{{ path('opensoft_codeconversation_project_show', {'projectName': project.name }) }}">{{ project.name }}</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="span8">
+            <h3>Activity</h3>
+        </div>
     </div>
 {% endblock %}
