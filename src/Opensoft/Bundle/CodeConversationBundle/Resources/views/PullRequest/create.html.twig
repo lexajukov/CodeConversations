@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    {% render 'OpensoftCodeConversationBundle:Project:header' with {'project': project, 'remote': remote, 'branch': branch} %}
+    {% render 'OpensoftCodeConversationBundle:Project:header' with {'project': project} %}
 
     <h2>Open a pull request on {{ project.name }}</h2>
     <hr />
