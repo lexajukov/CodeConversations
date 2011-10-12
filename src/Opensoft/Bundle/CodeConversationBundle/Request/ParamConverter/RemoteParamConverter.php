@@ -54,7 +54,7 @@ class RemoteParamConverter implements ParamConverterInterface
         $remote = $this->remoteManager->findRemoteByProjectSlugAndRemoteSlug($projectSlug, $remoteSlug);
 
         if (null === $remote) {
-            throw new NotFoundHttpException(sprintf('Remote with slug "%s" was not found for project "%s%', $remoteSlug, $projectSlug));
+            throw new NotFoundHttpException(sprintf('Remote with slug "%s" was not found for project "%s"', $remoteSlug, $projectSlug));
         }
 
         $request->attributes->set($configuration->getName(), $remote);
