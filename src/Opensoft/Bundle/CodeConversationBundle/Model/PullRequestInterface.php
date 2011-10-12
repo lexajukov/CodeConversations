@@ -20,6 +20,16 @@ interface PullRequestInterface extends StreamableInterface
     public function setId($id);
 
     /**
+     * @return string
+     */
+    public function getMergeBase();
+
+    /**
+     * @param string $mergeBase
+     */
+    public function setMergeBase($mergeBase);
+
+    /**
      * @param \Opensoft\Bundle\CodeConversationBundle\Model\PullRequestComment[]
      */
     public function setComments(array $comments);

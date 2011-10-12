@@ -21,6 +21,8 @@
 
         <field name="title" type="string" />
 
+        <field name="mergeBase" type="string" nullable="true" />
+
         <field name="description" type="text" />
 
         <field name="createdAt" type="datetime" />

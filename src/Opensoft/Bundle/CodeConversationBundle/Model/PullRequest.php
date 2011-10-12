@@ -31,6 +31,11 @@ class PullRequest implements PullRequestInterface
     protected $id;
 
     /**
+     * @var string
+     */
+    protected $mergeBase;
+
+    /**
      * @var Project
      */
     protected $project;
@@ -273,5 +278,21 @@ class PullRequest implements PullRequestInterface
     public function __toString()
     {
         return 'pull request ' . $this->id;
+    }
+
+    /**
+     * @param string $mergeBase
+     */
+    public function setMergeBase($mergeBase)
+    {
+        $this->mergeBase = $mergeBase;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMergeBase()
+    {
+        return $this->mergeBase;
     }
 }

@@ -46,6 +46,7 @@ class PullRequestController extends Controller
         $pullRequest->setAuthor($this->container->get('security.context')->getToken()->getUser());
         $pullRequest->setStatus(PullRequest::STATUS_OPEN);
 
+
         $form = $this->createForm(new PullRequestFormType($project), $pullRequest);
 
         $request = $this->getRequest();
@@ -54,6 +55,13 @@ class PullRequestController extends Controller
 
             if ($form->isValid()) {
 
+                /** @var \Opensoft\Bundle\CodeConversationBundle\Git\RepositoryManager $repositoryManager */
+                $repositoryManager = $this->get('opensoft_codeconversation.repository_manager');
+                $repository = $repositoryManager->getRepository($project);
+
+                $mergeBase = $repository->getMergeBase($pullRequest->getSourceBranch()->getFullName(), $pullRequest->getDestinationBranch()->getFullName());
+                $pullRequest->setMergeBase($mergeBase);
+                
                 $pullRequestManager->updatePullRequest($pullRequest);
 
 
@@ -90,16 +98,9 @@ class PullRequestController extends Controller
         $repositoryManager = $this->get('opensoft_codeconversation.repository_manager');
         $repository = $repositoryManager->getRepository($project);
 //
-//        print_r($project->getName());
-//        die();
 
-        $mergeBase = $repository->getMergeBase($pullRequest->getSourceBranch()->getFullName(), $pullRequest->getDestinationBranch()->getFullName());
-//        print_r($mergeBase);
-//        die();
-        $fullDiff = $repository->getDiff($mergeBase, $pullRequest->getSourceBranch()->getFullName());
-        $commits = $repository->getCommits($mergeBase, $pullRequest->getSourceBranch()->getFullName());
-
-//        $timeline = $pullRequest->getEventTimeline();
+        $fullDiff = $repository->getDiff($pullRequest->getMergeBase(), $pullRequest->getSourceBranch()->getFullName());
+        $commits = $repository->getCommits($pullRequest->getMergeBase(), $pullRequest->getSourceBranch()->getFullName());
 
         $timeline = new EventTimeline();
         foreach ($commits as $commit) {
