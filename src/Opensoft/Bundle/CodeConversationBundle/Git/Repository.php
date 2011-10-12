@@ -197,7 +197,7 @@ class Repository
     public function getTree($treeish, $path = null)
     {
         $objects = array();
-        $output = $this->repo->git(sprintf('ls-tree %s', $treeish));
+        $output = $this->repo->git(sprintf('ls-tree %s%s', $treeish, ':'.$path));
         if (!empty($output)) {
             foreach (explode("\n", $output) as $line) {
                 $info = explode("\t", $line);

@@ -25,7 +25,7 @@ class CommentController extends Controller
      * @Route("/{projectName}/pull/{pullId}/comment/new")
      * @Method("POST")
      * @ParamConverter("pullRequest", class="Opensoft\Bundle\CodeConversationBundle\Model\PullRequestInterface")
-     * @Template("OpensoftCodeConversationsBundle:Default:viewPullRequest")
+     * @Template("OpensoftCodeConversationBundle:Default:viewPullRequest")
      */
     public function postPrCommentAction(ProjectInterface $project, PullRequestInterface $pullRequest)
     {
@@ -77,7 +77,7 @@ class CommentController extends Controller
     /**
      * @Route("/{projectName}/commit/{sha1}/comment/new")
      * @Method("POST")
-     * @Template("OpensoftCodeConversationsBundle:Default:viewComment")
+     * @Template("OpensoftCodeConversationBundle:Default:viewComment")
      */
     public function postCommitCommentAction(ProjectInterface $project, $sha1)
     {

@@ -197,4 +197,57 @@ class ProjectController extends Controller
 
         return array('project' => $project, 'file' => explode("\n", $repository->getFileAtCommit($sha1, $filepath)));
     }
+
+
+
+    /**
+     * @Route("/{projectName}/tree/{remoteName}/{branchName}/{filepath}", requirements={"filepath" = ".+"})
+     * @Template("OpensoftCodeConversationBundle:Project:show.html.twig")
+     */
+    public function treeAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null, $filepath = null)
+    {
+        if (null === $remote) {
+            $remote = $project->getDefaultRemote();
+        }
+
+        if (null === $branch) {
+            $branch = $remote->getHeadBranch();
+        }
+
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
+        $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
+        $recentCommits = $repository->getCommits($branch->getFullName(), null, 1);
+
+        return array(
+            'project' => $project,
+            'remote' => $remote,
+            'branch' => $branch,
+            'recentCommit' => $recentCommits[0],
+            'filepath' => $filepath,
+            'tree' => $repository->getTree($branch->getFullName(), $filepath)
+        );
+    }
+
+    /**
+     * @Route("/{projectName}/blob/{remoteName}/{branchName}/{filepath}", requirements={"filepath" = ".+"})
+     * @Template()
+     */
+    public function blobAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null, $filepath)
+    {
+        if (null === $remote) {
+            $remote = $project->getDefaultRemote();
+        }
+
+        if (null === $branch) {
+            $branch = $remote->getHeadBranch();
+        }
+
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
+        $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
+
+        return array(
+            'project' => $project,
+            'file' => explode("\n", $repository->getFileAtCommit($sha1, $filepath))
+        );
+    }
 }

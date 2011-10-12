@@ -1,0 +1,47 @@
+<h3>
+    {{ project.name }} /
+    {% if filepath is defined %}
+        {{ filepath }}
+    {% endif %}
+</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Mode</th>
+            <th>Type</th>
+            <th>Object</th>
+            <th>File</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in tree %}
+        <tr>
+            <td>
+                {{ item.mode }}
+            </td>
+            <td>
+                {{ item.type }}
+            </td>
+            <td>
+                {{ item.object }}
+            </td>
+            <td>
+                {% if filepath is defined %}
+                    {% set builtFilepath = filepath~'/'~item.file%}
+                {% else %}
+                    {% set builtFilepath = item.file%}
+                {% endif%}
+
+                {% if item.type == 'tree' %}
+                    <a href="{{ path('opensoft_codeconversation_project_tree', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name, 'filepath': builtFilepath}) }}">
+                        {{ item.file }}
+                    </a>
+                {% else %}
+                    {{ item.file }}
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
