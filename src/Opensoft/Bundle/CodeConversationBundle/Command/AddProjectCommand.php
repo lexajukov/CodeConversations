@@ -59,7 +59,16 @@ class AddProjectCommand extends BaseCommand
         $projectManager->updateProject($project);
 
         $repository = $repoManager->getRepository($project);
-        $this->synchronizeBranches($repository, $project);
+        $this->synchronizeBranches($output, $repository, $project);
+
+        foreach ($remote->getBranches() as $branch) {
+            if ($branch->getName() == 'master') {
+                $remote->setHeadBranch($branch);
+                $remoteManager->updateRemote($remote);
+
+                break;
+            }
+        }
 
 
         $output->writeln(strtr("Project <info>%project%</info> created!", array('%project%' => $project->getName())));

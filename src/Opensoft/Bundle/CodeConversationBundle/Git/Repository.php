@@ -60,7 +60,7 @@ class Repository
      */
     public function getRemoteBranches()
     {
-        return array_filter(preg_replace('/[\s\*]/', '', explode("\n", $this->repo->git('branch -r'))));
+        return array_map('trim', explode("\n", $this->repo->git('branch -r')));
     }
 
     /**

@@ -89,6 +89,7 @@ class RepositoryManager
         $remote = $project->getDefaultRemote();
         $gitRepo->git(sprintf('remote add %s %s', $remote->getName(), $remote->getUrl()));
         $gitRepo->git(sprintf('fetch -p %s', $remote->getName()));
+        $gitRepo->git(sprintf('pull %s HEAD', $remote->getName()));
 
         return $gitRepo;
     }

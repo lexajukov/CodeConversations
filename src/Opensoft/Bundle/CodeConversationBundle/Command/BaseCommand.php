@@ -6,6 +6,7 @@
 namespace Opensoft\Bundle\CodeConversationBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Output\OutputInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface;
 use Opensoft\Bundle\CodeConversationBundle\Git\Repository;
@@ -22,7 +23,7 @@ abstract class BaseCommand extends ContainerAwareCommand
     /**
      * @return void
      */
-    public function synchronizeBranches(Repository $repo, ProjectInterface $project, RemoteInterface $remote = null)
+    public function synchronizeBranches(OutputInterface $output, Repository $repo, ProjectInterface $project, RemoteInterface $remote = null)
     {
         /** @var \Opensoft\Bundle\CodeConversationBundle\Model\BranchManagerInterface $branchManager  */
         $branchManager = $this->getContainer()->get('opensoft_codeconversation.manager.branch');
@@ -36,6 +37,7 @@ abstract class BaseCommand extends ContainerAwareCommand
         }
 
         foreach ($remotes as $remote) {
+            $output->writeln('>> Syncing Remote <info>' . $remote->getName() . '</info>');
             $knownBranches = $remote->getBranches();
             $remoteBranches = $repo->getRemoteBranches();
 
@@ -44,16 +46,20 @@ abstract class BaseCommand extends ContainerAwareCommand
                     if (in_array($remote->getName().'/'.$knownBranch->getName(), $remoteBranches)) {
                         // Remove knownBranch->getName from remoteBranches by value
                         $remoteBranches = array_values(array_diff($remoteBranches, array($remote->getName().'/'.$knownBranch->getName())));
-                        continue;
-                    }
 
-                    // probably shouldn't delete unknown branches that previously exists... just disable them
-                    $knownBranch->setEnabled(false);
+                        $output->writeln('>>> <comment>'.$remote->getName().'/'.$knownBranch->getName().'</comment> already being tracked');
+
+                        continue;
+                    } else {
+                        $output->writeln('>>> <error>'.$remote->getName().'/'.$knownBranch->getName().'</error> deleted');
+                        // probably shouldn't delete unknown branches that previously exists... just disable them
+                        $knownBranch->setEnabled(false);
+                    }
                 }
             }
 
             $defaultBranch = null;
-                print_r($remoteBranches);
+            $defaultBranchName = null;
             // known branches now only has the ones this project doesn't know about
             foreach ($remoteBranches as $newBranch) {
                 // set origin/HEAD pointer as default branch
@@ -69,6 +75,8 @@ abstract class BaseCommand extends ContainerAwareCommand
                 $branch->setRemote($remote);
 
                 $branchManager->updateBranch($branch);
+
+                $output->writeln('>>> <info>'.$remote->getName().'/'.$branch->getName().'</info> now tracking');
 
                 if (null !== $defaultBranchName && $branch->getName() === $defaultBranchName) {
                     $remote->setHeadBranch($branch);

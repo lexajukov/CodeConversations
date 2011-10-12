@@ -9,9 +9,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Opensoft\Bundle\CodeConversationBundle\Entity\Project;
-use Opensoft\Bundle\CodeConversationBundle\Entity\Branch;
-use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -50,7 +47,7 @@ class SynchronizeCommand extends BaseCommand
         }
 
         foreach ($projects as $project) {
-            $output->writeln(strtr('Synchronizing project "<info>%project%</info>...', array('%project%' => $project->getName())));
+            $output->writeln(strtr('Synchronizing project "<info>%project%</info>"...', array('%project%' => $project->getName())));
 
 
 
@@ -59,13 +56,12 @@ class SynchronizeCommand extends BaseCommand
 
             $repository = $repoManager->getRepository($project);
 
-            $this->synchronizeBranches($repository, $project);
+            $this->synchronizeBranches($output, $repository, $project);
 
             // Loop through pull requests and check for "merged" pull requests (ones with zero commit difference?)
 
 //            $projectManager->updateProject($project);
 
-            $output->writeln('');
             $output->writeln(strtr('Synchronization complete "<info>%project%</info>"', array('%project%' => $project->getName())));
         }
     }
