@@ -14,11 +14,11 @@
         {% set i = 1 %}
         {% for line in file %}
             <tr>
-                <td style="color: #AAA; padding: 0px 3px; border: none; border-right: 1px solid #DDD; text-align: center; background-color: #f5f5f5; border-radius: 0px;">
+                <td style="color: #AAA; padding: 0px 3px; border: none; border-right: 1px solid #DDD; text-align: center; background-color: #F5F5F5; border-radius: 0px;">
                     {{ i }}
                 </td>
-                <td style="padding: 0px; border: none; background-color: #f5f5f5; ">
-                    <pre style="white-space: pre; padding: 0px; margin: 0px; border: none; border-radius: 0px;" class="prettyprint">{{ line }}</pre>
+                <td style="padding: 0 0 0 2px; border: none; background-color: white; ">
+                    <pre style="white-space: pre; padding: 0px; margin: 0px; border: none; border-radius: 0px; background-color: white;" class="prettyprint">{{ line }}</pre>
                 </td>
             </tr>
             {% set i = i + 1 %}

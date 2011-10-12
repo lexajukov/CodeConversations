@@ -20,6 +20,7 @@
         {% else %}
             {% include 'OpensoftCodeConversationBundle:Project:tree.html.twig' with {'tree': tree, 'project': project, 'remote': remote, 'branch': branch} %}
         {% endif %}
+        
     {% elseif file is defined %}
         {% include 'OpensoftCodeConversationBundle:Project:file.html.twig' with {'file': file, 'project': project, 'remote': remote, 'branch': branch} %}
     {% endif %}

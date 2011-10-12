@@ -188,14 +188,29 @@ class ProjectController extends Controller
 
     /**
      * @Route("/{projectName}/commit/{sha1}/{filepath}", requirements={"filepath" = ".+"})
-     * @Template()
+     * @Template("OpensoftCodeConversationBundle:Project:show.html.twig")
      */
-    public function fileAction(ProjectInterface $project, $sha1, $filepath)
+    public function fileAction(ProjectInterface $project, $sha1, $filepath, RemoteInterface $remote = null, BranchInterface $branch = null)
     {
+        if (null === $remote) {
+            $remote = $project->getDefaultRemote();
+        }
+
+        if (null === $branch) {
+            $branch = $remote->getHeadBranch();
+        }
+
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
         $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
+        $recentCommits = $repository->getCommits($branch->getFullName(), null, 1);
 
-        return array('project' => $project, 'file' => explode("\n", $repository->getFileAtCommit($sha1, $filepath)));
+        return array(
+            'project' => $project,
+            'remote' => $remote,
+            'branch' => $branch,
+            'recentCommit' => $recentCommits[0],
+            'filepath' => $filepath,
+            'file' => explode("\n", $repository->getFileAtCommit($sha1, $filepath)));
     }
 
 
