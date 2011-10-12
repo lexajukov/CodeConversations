@@ -16,9 +16,7 @@ use Opensoft\Bundle\CodeConversationBundle\Model\PullRequest;
 use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
 
 /**
- * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
- * @ParamConverter("remote", class="Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface")
- * @ParamConverter("branch", class="Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface")
+ *
  */
 class ProjectController extends Controller
 {
@@ -42,6 +40,32 @@ class ProjectController extends Controller
     }
 
     /**
+     * @Route("/project-header/{projectSlug}/tree/{remoteSlug}/{branchSlug}")
+     * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
+     * @Template()
+     */
+    public function headerAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null)
+    {
+        if (null === $remote) {
+            $remote = $project->getDefaultRemote();
+        }
+
+        if (null === $branch) {
+            $branch = $remote->getHeadBranch();
+        }
+
+        $em = $this->get('doctrine')->getEntityManager();
+        $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
+
+        return array(
+            'project' => $project,
+            'remote' => $remote,
+            'branch' => $branch,
+            'openPullRequests' => $openPullRequests,
+        );
+    }
+
+    /**
      * @Route("/{projectSlug}/redirect")
      * @Method("POST")
      */
@@ -58,9 +82,10 @@ class ProjectController extends Controller
     /**
      * @Route("/{projectSlug}")
      * @Route("/{projectSlug}/tree/{remoteSlug}/{branchSlug}")
+     * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
      * @Template()
      */
-    public function showAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null)
+    public function showAction(ProjectInterface $project, RemoteInterface $remote, BranchInterface $branch)
     {
         $em = $this->get('doctrine')->getEntityManager();
 
@@ -83,14 +108,12 @@ class ProjectController extends Controller
 
         $recentCommits = $repository->getCommits($remote->getName().'/'.$branch->getName(), null, 1);
 
-        $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
 
         return array(
             'project' => $project,
             'remote' => $remote,
             'branch' => $branch,
             'recentCommit' => $recentCommits[0],
-            'openPullRequests' => $openPullRequests,
             'readme' => $repository->getFileAtCommit($recentCommits[0]->getId(), 'README.md')
         );
     }

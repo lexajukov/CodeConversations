@@ -12,19 +12,19 @@
                 <form style="display: inline;" method="POST" action="{{ path('opensoft_codeconversation_project_redirect', {'projectSlug': project.slug}) }}">
                     <span>Branch</span>
                     <select name="remotebranch" type="select" onchange="this.form.submit();">
-                        {% for remote in project.remotes %}
-                            {% for branch in remote.branches %}
-                                {% if remote.slug == app.request.get('remoteSlug') and branch.slug == app.request.get('branchSlug') %}
-                                    <option value="{{ remote.name }}/{{ branch.name }}" selected="selected">{{ remote.name }}/{{ branch.name }}</option>
+                        {% for projectRemote in project.remotes %}
+                            {% for projectBranch in projectRemote.branches %}
+                                {% if projectRemote.slug == remote.slug and projectBranch.slug == branch.slug %}
+                                    <option value="{{ projectBranch.fullName }}" selected="selected">{{ projectBranch.fullName }}</option>
                                 {% else %}
-                                    <option value="{{ remote.name }}/{{ branch.name }}">{{ remote.name }}/{{ branch.name }}</option>
+                                    <option value="{{ projectBranch.fullName }}">{{ projectBranch.fullName }}</option>
                                 {% endif %}
                             {% endfor %}
                         {% endfor %}
                     </select>
                 </form>
                 <a class="btn" href="{{ path('opensoft_codeconversation_project_commits', {'projectSlug': project.slug}) }}">Commits</a></li>
-                <a class="btn" href="{{ path('opensoft_codeconversation_pullrequest_list', {'projectSlug': project.slug}) }}">Active Pull Requests (0)</a>
+                <a class="btn" href="{{ path('opensoft_codeconversation_pullrequest_list', {'projectSlug': project.slug}) }}">Active Pull Requests ({{ openPullRequests|length|default(0) }})</a>
             </td>
         </tr>
     </tbody>
