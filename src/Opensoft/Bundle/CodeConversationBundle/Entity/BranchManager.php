@@ -5,6 +5,7 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Entity;
 
+use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\BranchManager as BaseBranchManager;
 use Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface;
 use Symfony\Component\Validator\Constraint;
@@ -70,6 +71,19 @@ class BranchManager extends BaseBranchManager
                 ->setParameter('projectName', $projectName)
                 ->getQuery()
                 ->getOneOrNullResult();
+    }
+
+    public function findEnabledBranchesByProject(ProjectInterface $project)
+    {
+        return $this->repository->createQueryBuilder('b')
+                ->join('b.remote', 'r')
+                ->join('r.project', 'p')
+                ->andWhere('p.id = :projectId')
+                ->andWhere('b.enabled = :enabled')
+                ->setParameter('enabled', true)
+                ->setParameter('projectId', $project->getId())
+                ->getQuery()
+                ->execute();
     }
 
     /**

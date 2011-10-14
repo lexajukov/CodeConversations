@@ -49,6 +49,9 @@ class ProjectController extends Controller
         if (null === $branch) {
             $branch = $project->getDefaultRemote()->getHeadBranch();
         }
+        
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Model\BranchManagerInterface $branchManager  */
+        $branchManager = $this->container->get('opensoft_codeconversation.manager.branch');
 
         $em = $this->get('doctrine')->getEntityManager();
         $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
@@ -56,6 +59,7 @@ class ProjectController extends Controller
         return array(
             'project' => $project,
             'branch' => $branch,
+            'enabledBranches' => $branchManager->findEnabledBranchesByProject($project),
             'openPullRequests' => $openPullRequests,
         );
     }
@@ -96,6 +100,7 @@ class ProjectController extends Controller
         }
 
         $tree = $repository->getTree($branch->getFullName());
+
 
 
         return array(

@@ -15,14 +15,12 @@
                 <form style="display: inline;" method="POST" action="{{ path('opensoft_codeconversation_project_redirect', {'projectName': project.name}) }}">
                     <span>Branch</span>
                     <select name="branch" type="select" onchange="this.form.submit();">
-                        {% for projectRemote in project.remotes %}
-                            {% for projectBranch in projectRemote.branches %}
-                                {% if projectBranch.name == branch.name %}
-                                    <option value="{{ projectBranch.name }}" selected="selected">{{ projectBranch.name }}</option>
-                                {% else %}
-                                    <option value="{{ projectBranch.name }}">{{ projectBranch.name }}</option>
-                                {% endif %}
-                            {% endfor %}
+                        {% for projectBranch in enabledBranches %}
+                            {% if projectBranch.name == branch.name %}
+                                <option value="{{ projectBranch.name }}" selected="selected">{{ projectBranch.name }}</option>
+                            {% else %}
+                                <option value="{{ projectBranch.name }}">{{ projectBranch.name }}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </form>

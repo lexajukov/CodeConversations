@@ -28,6 +28,8 @@ interface BranchManagerInterface
      */
     public function findBranches();
 
+    public function findEnabledBranchesByProject(ProjectInterface $project);
+
     /**
      * @param string $projectName
      * @param string $remoteName
