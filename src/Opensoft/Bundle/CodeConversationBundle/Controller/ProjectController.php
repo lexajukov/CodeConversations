@@ -130,8 +130,6 @@ class ProjectController extends Controller
             $commits[date("F j, Y", $commit->getCommittedDate()->getTimestamp())][] = $commit;
         }
 
-//        $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
-
         return array(
             'project' => $project,
             'branch' => $branch,

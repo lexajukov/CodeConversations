@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    {% render 'OpensoftCodeConversationBundle:Project:header' with {'project': project} %}
+    {% render 'OpensoftCodeConversationBundle:Project:header' with {'project': project, 'branch': branch} %}
 
     <div id="recent-commits">
         <h2>Recent commits on <span class="label">{{ branch.name }}</span></h2>
