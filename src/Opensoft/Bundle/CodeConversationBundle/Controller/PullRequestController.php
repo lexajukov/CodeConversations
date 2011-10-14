@@ -56,7 +56,7 @@ class PullRequestController extends Controller
                 $repositoryManager = $this->get('opensoft_codeconversation.repository_manager');
                 $repository = $repositoryManager->getRepository($project);
 
-                $mergeBase = $repository->getMergeBase($pullRequest->getSourceBranch()->getFullName(), $pullRequest->getDestinationBranch()->getFullName());
+                $mergeBase = $repository->getMergeBase($pullRequest->getBaseBranch()->getFullName(), $pullRequest->getHeadBranch()->getFullName());
                 $pullRequest->setMergeBase($mergeBase);
                 
                 $pullRequestManager->updatePullRequest($pullRequest);
@@ -96,8 +96,8 @@ class PullRequestController extends Controller
         $repository = $repositoryManager->getRepository($project);
 //
 
-        $fullDiff = $repository->getDiff($pullRequest->getMergeBase(), $pullRequest->getSourceBranch()->getFullName());
-        $commits = $repository->getCommits($pullRequest->getMergeBase(), $pullRequest->getSourceBranch()->getFullName());
+        $fullDiff = $repository->getDiff($pullRequest->getMergeBase(), $pullRequest->getHeadBranch()->getTip());
+        $commits = $repository->getCommits($pullRequest->getMergeBase(), $pullRequest->getHeadBranch()->getTip());
 
         $timeline = new EventTimeline();
         foreach ($commits as $commit) {

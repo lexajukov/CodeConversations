@@ -52,8 +52,8 @@ class OnePullRequestPerBranchValidator extends ConstraintValidator
 
         $exists = $this->em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array(
             'project' => $object->getProject()->getId(),
-            'sourceBranch' => $object->getSourceBranch()->getId(),
-            'destinationBranch' => $object->getDestinationBranch()->getId()
+            'headBranch' => $object->getHeadBranch()->getId(),
+            'baseBranch' => $object->getBaseBranch()->getId()
         ));
         
         if (!empty($exists)) {

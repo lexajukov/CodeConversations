@@ -7,7 +7,7 @@
     <entity name="Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest" table="pull_requests">
         
         <unique-constraints>
-            <unique-constraint columns="project_id,sourcebranch_id,destinationbranch_id" />
+            <unique-constraint columns="project_id,basebranch_id,headbranch_id" />
         </unique-constraints>
 
         <id name="id" type="integer">
@@ -28,9 +28,9 @@
 
         <many-to-one target-entity="Project" field="project" />
 
-        <many-to-one target-entity="Branch" field="sourceBranch" />
+        <many-to-one target-entity="Branch" field="baseBranch" />
 
-        <many-to-one target-entity="Branch" field="destinationBranch" />
+        <many-to-one target-entity="Branch" field="headBranch" />
 
         <many-to-one target-entity="User" field="author" />
 

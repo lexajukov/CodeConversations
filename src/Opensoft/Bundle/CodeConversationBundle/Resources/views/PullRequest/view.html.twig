@@ -4,6 +4,9 @@
 
     {% render 'OpensoftCodeConversationBundle:Project:header' with {'project': project} %}
 
+    <!-- /base sha1: {{ pullRequest.baseBranch.tip }}-->
+    <!-- /head sha1: {{ pullRequest.headBranch.tip }}-->
+
     <div>
         <span style="font-size: larger;">
             {% if pullRequest.status == 1 %}
@@ -14,8 +17,8 @@
         </span>
         <span>
             {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': pullRequest.author} %}
-             wants someone to merge code from <span class="label">{{ pullRequest.sourceBranch.fullName }}</span>
-             to <span class="label">{{ pullRequest.destinationBranch.fullName }}</span> ASAP!
+             wants someone to merge code from <span class="label">{{ pullRequest.headBranch.name }}</span>
+             to <span class="label">{{ pullRequest.baseBranch.name }}</span> ASAP!
         </span>
         <span class="pull-right">
             <a href="{{ path('opensoft_codeconversation_pullrequest_view', {'projectName': project.name, 'pullId': pullRequest.id} )}}">#{{ pullRequest.id }}</a>

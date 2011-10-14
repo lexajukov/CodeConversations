@@ -54,8 +54,8 @@ class BranchPointValidator extends ConstraintValidator
             $repository = $this->repositoryManager->getRepository($object->getProject());
 
 
-            $source = $object->getSourceBranch()->getRemote()->getName().'/'.$object->getSourceBranch()->getName();
-            $destination = $object->getDestinationBranch()->getRemote()->getName().'/'.$object->getDestinationBranch()->getName();
+            $source = $object->getHeadBranch()->getTip();
+            $destination = $object->getBaseBranch()->getTip();
 
             $common = $repository->getMergeBase($source, $destination);
         } catch (\GitRuntimeException $e) {

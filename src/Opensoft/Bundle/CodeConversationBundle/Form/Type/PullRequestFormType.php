@@ -36,23 +36,25 @@ class PullRequestFormType extends AbstractType
         $builder
             ->add('title', 'text')
             ->add('description', 'textarea')
-            ->add('sourceBranch', 'entity', array(
+            ->add('baseBranch', 'entity', array(
                 'property' => 'name',
                 'class' => 'OpensoftCodeConversationBundle:Branch',
                 'query_builder' => function(EntityRepository $repo) use ($project) {
                     return $repo->createQueryBuilder('b')
                             ->join('b.remote', 'r')
                             ->where('r.project = :project')->setParameter('project', $project)
+                            ->andWhere('b.enabled = :enabled')->setParameter('enabled', true)
                             ->orderBy('r.name, b.name');
                 }
             ))
-            ->add('destinationBranch', 'entity', array(
+            ->add('headBranch', 'entity', array(
                 'property' => 'name',
                 'class' => 'OpensoftCodeConversationBundle:Branch',
                 'query_builder' => function(EntityRepository $repo) use ($project) {
                     return $repo->createQueryBuilder('b')
                             ->join('b.remote', 'r')
                             ->where('r.project = :project')->setParameter('project', $project)
+                            ->andWhere('b.enabled = :enabled')->setParameter('enabled', true)
                             ->orderBy('r.name, b.name');
                 }
             ))

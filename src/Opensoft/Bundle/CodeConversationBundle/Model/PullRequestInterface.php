@@ -60,14 +60,14 @@ interface PullRequestInterface extends StreamableInterface
     public function getDescription();
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface $destinationBranch
+     * @param \Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface $baseBranch
      */
-    public function setDestinationBranch($destinationBranch);
+    public function setBaseBranch($baseBranch);
 
     /**
      * @return \Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface
      */
-    public function getDestinationBranch();
+    public function getBaseBranch();
 
     /**
      * @param \Opensoft\Bundle\CodeConversationBundle\Model\UserInterface $author
@@ -90,14 +90,14 @@ interface PullRequestInterface extends StreamableInterface
     public function getProject();
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface $sourceBranch
+     * @param \Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface $headBranch
      */
-    public function setSourceBranch($sourceBranch);
+    public function setHeadBranch($headBranch);
 
     /**
      * @return \Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface
      */
-    public function getSourceBranch();
+    public function getHeadBranch();
 
     /**
      * @param int $status

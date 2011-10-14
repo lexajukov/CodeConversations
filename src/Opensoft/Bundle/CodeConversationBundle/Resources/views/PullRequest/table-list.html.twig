@@ -19,7 +19,7 @@
                     <span class="pull-right">{{ pullRequest.comments|length }} comments</span>
                     <span class="pull-left">
                         {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': pullRequest.author} %}
-                        wants someone to merge commits from <span class="label">{{ pullRequest.sourceBranch.fullName }}</span> into <span class="label">{{ pullRequest.destinationBranch.fullName }}</span>
+                        wants someone to merge commits from <span class="label">{{ pullRequest.headBranch.name }}</span> into <span class="label">{{ pullRequest.baseBranch.name }}</span>
                     </span>
                 </td>
             </tr>

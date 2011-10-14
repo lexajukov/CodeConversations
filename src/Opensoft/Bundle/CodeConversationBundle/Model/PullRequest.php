@@ -43,12 +43,12 @@ class PullRequest implements PullRequestInterface
     /**
      * @var Branch
      */
-    protected $sourceBranch;
+    protected $baseBranch;
 
     /**
      * @var Branch
      */
-    protected $destinationBranch;
+    protected $headBranch;
 
     /**
      * @var User
@@ -142,19 +142,19 @@ class PullRequest implements PullRequestInterface
     }
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $destinationBranch
+     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $baseBranch
      */
-    public function setDestinationBranch($destinationBranch)
+    public function setBaseBranch($baseBranch)
     {
-        $this->destinationBranch = $destinationBranch;
+        $this->baseBranch = $baseBranch;
     }
 
     /**
      * @return \Opensoft\Bundle\CodeConversationBundle\Entity\Branch
      */
-    public function getDestinationBranch()
+    public function getBaseBranch()
     {
-        return $this->destinationBranch;
+        return $this->baseBranch;
     }
 
     /**
@@ -206,19 +206,19 @@ class PullRequest implements PullRequestInterface
     }
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $sourceBranch
+     * @param \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $headBranch
      */
-    public function setSourceBranch($sourceBranch)
+    public function setHeadBranch($headBranch)
     {
-        $this->sourceBranch = $sourceBranch;
+        $this->headBranch = $headBranch;
     }
 
     /**
      * @return \Opensoft\Bundle\CodeConversationBundle\Entity\Branch
      */
-    public function getSourceBranch()
+    public function getHeadBranch()
     {
-        return $this->sourceBranch;
+        return $this->headBranch;
     }
 
     /**
