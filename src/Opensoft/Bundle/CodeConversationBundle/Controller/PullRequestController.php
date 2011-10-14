@@ -17,10 +17,7 @@ use Opensoft\Bundle\CodeConversationBundle\Timeline\EventTimeline;
 use Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment;
 
 /**
- * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
- * @ParamConverter("remote", class="Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface")
- * @ParamConverter("branch", class="Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface")
- * @ParamConverter("pullRequest", class="Opensoft\Bundle\CodeConversationBundle\Model\PullRequestInterface")
+ * 
  */
 class PullRequestController extends Controller
 {

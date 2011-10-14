@@ -42,7 +42,6 @@ class ProjectController extends Controller
 
     /**
      * @Route("/project-header/{projectName}/tree/{branchName}")
-     * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
      * @Template()
      */
     public function headerAction(ProjectInterface $project, BranchInterface $branch = null)
@@ -77,23 +76,14 @@ class ProjectController extends Controller
     /**
      * @Route("/{projectName}")
      * @Route("/{projectName}/tree/{branchName}")
-     * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
      * @Template()
      */
     public function showAction(ProjectInterface $project, BranchInterface $branch = null)
     {
-        $em = $this->get('doctrine')->getEntityManager();
-
         if (null === $branch) {
             $branch = $project->getDefaultRemote()->getHeadBranch();
         }
         
-//        if ($branchName !== null && $remote !== null) {
-//            /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
-//            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($remote . '/' . $branchName);
-//        } else {
-//            $branch = $project->getDefaultRemote()->getHeadBranch();
-//        }
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
         $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
 
@@ -126,16 +116,6 @@ class ProjectController extends Controller
         if (null === $branch) {
             $branch = $project->getDefaultRemote()->getHeadBranch();
         }
-
-//        $em = $this->get('doctrine')->getEntityManager();
-//
-//        if ($branchName !== null) {
-//            /** @var \Opensoft\Bundle\CodeConversationBundle\Entity\Branch $branch  */
-//            $branch = $em->getRepository('OpensoftCodeConversationBundle:Branch')->findOneByName($branchName);
-//        } else {
-//            $branch = $project->getHeadBranch();
-//        }
-
 
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
         $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
