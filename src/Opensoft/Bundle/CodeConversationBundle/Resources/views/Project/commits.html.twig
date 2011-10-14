@@ -5,7 +5,7 @@
     {% render 'OpensoftCodeConversationBundle:Project:header' with {'project': project} %}
 
     <div id="recent-commits">
-        <h2>Recent commits on <span class="label">{{ remote.name }}/{{ branch.name }}</span></h2>
+        <h2>Recent commits on <span class="label">{{ branch.name }}</span></h2>
 
         {% for date, datedCommits in commits %}
             <table class="zebra-striped">

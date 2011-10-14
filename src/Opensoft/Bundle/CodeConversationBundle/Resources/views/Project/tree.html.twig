@@ -24,7 +24,7 @@
                     {% endif %}
                 {% endfor %}
 
-                <a href="{{ path('opensoft_codeconversation_project_tree', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name, 'filepath': totalPath}) }}">
+                <a href="{{ path('opensoft_codeconversation_project_tree', {'projectName': project.name, 'branchName': branch.name, 'filepath': totalPath}) }}">
                     ...
                 </a>
             </td>
@@ -44,7 +44,7 @@
                         {% set builtFilepath = item.file%}
                     {% endif%}
 
-                    <a href="{{ path('opensoft_codeconversation_project_tree', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name, 'filepath': builtFilepath}) }}">
+                    <a href="{{ path('opensoft_codeconversation_project_tree', {'projectName': project.name, 'branchName': branch.name, 'filepath': builtFilepath}) }}">
                         {{ item.file }}/
                     </a>
                 </td>
@@ -66,7 +66,7 @@
                         {% set builtFilepath = item.file%}
                     {% endif%}
 
-                    <a href="{{ path('opensoft_codeconversation_project_blob', {'projectName': project.name, 'remoteName': remote.name, 'branchName': branch.name, 'filepath': builtFilepath}) }}">
+                    <a href="{{ path('opensoft_codeconversation_project_blob', {'projectName': project.name, 'branchName': branch.name, 'filepath': builtFilepath}) }}">
                         {{ item.file }}
                     </a>
                 </td>

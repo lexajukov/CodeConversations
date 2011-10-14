@@ -41,18 +41,14 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project-header/{projectName}/tree/{remoteName}/{branchName}")
+     * @Route("/project-header/{projectName}/tree/{branchName}")
      * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
      * @Template()
      */
-    public function headerAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null)
+    public function headerAction(ProjectInterface $project, BranchInterface $branch = null)
     {
-        if (null === $remote) {
-            $remote = $project->getDefaultRemote();
-        }
-
         if (null === $branch) {
-            $branch = $remote->getHeadBranch();
+            $branch = $project->getDefaultRemote()->getHeadBranch();
         }
 
         $em = $this->get('doctrine')->getEntityManager();
@@ -60,7 +56,6 @@ class ProjectController extends Controller
 
         return array(
             'project' => $project,
-            'remote' => $remote,
             'branch' => $branch,
             'openPullRequests' => $openPullRequests,
         );
@@ -72,30 +67,25 @@ class ProjectController extends Controller
      */
     public function redirectAction(ProjectInterface $project)
     {
-        list($remoteName, $branchName) = explode("/", $this->getRequest()->get('remotebranch'));
+        $branchName = $this->getRequest()->get('branch');
         return $this->redirect($this->generateUrl('opensoft_codeconversation_project_show_1', array(
             'projectName' => $project->getName(),
-            'remoteName' => $remoteName,
             'branchName' => $branchName
         )));
     }
 
     /**
      * @Route("/{projectName}")
-     * @Route("/{projectName}/tree/{remoteName}/{branchName}")
+     * @Route("/{projectName}/tree/{branchName}")
      * @ParamConverter("project", class="Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface")
      * @Template()
      */
-    public function showAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null)
+    public function showAction(ProjectInterface $project, BranchInterface $branch = null)
     {
         $em = $this->get('doctrine')->getEntityManager();
 
-        if (null === $remote) {
-            $remote = $project->getDefaultRemote();
-        }
-
         if (null === $branch) {
-            $branch = $remote->getHeadBranch();
+            $branch = $project->getDefaultRemote()->getHeadBranch();
         }
         
 //        if ($branchName !== null && $remote !== null) {
@@ -107,7 +97,7 @@ class ProjectController extends Controller
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
         $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
 
-        $recentCommits = $repository->getCommits($remote->getName().'/'.$branch->getName(), null, 1);
+        $recentCommits = $repository->getCommits($branch->getFullName(), null, 1);
 
         try {
             $readme = $repository->getFileAtCommit($recentCommits[0]->getId(), 'README.md');
@@ -120,7 +110,6 @@ class ProjectController extends Controller
 
         return array(
             'project' => $project,
-            'remote' => $remote,
             'branch' => $branch,
             'tree' => $tree,
             'recentCommit' => $recentCommits[0],
@@ -129,18 +118,13 @@ class ProjectController extends Controller
     }
     /**
      * @Route("/{projectName}/commits")
-     * @Route("/{projectName}/tree/{remoteName}/{branchName}/commits")
+     * @Route("/{projectName}/tree/{branchName}/commits")
      * @Template()
      */
-    public function commitsAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null)
+    public function commitsAction(ProjectInterface $project, BranchInterface $branch = null)
     {
-
-        if (null === $remote) {
-            $remote = $project->getDefaultRemote();
-        }
-
         if (null === $branch) {
-            $branch = $remote->getHeadBranch();
+            $branch = $project->getDefaultRemote()->getHeadBranch();
         }
 
 //        $em = $this->get('doctrine')->getEntityManager();
@@ -157,13 +141,17 @@ class ProjectController extends Controller
         $repository = $this->container->get('opensoft_codeconversation.repository_manager')->getRepository($project);
 
         $commits = array();
-        foreach ($repository->getCommits($remote->getName().'/'.$branch->getName(), null, 50) as $commit) {
+        foreach ($repository->getCommits($branch->getFullName(), null, 50) as $commit) {
             $commits[date("F j, Y", $commit->getCommittedDate()->getTimestamp())][] = $commit;
         }
 
 //        $openPullRequests = $em->getRepository('OpensoftCodeConversationBundle:PullRequest')->findBy(array('project' => $project->getId(), 'status' => PullRequest::STATUS_OPEN), array('createdAt' => 'DESC'));
 
-        return array('project' => $project, 'remote' => $remote, 'branch' => $branch, 'commits' => $commits);
+        return array(
+            'project' => $project,
+            'branch' => $branch,
+            'commits' => $commits
+        );
     }
 
     /**
@@ -216,17 +204,13 @@ class ProjectController extends Controller
 
 
     /**
-     * @Route("/{projectName}/tree/{remoteName}/{branchName}/{filepath}", requirements={"filepath" = ".+"})
+     * @Route("/{projectName}/tree/{branchName}/{filepath}", requirements={"filepath" = ".+"})
      * @Template("OpensoftCodeConversationBundle:Project:show.html.twig")
      */
-    public function treeAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null, $filepath = null)
+    public function treeAction(ProjectInterface $project, BranchInterface $branch = null, $filepath = null)
     {
-        if (null === $remote) {
-            $remote = $project->getDefaultRemote();
-        }
-
         if (null === $branch) {
-            $branch = $remote->getHeadBranch();
+            $branch = $project->getDefaultRemote()->getHeadBranch();
         }
 
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
@@ -235,7 +219,6 @@ class ProjectController extends Controller
 
         return array(
             'project' => $project,
-            'remote' => $remote,
             'branch' => $branch,
             'recentCommit' => $recentCommits[0],
             'filepath' => explode("/", $filepath),
@@ -244,17 +227,13 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{projectName}/blob/{remoteName}/{branchName}/{filepath}", requirements={"filepath" = ".+"})
+     * @Route("/{projectName}/blob/{branchName}/{filepath}", requirements={"filepath" = ".+"})
      * @Template("OpensoftCodeConversationBundle:Project:show.html.twig")
      */
-    public function blobAction(ProjectInterface $project, RemoteInterface $remote = null, BranchInterface $branch = null, $filepath)
+    public function blobAction(ProjectInterface $project, BranchInterface $branch = null, $filepath)
     {
-        if (null === $remote) {
-            $remote = $project->getDefaultRemote();
-        }
-
         if (null === $branch) {
-            $branch = $remote->getHeadBranch();
+            $branch = $project->getDefaultRemote()->getHeadBranch();
         }
 
         /** @var \Opensoft\Bundle\CodeConversationBundle\Git\Repository $repository  */
@@ -263,7 +242,6 @@ class ProjectController extends Controller
 
         return array(
             'project' => $project,
-            'remote' => $remote,
             'branch' => $branch,
             'recentCommit' => $recentCommits[0],
             'filepath' => explode("/", $filepath),

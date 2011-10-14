@@ -141,7 +141,6 @@ class Branch implements BranchInterface
             'route' => 'opensoft_codeconversation_project_commits_1',
             'parameters' => array(
                 'projectName' => $this->getRemote()->getProject()->getName(),
-                'remoteName' => $this->getRemote()->getName(),
                 'branchName' => $this->getName(),
             )
         );

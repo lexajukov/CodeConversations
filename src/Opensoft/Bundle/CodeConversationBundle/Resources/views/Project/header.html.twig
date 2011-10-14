@@ -2,7 +2,10 @@
     <thead>
         <tr>
             <th>
-                <h3><a href="{{ path('opensoft_codeconversation_project_show', {'projectName': project.name}) }}">{{ project.name }}</a></h3>
+                <h3>
+                    <a href="{{ path('opensoft_codeconversation_project_show', {'projectName': project.name}) }}">{{ project.name }}</a>
+                    / {{ branch.name }}
+                </h3>
             </th>
         </tr>
     </thead>
@@ -11,13 +14,13 @@
             <td>
                 <form style="display: inline;" method="POST" action="{{ path('opensoft_codeconversation_project_redirect', {'projectName': project.name}) }}">
                     <span>Branch</span>
-                    <select name="remotebranch" type="select" onchange="this.form.submit();">
+                    <select name="branch" type="select" onchange="this.form.submit();">
                         {% for projectRemote in project.remotes %}
                             {% for projectBranch in projectRemote.branches %}
-                                {% if projectRemote.name == remote.name and projectBranch.name == branch.name %}
-                                    <option value="{{ projectBranch.fullName }}" selected="selected">{{ projectBranch.fullName }}</option>
+                                {% if projectBranch.name == branch.name %}
+                                    <option value="{{ projectBranch.name }}" selected="selected">{{ projectBranch.name }}</option>
                                 {% else %}
-                                    <option value="{{ projectBranch.fullName }}">{{ projectBranch.fullName }}</option>
+                                    <option value="{{ projectBranch.name }}">{{ projectBranch.name }}</option>
                                 {% endif %}
                             {% endfor %}
                         {% endfor %}

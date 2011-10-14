@@ -45,17 +45,17 @@ class BranchParamConverter implements ParamConverterInterface
      */
     function apply(Request $request, ConfigurationInterface $configuration)
     {
-        if (!$request->attributes->has('projectName') || !$request->attributes->has('remoteName') || !$request->attributes->has('branchName')) {
+        if (!$request->attributes->has('projectName') || !$request->attributes->has('branchName')) {
             return;
         }
 
         $projectName = $request->attributes->get('projectName');
-        $remoteName = $request->attributes->get('remoteName');
+        $remoteName = 'origin';
         $branchName = $request->attributes->get('branchName');
         $branch = $this->branchManager->findBranchByProjectNameAndRemoteNameAndBranchName($projectName, $remoteName, $branchName);
 
         if (null === $branch) {
-            throw new NotFoundHttpException(sprintf('Branch with name "%s" on remote "%s" was not found for project "%s%', $branchName, $remoteName, $projectName));
+            throw new NotFoundHttpException(sprintf('Branch with name "%s" was not found for project "%s%', $branchName, $projectName));
         }
 
         $request->attributes->set($configuration->getName(), $branch);
