@@ -76,11 +76,11 @@ abstract class BaseCommand extends ContainerAwareCommand
                         $branchManager->updateBranch($knownBranch);
 
                         // if this branch being deleted is part of any pull requests... close those requests
-                        foreach ($pullRequestManager->findPullRequestBy(array('headBranch' => $knownBranch)) as $pullRequest) {
+                        foreach ($pullRequestManager->findPullRequestBy(array('headBranch' => $knownBranch->getId())) as $pullRequest) {
                             $pullRequest->setStatus(PullRequest::STATUS_CLOSED);
                             $pullRequestManager->updatePullRequest($pullRequest);
                         }
-                        foreach ($pullRequestManager->findPullRequestBy(array('baseBranch' => $knownBranch)) as $pullRequest) {
+                        foreach ($pullRequestManager->findPullRequestBy(array('baseBranch' => $knownBranch->getId())) as $pullRequest) {
                             $pullRequest->setStatus(PullRequest::STATUS_CLOSED);
                             $pullRequestManager->updatePullRequest($pullRequest);
                         }
