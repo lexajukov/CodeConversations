@@ -82,7 +82,19 @@ class PullRequestController extends Controller
      */
     public function listAction(ProjectInterface $project)
     {
-        return array('project' => $project, 'pullRequests' => $this->getPullRequestManager()->findPullRequestBy(array('project' => $project->getId()), array('createdAt' => 'DESC')));
+        $criteria = array('project' => $project->getId());
+
+        if (null !== $this->getRequest()->get('open')) {
+            $criteria['status'] = PullRequest::STATUS_OPEN;
+        }
+        if (null !== $this->getRequest()->get('closed')) {
+            $criteria['status'] = PullRequest::STATUS_CLOSED;
+        }
+
+        return array(
+            'project' => $project,
+            'pullRequests' => $this->getPullRequestManager()->findPullRequestBy($criteria, array('createdAt' => 'DESC'))
+        );
     }
 
     /**
