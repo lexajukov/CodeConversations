@@ -7,6 +7,7 @@ namespace Opensoft\Bundle\CodeConversationBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
+use Opensoft\Bundle\CodeConversationBundle\Model\PullRequest;
 use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface;
@@ -32,6 +33,9 @@ abstract class BaseCommand extends ContainerAwareCommand
         /** @var \Opensoft\Bundle\CodeConversationBundle\Model\RemoteManagerInterface $remoteManager  */
         $remoteManager = $this->getContainer()->get('opensoft_codeconversation.manager.remote');
 
+        /** @var \Opensoft\Bundle\CodeConversationBundle\Model\PullRequestManagerInterface $pullRequestManager  */
+        $pullRequestManager = $this->getContainer()->get('opensoft_codeconversation.manager.pull_request');
+
         if (null === $remote) {
             $remotes = array($project->getDefaultRemote());
         } else {
@@ -50,9 +54,9 @@ abstract class BaseCommand extends ContainerAwareCommand
                 foreach ($knownBranches as $knownBranch) {
                     if (in_array($remote->getName().'/'.$knownBranch->getName(), $remoteBranches)) {
                         // Remove knownBranch->getName from remoteBranches by value
-                        $remoteBranches = array_values(array_diff($remoteBranches, array($remote->getName().'/'.$knownBranch->getName())));
+                        $remoteBranches = array_values(array_diff($remoteBranches, array($knownBranch->getFullName())));
 
-                        $output->writeln('>>> <comment>'.$remote->getName().'/'.$knownBranch->getName().'</comment> already being tracked');
+                        $output->writeln('>>> <comment>'.$knownBranch->getFullName().'</comment> already being tracked');
 
                         $tip = $repo->getTip($knownBranch->getFullName());
 
@@ -65,9 +69,21 @@ abstract class BaseCommand extends ContainerAwareCommand
 
                         continue;
                     } else {
-                        $output->writeln('>>> <error>'.$remote->getName().'/'.$knownBranch->getName().'</error> deleted');
+                        $output->writeln('>>> <error>'.$knownBranch->getFullName().'</error> deleted');
                         // probably shouldn't delete unknown branches that previously exists... just disable them
                         $knownBranch->setEnabled(false);
+
+                        $branchManager->updateBranch($knownBranch);
+
+                        // if this branch being deleted is part of any pull requests... close those requests
+                        foreach ($pullRequestManager->findPullRequestBy(array('headBranch' => $knownBranch)) as $pullRequest) {
+                            $pullRequest->setStatus(PullRequest::STATUS_CLOSED);
+                            $pullRequestManager->updatePullRequest($pullRequest);
+                        }
+                        foreach ($pullRequestManager->findPullRequestBy(array('baseBranch' => $knownBranch)) as $pullRequest) {
+                            $pullRequest->setStatus(PullRequest::STATUS_CLOSED);
+                            $pullRequestManager->updatePullRequest($pullRequest);
+                        }
                     }
                 }
             }
