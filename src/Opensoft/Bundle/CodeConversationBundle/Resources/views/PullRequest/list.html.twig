@@ -11,55 +11,60 @@
     </div>
     
 
-    {% if pullRequests|length > 0 %}
-        <table>
-            <thead>
+    <table>
+        <thead>
+            <tr>
+                <td style="background-color: #E0EDFF;">
+                    <form action="{{ path('opensoft_codeconversation_pullrequest_list', {'projectName': project.name}) }}" method="GET">
+                        <span>Merged</span>
+                        <input id="pullrequestfiltermerged" type="checkbox" name="merged" value="true" {{ app.request.get('merged') == true ? "checked" : ""}} />
+
+                        <span>Open</span>
+                        <input id="pullrequestfilteropen" type="checkbox" name="open" value="true" {{ app.request.get('open') == true ? "checked" : ""}} />
+
+                        <span>Closed</span>
+                        <input id="pullrequestfilterclosed" type="checkbox" name="closed" value="true"{{ app.request.get('closed') == true ? "checked" : ""}}  />
+
+                        <span class="pull-right">
+                            <input type="submit" class="btn" value="Filter" />
+                        </span>
+                    </form>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+        {% if pullRequests|length > 0 %}
+            {% for pullRequest in pullRequests %}
                 <tr>
-                    <td style="background-color: #E0EDFF;">
-                        <form action="{{ path('opensoft_codeconversation_pullrequest_list', {'projectName': project.name}) }}" method="GET">
-                            <span>Open</span>
-                            <input id="pullrequestfilteropen" type="checkbox" name="open" value="true" {{ app.request.get('open') == true ? "checked" : ""}} />
+                    <td>
+                        <div>
+                            {% if pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_MERGED") %}
+                                <span class="label notice">Merged</span>
+                            {% elseif pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_OPEN") %}
+                                <span class="label success">Open</span>
+                            {% elseif pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_CLOSED") %}
+                                <span class="label important">Closed</span>
+                            {% endif %}
 
-                            <span>Closed</span>
-                            <input id="pullrequestfilterclosed" type="checkbox" name="closed" value="true"{{ app.request.get('closed') == true ? "checked" : ""}}  />
+                            <a href="{{ path('opensoft_codeconversation_pullrequest_view', {'pullId': pullRequest.id, 'projectName': project.name}) }}">{{ pullRequest.title|truncate(80) }}</a>
 
-                            <span class="pull-right">
-                                <input type="submit" class="btn" value="Filter" />
-                            </span>
-                        </form>
+                            <span class="pull-right">opened {{ time_diff(pullRequest.createdAt) }}</span>
+
+                            <span class="help-block">{{ pullRequest.description|truncate(120) }}</span>
+                        </div>
+                        <span class="pull-right">{{ pullRequest.comments|length }} comments</span>
+                        <span class="pull-left">
+                            {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': pullRequest.author} %}
+                            wants someone to merge commits from <span class="label">{{ pullRequest.headBranch.name }}</span> into <span class="label">{{ pullRequest.baseBranch.name }}</span>
+                        </span>
                     </td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for pullRequest in pullRequests %}
-                    <tr>
-                        <td>
-                            <div>
-                                {% if pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_OPEN") %}
-                                    <span class="label success">Open</span>
-                                {% elseif pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_CLOSED") %}
-                                    <span class="label important">Closed</span>
-                                {% endif %}
-
-                                <a href="{{ path('opensoft_codeconversation_pullrequest_view', {'pullId': pullRequest.id, 'projectName': project.name}) }}">{{ pullRequest.title|truncate(80) }}</a>
-
-                                <span class="pull-right">opened {{ time_diff(pullRequest.createdAt) }}</span>
-
-                                <span class="help-block">{{ pullRequest.description|truncate(120) }}</span>
-                            </div>
-                            <span class="pull-right">{{ pullRequest.comments|length }} comments</span>
-                            <span class="pull-left">
-                                {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': pullRequest.author} %}
-                                wants someone to merge commits from <span class="label">{{ pullRequest.headBranch.name }}</span> into <span class="label">{{ pullRequest.baseBranch.name }}</span>
-                            </span>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>
-            There are no pull requests for {{ project.name }}.
-        </p>
-    {% endif %}
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td>There are no pull requests for {{ project.name }}</td>
+            </tr>
+        {% endif %}
+        </tbody>
+    </table>
 {% endblock %}

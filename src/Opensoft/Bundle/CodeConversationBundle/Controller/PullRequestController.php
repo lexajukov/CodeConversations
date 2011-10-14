@@ -84,6 +84,9 @@ class PullRequestController extends Controller
     {
         $criteria = array('project' => $project->getId());
 
+        if (null !== $this->getRequest()->get('merged')) {
+            $criteria['status'] = PullRequest::STATUS_MERGED;
+        }
         if (null !== $this->getRequest()->get('open')) {
             $criteria['status'] = PullRequest::STATUS_OPEN;
         }

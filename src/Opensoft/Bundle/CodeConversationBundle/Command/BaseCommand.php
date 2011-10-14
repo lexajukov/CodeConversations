@@ -75,12 +75,12 @@ abstract class BaseCommand extends ContainerAwareCommand
 
                         $branchManager->updateBranch($knownBranch);
 
-                        // if this branch being deleted is part of any pull requests... close those requests
-                        foreach ($pullRequestManager->findPullRequestBy(array('headBranch' => $knownBranch->getId())) as $pullRequest) {
+                        // if this branch being deleted is part of any open pull requests... close those requests
+                        foreach ($pullRequestManager->findPullRequestBy(array('headBranch' => $knownBranch->getId(), 'status' => PullRequest::STATUS_OPEN)) as $pullRequest) {
                             $pullRequest->setStatus(PullRequest::STATUS_CLOSED);
                             $pullRequestManager->updatePullRequest($pullRequest);
                         }
-                        foreach ($pullRequestManager->findPullRequestBy(array('baseBranch' => $knownBranch->getId())) as $pullRequest) {
+                        foreach ($pullRequestManager->findPullRequestBy(array('baseBranch' => $knownBranch->getId(), 'status' => PullRequest::STATUS_OPEN)) as $pullRequest) {
                             $pullRequest->setStatus(PullRequest::STATUS_CLOSED);
                             $pullRequestManager->updatePullRequest($pullRequest);
                         }
@@ -154,7 +154,8 @@ abstract class BaseCommand extends ContainerAwareCommand
 
                         // only check tip... this ok? or should we check every commit in the merge to ensure they're all there?
                         // TODO:  this won't work with squashes... hmm
-                        if ($repo->branchContains($branch, $pullRequest->getHeadBranch()->getTip())) {
+                        if ($pullRequest->getHeadBranch()->getTip() == $commit->getId() &&
+                            $repo->branchContains($branch, $pullRequest->getHeadBranch()->getTip())) {
 
                             $pullRequest->setStatus(PullRequest::STATUS_MERGED);
                             $pullRequestManager->updatePullRequest($pullRequest);
@@ -163,6 +164,7 @@ abstract class BaseCommand extends ContainerAwareCommand
                             if ($user) {
                                 $action = $activityManager->createAction();
                                 $action->setActor($user);
+                                $action->setActorType('Opensoft\Bundle\CodeConversationBundle\Entity\User');
                                 $action->setVerb('merged');
                                 $action->setTarget($pullRequest);
 
@@ -189,6 +191,7 @@ abstract class BaseCommand extends ContainerAwareCommand
                 $action = $activityManager->createAction();
 
                 $action->setActor($userDefinition['user']);
+                $action->setActorType('Opensoft\Bundle\CodeConversationBundle\Entity\User');
                 if ($userDefinition['count'] == 1) {
                     $action->setVerb(sprintf('pushed %d commit to', $userDefinition['count']));
                 } else {

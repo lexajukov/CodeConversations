@@ -9,7 +9,9 @@
 
     <div>
         <span style="font-size: larger;">
-            {% if pullRequest.status == 1 %}
+            {% if pullRequest.status == 2 %}
+                <span style="font-size: large;" class="label notice">Merged</span>
+            {% elseif pullRequest.status == 1 %}
                 <span style="font-size: large;" class="label success">Open</span>
             {% elseif pullRequest.status == 0 %}
                 <span style="font-size: large;" class="label important">Closed</span>
@@ -102,7 +104,9 @@
             </div>
             <div class="span2" style="text-align: center;">
                 <div>
-                    {% if pullRequest.status == 1 %}
+                    {% if pullRequest.status == 2 %}
+                        <span style="font-size: large;" class="label notice">Merged</span>
+                    {% elseif pullRequest.status == 1 %}
                         <span style="font-size: large;" class="label success">Open</span>
                     {% elseif pullRequest.status == 0 %}
                         <span style="font-size: large;" class="label important">Closed</span>
