@@ -103,6 +103,8 @@ abstract class BaseCommand extends ContainerAwareCommand
                 $branch->setRemote($remote);
                 $branch->setTip($repo->getTip($newBranch));
 
+                $this->recordBranchActivity($output, $repo, $branch, $branch->getTip());
+
                 $branchManager->updateBranch($branch);
 
                 $output->writeln('>>> <info>'.$remote->getName().'/'.$branch->getName().'</info> now tracking');
@@ -132,19 +134,47 @@ abstract class BaseCommand extends ContainerAwareCommand
 
             /** @var \Redpanda\Bundle\ActivityStreamBundle\Entity\ActionManager $activityManager  */
             $activityManager = $this->getContainer()->get('activity_stream.action_manager');
+            
+            /** @var \Opensoft\Bundle\CodeConversationBundle\Model\PullRequestManagerInterface $pullRequestManager  */
+            $pullRequestManager = $this->getContainer()->get('opensoft_codeconversation.manager.pull_request');
 
             /** @var \FOS\UserBundle\Entity\UserManager $userManager  */
             $userManager = $this->getContainer()->get('fos_user.user_manager');
 
             $project = $branch->getRemote()->getProject();
+            $pullRequests = $pullRequestManager->findPullRequestBy(array('baseBranch' => $branch->getId()));
 
             $userCommits = array();
             foreach ($commits as $commit) {
-
                 $user = $userManager->findUserBy(array('gitAlias' => $commit->getCommitterName()));
 
-                if ($user) {
+                // detect merge commit here...
+                if (!empty($pullRequests)) {
+                    foreach ($pullRequests as $pullRequest) {
 
+                        // only check tip... this ok? or should we check every commit in the merge to ensure they're all there?
+                        // TODO:  this won't work with squashes... hmm
+                        if ($repo->branchContains($branch, $pullRequest->getHeadBranch()->getTip())) {
+
+                            $pullRequest->setStatus(PullRequest::STATUS_MERGED);
+                            $pullRequestManager->updatePullRequest($pullRequest);
+
+
+                            if ($user) {
+                                $action = $activityManager->createAction();
+                                $action->setActor($user);
+                                $action->setVerb('merged');
+                                $action->setTarget($pullRequest);
+
+                                $activityManager->updateAction($action);
+                            }
+
+                            $output->writeln('>>>> recording a merge for pull request ' . $pullRequest->getId());
+                        }
+                    }
+                }
+
+                if ($user) {
                     $username = $user->getUsername();
 
                     $userCommits[$username]['user'] = $user;
@@ -152,7 +182,6 @@ abstract class BaseCommand extends ContainerAwareCommand
                         $userCommits[$username]['count'] = 0;
                     }
                     $userCommits[$username]['count'] += 1;
-
                 }
             }
 

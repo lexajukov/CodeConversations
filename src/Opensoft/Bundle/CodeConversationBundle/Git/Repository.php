@@ -8,6 +8,7 @@ namespace Opensoft\Bundle\CodeConversationBundle\Git;
 use PHPGit_Repository;
 use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\RemoteInterface;
+use Opensoft\Bundle\CodeConversationBundle\Model\BranchInterface;
 use Opensoft\Bundle\CodeConversationBundle\Model\Commit;
 use Opensoft\Bundle\CodeConversationBundle\Git\Diff\DiffHeaderParser;
 
@@ -150,6 +151,13 @@ class Repository
         }
 
         return $commit;
+    }
+
+    public function branchContains(BranchInterface $branch, $commit)
+    {
+        $output = array_map('trim', explode("\n", $this->repo->git(sprintf('branch -r --contains %s', $commit))));
+
+        return in_array($branch->getFullName(), $output);
     }
 
 

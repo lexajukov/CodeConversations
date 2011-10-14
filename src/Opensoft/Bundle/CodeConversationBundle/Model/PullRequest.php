@@ -24,6 +24,7 @@ class PullRequest implements PullRequestInterface
 {
     const STATUS_CLOSED = 0;
     const STATUS_OPEN = 1;
+    const STATUS_MERGED = 2;
 
     /**
      * @var integer
