@@ -4,8 +4,8 @@
 
     {% render 'OpensoftCodeConversationBundle:Project:header' with {'project': project} %}
 
-    <!-- /base sha1: {{ pullRequest.baseBranch.tip }}-->
-    <!-- /head sha1: {{ pullRequest.headBranch.tip }}-->
+    <!-- /base sha1: "{{ pullRequest.mergeBase }}" -->
+    <!-- /head sha1: "{{ pullRequest.headBranch.tip }}"-->
 
     <div>
         <span style="font-size: larger;">

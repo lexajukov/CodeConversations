@@ -27,7 +27,7 @@ interface PullRequestManagerInterface
 
     /**
      * @param array $criteria
-     * @return PullRequestInterface
+     * @return PullRequestInterface[]
      */
     public function findPullRequestBy(array $criteria);
 
