@@ -49,9 +49,7 @@
 
     {% if readme is defined %}
     <h4>README.md</h4>
-    <table>
-        <tr><td>{{ readme|markdown|nl2br }}</td></tr>
-    </table>
+    <div style="border: 1px solid #EEE; padding: 8px;" class="content-formatted">{{ readme|markdown }}</div>
     {% endif %}
 
 

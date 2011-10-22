@@ -1,15 +1,15 @@
-<table>
+<table class="filetree">
     <thead>
         <tr>
-            <th style="width: 18px;">Type</th>
-            <th>File</th>
+            <th style="width: 18px;"></th>
+            <th style="border-left: none; padding-left: 0;">name</th>
         </tr>
     </thead>
     <tbody>
         {% if filepath is defined %}
         <tr>
             <td></td>
-            <td>
+            <td style="border-left: none; padding-left: 0;">
                 {% set totalPath = '' %}
                 {% set i = 0 %}
                 {% set pathLength = filepath|length %}
@@ -35,9 +35,9 @@
             {% if item.type == 'tree' %}
             <tr>
                 <td>
-                    {{ item.type }}
+                    <img src="{{ asset('bundles/opensoftcodeconversation/images/folder_32.png') }}" width="16" height="16" />
                 </td>
-                <td>
+                <td style="border-left: none; padding-left: 0;">
                     {% if filepath is defined %}
                         {% set builtFilepath = filepath|join('/')~'/'~item.file%}
                     {% else %}
@@ -57,9 +57,9 @@
             {% if item.type == 'blob' %}
             <tr>
                 <td>
-                    {{ item.type }}
+                    <img src="{{ asset('bundles/opensoftcodeconversation/images/page_text_32.png') }}" width="16" height="16" />
                 </td>
-                <td>
+                <td style="border-left: none; padding-left: 0;">
                     {% if filepath is defined %}
                         {% set builtFilepath = filepath|join('/')~'/'~item.file%}
                     {% else %}
