@@ -16,6 +16,10 @@ interface CommitInterface
 
     public function getId();
 
+    public function setProject(ProjectInterface $project);
+
+    public function getProject();
+
     public function setTree($tree);
 
     public function getTree();

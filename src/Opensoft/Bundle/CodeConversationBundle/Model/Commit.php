@@ -33,6 +33,8 @@ class Commit implements CommitInterface, EventInterface
 
     private $diff;
 
+    private $project;
+
 
     public function setId($id)
     {
@@ -42,6 +44,16 @@ class Commit implements CommitInterface, EventInterface
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setProject(ProjectInterface $project)
+    {
+        $this->project = $project;
+    }
+
+    public function getProject()
+    {
+        return $this->project;
     }
 
     public function setTree($tree)

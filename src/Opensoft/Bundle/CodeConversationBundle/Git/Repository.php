@@ -104,6 +104,7 @@ class Repository
                 $commit->setCommittedDate(new \DateTime($infos[7]));
                 $commit->setParents(explode(' ',$infos[8]));
                 $commit->setMessage($infos[9]);
+                $commit->setProject($this->project);
     
                 $commits[] = $commit;
             }
@@ -130,6 +131,7 @@ class Repository
         $commit->setCommitterEmail($infos[6]);
         $commit->setCommittedDate(new \DateTime($infos[7]));
         $commit->setParents(explode(' ',$infos[8]));
+        $commit->setProject($this->project);
 
         $message = $infos[9];
         
