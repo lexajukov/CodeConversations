@@ -1,0 +1,71 @@
+.avatar-bubble {
+    margin: 20px 0;
+    padding-left: 60px;
+}
+
+.avatar-bubble .avatar {
+    position: relative;
+    float: left;
+    margin-left: -60px;
+}
+
+.bubble {
+    padding:  3px;
+    background: #EEE;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+
+.comment {
+    border:  1px solid #CACACA;
+}
+
+.comment .cmeta {
+    height: 33px;
+    padding: 0 6px;
+    border-bottom: 1px solid #CCC;
+    background-color: #EEE;
+}
+
+.comment .body {
+    position: relative;
+    color: #333;
+    overflow: auto;
+    background-color: white;
+    padding: 0 10px;
+}
+
+.comment .body p.author {
+    margin: 10px 0 0;
+    color: #666;
+    font-size: 12px;
+}
+.comment .body p.author a {
+    font-weight: bold;
+    color: #666;
+}
+.comment h2.content-title {
+    margin: 0 0 -10px;
+    font-size: 20px;
+}
+.comment .formatted-content {
+    padding-top: 3px;
+}
+
+
+
+.commit .body {
+    position: relative;
+    color: #333;
+    overflow: auto;
+    background-color: white;
+    padding: 0 10px;
+}
+
+.commit .cmeta {
+    height: 33px;
+    padding: 0 6px;
+    border-bottom: 1px solid #CCC;
+    background-color: #E0EDFF;
+}

@@ -37,71 +37,100 @@
     <div class="pill-content">
         <div class="active row" id="code-conversation">
             <div class="span14">
-                <table>
-                    <thead>
-                        <tr style="background-color: #FFF0E0;">
-                            <th>
-                                <span>{{ pullRequest.title }}</span>
-                                <span class="pull-right">opened on {{ pullRequest.createdAt|date("F j, Y") }} at {{ pullRequest.createdAt|date("G:i:s") }}</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{ pullRequest.description|markdown }}</td>
-                        </tr>
-                    </tbody>
-                </table>
 
-                {% if eventTimeline %}
-                    {% for item in eventTimeline %}
-                        {% if item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Model\\Commit' %}
-                            {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': item } %}
-                        {% elseif item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequestComment' %}
-                            {% include 'OpensoftCodeConversationBundle::comment.html.twig' with {'comment': item } %}
-                        {% else %}
-                            {% include 'OpensoftCodeConversationBundle:PullRequest:log-status-change.html.twig' with {'logEntry': item } %}
-                        {% endif %}
-                    {% endfor %}
-                {% endif %}
+                    <div class="avatar-bubble js-comment-container">
+                      <span class="avatar">
+                        <img src="{{ gravatar(pullRequest.author.email, 48) }}" />
+                        <span class="overlay size-48"></span>
+                      </span>
 
-                <h2>Activity stream</h2>
-                {% if stream %}
-                    {% for event in stream %}
-                        {% include 'OpensoftCodeConversationBundle::action.html.twig' with {'action': event} %}
-                    {% endfor %}
-                {% endif %}
-
-                <hr />
-                <h4>Comment on this pull request</h4>
-
-                <form action="{{ path('opensoft_codeconversation_comment_postprcomment', {'projectName': project.name, 'pullId': pullRequest.id }) }}" {{ form_enctype(form) }} method="POST">
-                    <fieldset>
-                        {{ form_errors(form) }}
-
-                        <div class="clearfix">
-                            {{ form_label(form.content) }}
-                            <div class="input">
-                                {{ form_widget(form.content, { 'attr': {'class': 'span11', 'rows': 5} }) }}
-                                <span class="help-block">Comments are parsed with everyone's favorite <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> language.</span>
+                      <div class="bubble">
+                        <div class="comment starting-comment " id="issue-1837176">
+                          <div class="body">
+                            <p class="author"><a href="/lsmith77">{{ pullRequest.author.username }}</a> opened this pull request <time class="js-relative-date" datetime="{{ pullRequest.createdAt|date() }}" title="{{ pullRequest.createdAt|date() }}">{{ pullRequest.createdAt|date("F j, Y") }}</time></p>
+                            <h2 class="content-title">{{ pullRequest.title }}</h2>
+                            <div class="formatted-content">
+                              <div class="content-body wikistyle markdown-format">{{ pullRequest.description|markdown }}</div>
                             </div>
+                          </div>
                         </div>
+                      </div><!-- /.bubble -->
+                    </div>
 
-                        <div class="actions">
-                            <input name="preview" class="btn" type="submit" value="Preview" />
-                            <input name="add-comment" class="btn primary" type="submit" value="Add comment" />
+                    <table>
+                        <thead>
+                            <tr style="background-color: #FFF0E0;">
+                                <th>
+                                    <span>{{ pullRequest.title }}</span>
+                                    <span class="pull-right">opened on {{ pullRequest.createdAt|date("F j, Y") }} at {{ pullRequest.createdAt|date("G:i:s") }}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ pullRequest.description|markdown }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                            {% if pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_OPEN") %}
-                                <input name="close" class="btn danger pull-right" type="submit" value="Close Pull Request" />
-                            {% elseif pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_CLOSED") %}
-                                <input name="reopen" class="btn success pull-right" type="submit" value="Reopen Pull Request" />
-                            {% endif %}
-                        </div>
+                    {% if eventTimeline %}
+                        {% for item in eventTimeline %}
+                            <div class="avatar-bubble js-comment-container">
+                                <span class="avatar">
+                                    <img src="{{ gravatar(pullRequest.author.email, 48) }}" />
+                                    <span class="overlay size-48"></span>
+                                </span>
+                                <div class="bubble">
+                                    {% if item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Model\\Commit' %}
+                                        {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': item } %}
+                                    {% elseif item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequestComment' %}
+                                        {% include 'OpensoftCodeConversationBundle::comment.html.twig' with {'comment': item } %}
+                                    {% else %}
+                                        {% include 'OpensoftCodeConversationBundle:PullRequest:log-status-change.html.twig' with {'logEntry': item } %}
+                                    {% endif %}
+                                </div><!-- /.bubble -->
+                            </div>
+                        {% endfor %}
+                    {% endif %}
 
-                        {{ form_rest(form) }}
-                    </fieldset>
-                </form>
+                    <h2>Activity stream</h2>
+                    {% if stream %}
+                        {% for event in stream %}
+                            {% include 'OpensoftCodeConversationBundle::action.html.twig' with {'action': event} %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <hr />
+                    <h4>Comment on this pull request</h4>
+
+                    <form action="{{ path('opensoft_codeconversation_comment_postprcomment', {'projectName': project.name, 'pullId': pullRequest.id }) }}" {{ form_enctype(form) }} method="POST">
+                        <fieldset>
+                            {{ form_errors(form) }}
+
+                            <div class="clearfix">
+                                {{ form_label(form.content) }}
+                                <div class="input">
+                                    {{ form_widget(form.content, { 'attr': {'class': 'span11', 'rows': 5} }) }}
+                                    <span class="help-block">Comments are parsed with everyone's favorite <a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> language.</span>
+                                </div>
+                            </div>
+
+                            <div class="actions">
+                                <input name="preview" class="btn" type="submit" value="Preview" />
+                                <input name="add-comment" class="btn primary" type="submit" value="Add comment" />
+
+                                {% if pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_OPEN") %}
+                                    <input name="close" class="btn danger pull-right" type="submit" value="Close Pull Request" />
+                                {% elseif pullRequest.status == constant("Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequest::STATUS_CLOSED") %}
+                                    <input name="reopen" class="btn success pull-right" type="submit" value="Reopen Pull Request" />
+                                {% endif %}
+                            </div>
+
+                            {{ form_rest(form) }}
+                        </fieldset>
+                    </form>
             </div>
+
             <div class="span2" style="text-align: center;">
                 <div>
                     {% if pullRequest.status == 2 %}

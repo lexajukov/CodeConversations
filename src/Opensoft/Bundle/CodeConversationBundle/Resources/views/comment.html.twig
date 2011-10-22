@@ -1,15 +1,9 @@
-<table>
-    <thead>
-        <tr style="background-color: #F5F5F5;">
-            <th>
-                {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': comment.author} %}
-                <span class="pull-right">{{ time_diff(comment.createdAt) }}</span>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{ comment.content | markdown}}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="comment">
+    <div class="cmeta">
+        {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': comment.author} %}
+        <span class="pull-right">{{ time_diff(comment.createdAt) }}</span>
+    </div>
+    <div class="body">
+        <div class="formatted-content">{{ comment.content | markdown}}</div>
+    </div>
+</div>
