@@ -126,7 +126,14 @@ class PullRequestController extends Controller
 
         /** @var \Redpanda\Bundle\ActivityStreamBundle\Entity\ActionManager $activityManager  */
         $activityManager = $this->container->get('activity_stream.action_manager');
-        $stream = $activityManager->findStreamByTarget($pullRequest);
+        $stream = $activityManager->findStreamBy(array(
+            'targetId'   => $pullRequest->getId(),
+            'targetType' => get_class($pullRequest),
+            'verb' => array('merged', 'closed', 'reopened')
+        ));
+        foreach ($stream as $event) {
+            $timeline->insert($event);
+        }
 //        $activityManager->
 
 

@@ -1,65 +1,63 @@
-<div class="commit">
-    <div class="body">
-        <table>
-            <thead>
-                <tr>
-                    <th style="background-color: #E0EDFF;" colspan="2">
-                        <a style="color: #000000;" href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': commit.id }) }}">{{ commit.message|truncate(80) }}</a>
-                        <span class="pull-right">{{ time_diff(commit.committedDate) }}</span>
-                    </th>
-                </tr>
-                {% if commit.message|length >= 80 %}
-                    <tr>
-                        <th style="font-size: smaller; color: #777; background-color: #EEEEEE" colspan="2">
-                            <pre>{{ commit.message }}</pre>
-                        </th>
-                    </tr>
+<table>
+    <thead>
+        <tr>
+            <th style="background-color: #E0EDFF;" colspan="2">
+                <a style="color: #000000;" href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': commit.id }) }}">{{ commit.message|truncate(80) }}</a>
+                <span class="pull-right">{{ time_diff(commit.committedDate) }}</span>
+            </th>
+        </tr>
+        {% if commit.message|length >= 80 %}
+            <tr>
+                <th style="font-size: smaller; color: #777; background-color: #EEEEEE" colspan="2">
+                    <pre>{{ commit.message }}</pre>
+                </th>
+            </tr>
+        {% endif %}
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <div class="clearfix" style="white-space: nowrap;">
+                    <span class="author-name">
+                        {% if git_author_exists(commit.authorName) %}
+                            {% set user = git_author(commit.authorName) %}
+                            {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': user} %}
+                        {% else %}
+                            {{ commit.authorName }}
+                        {% endif %}
+                    </span>
+                    authored <time class="js-relative-date" datetime="{{ commit.authoredDate|date("Y-m-d\TG:i:sO") }}" title="{{ commit.authoredDate|date("Y-m-d G:i:s") }}">{{ time_diff(commit.authoredDate) }}</time>
+                </div>
+                {% if commit.committerName != commit.authorName %}
+                    <div class="clearfix" style="white-space: nowrap;">
+                        <span class="author-name">
+                            {% if git_author_exists(commit.committerName) %}
+                                {% set user = git_author(commit.committerName) %}
+                                {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': user} %}
+                            {% else %}
+                                {{ commit.committerName }}
+                            {% endif %}
+                        </span>
+                        committed <time class="js-relative-date" datetime="{{ commit.committedDate|date("Y-m-d\TG:i:sO") }}" title="{{ commit.committedDate|date("Y-m-d G:i:s") }}">{{ time_diff(commit.committedDate) }}</time>
+                    </div>
                 {% endif %}
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="clearfix">
-                            <span class="author-name">
-                                {% if git_author_exists(commit.authorName) %}
-                                    {% set user = git_author(commit.authorName) %}
-                                    {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': user} %}
-                                {% else %}
-                                    {{ commit.authorName }}
-                                {% endif %}
-                            </span>
-                            authored <time class="js-relative-date" datetime="{{ commit.authoredDate|date("Y-m-d\TG:i:sO") }}" title="{{ commit.authoredDate|date("Y-m-d G:i:s") }}">{{ time_diff(commit.authoredDate) }}</time>
-                        </div>
-                        <div class="clearfix">
-                            <span class="author-name">
-                                {% if git_author_exists(commit.committerName) %}
-                                    {% set user = git_author(commit.committerName) %}
-                                    {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': user} %}
-                                {% else %}
-                                    {{ commit.committerName }}
-                                {% endif %}
-                            </span>
-                            committed <time class="js-relative-date" datetime="{{ commit.committedDate|date("Y-m-d\TG:i:sO") }}" title="{{ commit.committedDate|date("Y-m-d G:i:s") }}">{{ time_diff(commit.committedDate) }}</time>
-                        </div>
-                    </td>
-                    <td style="text-align: right;" align="right">
-                        <div class="clearfix">
-                            tree <span class="sha">{{ commit.tree }}</span>
-                        </div>
-                        <div class="clearfix">
-                            commit <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': commit.id }) }}" class="sha-block"><span class="sha">{{ commit.id }}</span></a>
-                        </div>
-                        <div class="clearfix">
-                            {{ commit.parents|length }} parent{% if commit.parents|length > 1%}s{% endif %}
-                            {% for id in commit.parents %}
-                                <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': id }) }}" class="sha-block">
-                                    <span class="sha">{{ id }}</span>
-                                </a>
-                            {% endfor %}
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+            </td>
+            <td style="text-align: right;" align="right">
+                <div class="clearfix">
+
+                    {{ commit.parents|length }} parent{% if commit.parents|length > 1%}s{% endif %}
+                    {% for id in commit.parents %}
+                        <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': id }) }}" class="sha-block">
+                            <span class="sha">{{ id|truncate(8) }}</span>
+                        </a>
+                    {% endfor %}
+                    |
+                    commit
+                    <a href="{{ path('opensoft_codeconversation_project_viewcommit', {'projectName': project.name, 'sha1': commit.id }) }}" class="sha-block">
+                        <span class="sha">{{ commit.id|truncate(8) }}</span>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>

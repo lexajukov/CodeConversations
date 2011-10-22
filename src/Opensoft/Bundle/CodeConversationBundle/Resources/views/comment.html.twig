@@ -1,9 +1,26 @@
-<div class="comment">
-    <div class="cmeta">
-        {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': comment.author} %}
-        <span class="pull-right">{{ time_diff(comment.createdAt) }}</span>
-    </div>
-    <div class="body">
-        <div class="formatted-content">{{ comment.content | markdown}}</div>
+<div class="avatar-bubble js-comment-container">
+    <span class="avatar">
+        <img src="{{ gravatar(comment.author.email, 48) }}" />
+        <span class="overlay size-48"></span>
+    </span>
+    <div class="bubble">
+
+        <div class="comment">
+            <div class="cmeta">
+                <div class="author">
+                    <a href="{{ path('opensoft_codeconversation_user_show', {'usernameCanonical': comment.author.usernameCanonical}) }}">{{ comment.author.username }}</a> made some comments
+
+                    <span class="pull-right">
+                        <time class="js-relative-date" datetime="{{ comment.createdAt|date() }}" title="{{ comment.createdAt|date() }}">
+                            {{ time_diff(comment.createdAt) }}
+                        </time>
+                    </span>
+                </div>
+
+            </div>
+            <div class="body">
+                <div class="formatted-content">{{ comment.content | markdown}}</div>
+            </div>
+        </div>
     </div>
 </div>

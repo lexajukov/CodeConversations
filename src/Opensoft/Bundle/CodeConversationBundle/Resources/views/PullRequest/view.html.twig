@@ -38,65 +38,21 @@
         <div class="active row" id="code-conversation">
             <div class="span14">
 
-                    <div class="avatar-bubble js-comment-container">
-                      <span class="avatar">
-                        <img src="{{ gravatar(pullRequest.author.email, 48) }}" />
-                        <span class="overlay size-48"></span>
-                      </span>
+                    {% include 'OpensoftCodeConversationBundle:PullRequest:description.html.twig' with {'pullRequest': pullRequest } %}
 
-                      <div class="bubble">
-                        <div class="comment starting-comment " id="issue-1837176">
-                          <div class="body">
-                            <p class="author"><a href="/lsmith77">{{ pullRequest.author.username }}</a> opened this pull request <time class="js-relative-date" datetime="{{ pullRequest.createdAt|date() }}" title="{{ pullRequest.createdAt|date() }}">{{ pullRequest.createdAt|date("F j, Y") }}</time></p>
-                            <h2 class="content-title">{{ pullRequest.title }}</h2>
-                            <div class="formatted-content">
-                              <div class="content-body wikistyle markdown-format">{{ pullRequest.description|markdown }}</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div><!-- /.bubble -->
-                    </div>
-
-                    <table>
-                        <thead>
-                            <tr style="background-color: #FFF0E0;">
-                                <th>
-                                    <span>{{ pullRequest.title }}</span>
-                                    <span class="pull-right">opened on {{ pullRequest.createdAt|date("F j, Y") }} at {{ pullRequest.createdAt|date("G:i:s") }}</span>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{ pullRequest.description|markdown }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
 
                     {% if eventTimeline %}
                         {% for item in eventTimeline %}
-                            <div class="avatar-bubble js-comment-container">
-                                <span class="avatar">
-                                    <img src="{{ gravatar(pullRequest.author.email, 48) }}" />
-                                    <span class="overlay size-48"></span>
-                                </span>
-                                <div class="bubble">
-                                    {% if item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Model\\Commit' %}
-                                        {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': item } %}
-                                    {% elseif item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequestComment' %}
-                                        {% include 'OpensoftCodeConversationBundle::comment.html.twig' with {'comment': item } %}
-                                    {% else %}
-                                        {% include 'OpensoftCodeConversationBundle:PullRequest:log-status-change.html.twig' with {'logEntry': item } %}
-                                    {% endif %}
-                                </div><!-- /.bubble -->
-                            </div>
-                        {% endfor %}
-                    {% endif %}
 
-                    <h2>Activity stream</h2>
-                    {% if stream %}
-                        {% for event in stream %}
-                            {% include 'OpensoftCodeConversationBundle::action.html.twig' with {'action': event} %}
+                            {% if not item.class is defined %}
+                                {% include 'OpensoftCodeConversationBundle:PullRequest:action.html.twig' with {'action': item} %}
+                            {% elseif item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Model\\Commit' %}
+                                {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': item } %}
+                            {% elseif item.class == 'Opensoft\\Bundle\\CodeConversationBundle\\Entity\\PullRequestComment' %}
+                                {% include 'OpensoftCodeConversationBundle::comment.html.twig' with {'comment': item } %}
+                            {% else %}
+                                {% include 'OpensoftCodeConversationBundle:PullRequest:log-status-change.html.twig' with {'logEntry': item } %}
+                            {% endif %}
                         {% endfor %}
                     {% endif %}
 
