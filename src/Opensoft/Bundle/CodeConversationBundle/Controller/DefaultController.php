@@ -30,7 +30,7 @@ class DefaultController extends Controller
      */
     public function aboutAction()
     {
-        return array();
+        return array('about' => file_get_contents(__DIR__.'/../Resources/doc/about.md'));
     }
 
     /**
