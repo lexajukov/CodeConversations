@@ -103,6 +103,14 @@
     git=http://github.com/Behat/MinkBundle.git
     target=/bundles/Behat/MinkBundle
 
+[goutte]
+    git=https://github.com/fabpot/Goutte.git
+    target=/goutte
+    
+[zend]
+    git=https://github.com/zendframework/zf2.git
+    target=/zend
+
 [JMSDebuggingBundle]
     git=https://github.com/schmittjoh/JMSDebuggingBundle.git
     target=/bundles/JMS/DebuggingBundle
