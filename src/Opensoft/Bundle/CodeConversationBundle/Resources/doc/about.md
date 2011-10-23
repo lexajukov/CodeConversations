@@ -58,24 +58,24 @@ Install the database by running the following commands:
 Add a symlink in your local web directory to the public directory of CodeConversations
 
 	$  cd /var/www
-	$  sudo ln -s /path/to/CodeConversations/public codeconversations
+	$  sudo ln -s /path/to/CodeConversations/web codeconversations
 
-At this point, the code should be live.  Verify this by visiting http://localhost/codeconversations in the browser to
+At this point, the code should be live.  Verify this by visiting `http://localhost/codeconversations` in the browser to
 ensure that you get a login prompt.
 
 Up until this point, there are no projects being tracked by CodeConversations, let's fix that:
 
 	$  ./app/console opensoft:code:add-project MyProject http://path/to/MyProject.git
 
-The `opensoft:code:add-project` command will set up CodeConversations to allow it to listen to this git repository and
-provide functionality for tracking MyProject. Any number of projects can be added. CodeConversations also will need to
+The `opensoft:code:add-project` command will set up Code Conversations to allow it to listen to this git repository and
+provide functionality for tracking MyProject. Any number of projects can be added. Code Conversations also will need to
 set up synchronization for existing projects.  This will allow it to track changes to this repository over time.
 
 Presently, synchronization is done with a single crontab entry:
 
      * * * * * /path/to/CodeConversations/app/console opensoft:code:sync
 
-This will allow CodeConversations to attempt to synchronize with this all projects it knows about once every minute.  This
+This will allow Code Conversations to attempt to synchronize with this all projects it knows about once every minute.  This
 will allow it to track commits and branches as they are added to the project.
 
 Usage
@@ -83,7 +83,7 @@ Usage
 
 Using CodeConversations is simple.
 
-	1.  Register with CodeConversations by visiting the project with your web browser.  If you don't have a user, create
+	1.  Register with Code Conversations by visiting the project with your web browser.  If you don't have a user, create
 	    a new one by clicking on the "Register here" link on the login page.  After following a few simple instructions
 	    about adding your username and password, you'll be logged in in no time.
 
@@ -126,7 +126,8 @@ code style, bugs, or by merging with the base branch changes at any time, and th
 CodeConversations.
 
 Once project leads are satisfied with the pull request, they'll check out the code themselves, ensure that tests pass
-and nothing major is broken, then merge this code into its destined location.
+and nothing major is broken, then merge this code into its destined location.  Merges should be performed with the --no-ff
+flag.
 
 Once CodeConversations detects the merge, the pull request will be closed.
 
