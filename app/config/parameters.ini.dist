@@ -16,4 +16,4 @@
 
     locale            = en
 
-    secret            = f7fc2428bcd7b546262cf73278aa102a4
+    secret            = ThisCodeIsNotSoSecretChangeIt
