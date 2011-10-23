@@ -25,6 +25,7 @@
                     </select>
                 </form>
                 <a class="btn" href="{{ path('opensoft_codeconversation_project_commits_1', {'projectName': project.name, 'branchName': branch.name}) }}">Commits</a></li>
+                <a class="btn" href="{{ path('opensoft_codeconversation_project_activity', {'projectName': project.name}) }}">Activity</a></li>
                 <a class="btn" href="{{ path('opensoft_codeconversation_pullrequest_list', {'projectName': project.name, 'open': 1}) }}">Active Pull Requests ({{ openPullRequests|length|default(0) }})</a>
             </td>
         </tr>

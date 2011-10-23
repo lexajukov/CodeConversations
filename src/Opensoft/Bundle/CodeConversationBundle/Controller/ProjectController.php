@@ -138,6 +138,24 @@ class ProjectController extends Controller
     }
 
     /**
+     * @Route("/{projectName}/activity")
+     * @Template()
+     */
+    public function activityAction(ProjectInterface $project)
+    {
+        $activityManager = $this->container->get('activity_stream.action_manager');
+        $stream = $activityManager->findStreamBy(array(
+            'actionObjectId' => $project->getId(),
+            'actionObjectType' => get_class($project)
+        ), array('createdAt' => 'DESC'), 50);
+        
+        return array(
+            'project' => $project,
+            'stream' => $stream,
+        );
+    }
+
+    /**
      * @Route("/{projectName}/commit/{sha1}")
      * @Template()
      */

@@ -16,7 +16,7 @@ class DefaultController extends Controller
     {
         /** @var \Redpanda\Bundle\ActivityStreamBundle\Model\ActionManagerInterface $activityManager **/
         $activityManager = $this->container->get('activity_stream.action_manager');
-        $stream = $activityManager->findStreamBy(array(), array('createdAt' => 'DESC'));
+        $stream = $activityManager->findStreamBy(array(), array('createdAt' => 'DESC'), 50);
 
         return array(
             'projects' => $this->getProjectManager()->findProjects(),

@@ -1,0 +1,46 @@
+{% extends 'OpensoftCodeConversationBundle::layout.html.twig' %}
+
+{% block content %}
+
+    {% render 'OpensoftCodeConversationBundle:Project:header' with {'project': project} %}
+
+    <div class="row">
+        <div class="span16">
+            <h2>Recent activity on {{ project.name }}</h2>
+            <div class="activity-group">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Who</th>
+                            <th>did something</th>
+                            <th>to</th>
+                            <th>some time ago</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for action in stream %}
+                        <tr class="activity-row">
+                            <td>
+                                <a href="{{ activity_stream_get_absolute_url(action.actor) }}">
+                                    {% include 'OpensoftCodeConversationBundle::useravatar.html.twig' with {'user': action.actor} %}
+                                </a>
+                            </td>
+                            <td>
+                                {{ action.verb }}
+                            </td>
+                            <td>
+                                {% if action.hasTarget %}
+                                    <a href="{{ activity_stream_get_absolute_url(action.target) }}">{{ action.target }}</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <time class="js-relative-date" datetime="{{ action.createdAt|date("Y-m-d\TG:i:sO") }}" title="{{ action.createdAt|date("Y-m-d G:i:s")}}">{{ time_diff(action.createdAt) }}</time>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
