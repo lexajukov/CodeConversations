@@ -164,9 +164,9 @@ abstract class BaseCommand extends ContainerAwareCommand
                             if ($user) {
                                 $action = $activityManager->createAction();
                                 $action->setActor($user);
-                                $action->setActorType('Opensoft\Bundle\CodeConversationBundle\Entity\User');
                                 $action->setVerb('merged');
                                 $action->setTarget($pullRequest);
+                                $action->setActionObject($pullRequest->getProject());
 
                                 $activityManager->updateAction($action);
                             }
@@ -199,7 +199,6 @@ abstract class BaseCommand extends ContainerAwareCommand
                 }
                 $action->setTarget($branch);
                 // Stupid proxy object gets put here... short circuit that....
-                $action->setTargetType('Opensoft\Bundle\CodeConversationBundle\Entity\Branch');
                 $action->setActionObject($project);
 
                 $output->writeln('>>>> recording ' . $userDefinition['count'] . ' commits for user ' . $username);

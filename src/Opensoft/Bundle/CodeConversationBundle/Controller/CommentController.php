@@ -52,15 +52,15 @@ class CommentController extends Controller
                     $pullRequest->setStatus(PullRequest::STATUS_CLOSED);
                     $em->persist($pullRequest);
                     $this->get('session')->setFlash('error', 'This pull request was closed.');
-                    $activityManager->send("closed", $pullRequest);
+                    $activityManager->send("closed", $pullRequest, $pullRequest->getProject());
                 } elseif ($request->get('reopen')) {
                     $pullRequest->setStatus(PullRequest::STATUS_OPEN);
                     $em->persist($pullRequest);
                     $this->get('session')->setFlash('success', 'This pull request was reopened.');
-                    $activityManager->send("reopened", $pullRequest);
+                    $activityManager->send("reopened", $pullRequest, $pullRequest->getProject());
                 } else {
                     $this->get('session')->setFlash('success', 'Your comment was added to this pull request.');
-                    $activityManager->send("commented on", $pullRequest);
+                    $activityManager->send("commented on", $pullRequest, $pullRequest->getProject());
                 }
 
                 $em->persist($comment);
@@ -111,7 +111,7 @@ class CommentController extends Controller
 
                 /** @var \Redpanda\Bundle\ActivityStreamBundle\Entity\ActionManager $activityManager  */
                 $activityManager = $this->container->get('activity_stream.action_manager');
-                $activityManager->send('commented on', $project, $comment);
+                $activityManager->send('commented on', $comment, $project);
 
                 $this->get('session')->setFlash('success', 'Your comment was added to commit '.$sha1.'.');
 

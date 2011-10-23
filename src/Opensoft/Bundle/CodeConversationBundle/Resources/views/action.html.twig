@@ -7,7 +7,7 @@
         <a href="{{ activity_stream_get_absolute_url(action.target) }}">{{ action.target }}</a>
     {% endif %}
     {% if action.hasActionObject %}
-        on <a href="{{ activity_stream_get_absolute_url(action.actionObject) }}">{{ action.actionObject }}</a>
+        in <a href="{{ activity_stream_get_absolute_url(action.actionObject) }}">{{ action.actionObject }}</a>
     {% endif %}
     <time class="js-relative-date" datetime="{{ action.createdAt|date("Y-m-d\TG:i:sO") }}" title="{{ action.createdAt|date("Y-m-d G:i:s")}}">{{ time_diff(action.createdAt) }}</time>
 </div>
