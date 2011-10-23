@@ -102,3 +102,11 @@
 [MinkBundle]
     git=http://github.com/Behat/MinkBundle.git
     target=/bundles/Behat/MinkBundle
+
+[JMSDebuggingBundle]
+    git=https://github.com/schmittjoh/JMSDebuggingBundle.git
+    target=/bundles/JMS/DebuggingBundle
+
+[ElaoWebProfilerExtraBundle]
+    git=https://github.com/Elao/WebProfilerExtraBundle.git
+    target=/bundles/Elao/WebProfilerExtraBundle
