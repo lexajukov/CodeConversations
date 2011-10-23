@@ -35,7 +35,13 @@ there is huge demand)
 	- Integration with (insert your favorite bug tracking software here)
 
 Code Conversations is brought to you by [Richard Fullmer](http://github.com/richardfullmer) at Opensoft.  Fork the project
-at `git:CodeConversations.git` and improve it.
+at `git:CodeConversations.git` and improve it.  Once we've done some pilot testing of the code, and iterated on improvements
+internally, we'll release this code via our [public github account](http://github.com/opensoft).
+
+Issues
+======
+
+Project bugs, issues, feature requests should be issued and tracked at [JIRA](https://jira.farheap.com/browse/CC)
 
 Installation
 =============
