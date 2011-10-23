@@ -12,3 +12,18 @@ web_profiler:
 
 swiftmailer:
     disable_delivery: true
+
+# Enables Mink and configure it
+mink:
+    base_url:  http://localhost/codeconversations/app_test.php/
+    default_session:    goutte
+    goutte:    ~
+
+# Enables Behat
+behat: ~
+
+security:
+    firewalls:
+        main:
+            form_login:
+                provider: in_memory

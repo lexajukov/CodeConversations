@@ -10,6 +10,7 @@ $loader->registerNamespaces(array(
     'JMS'              => __DIR__.'/../vendor/bundles',
     'FOS'              => __DIR__.'/../vendor/bundles',
     'Knp'              => __DIR__.'/../vendor/bundles',
+    'Elao'             => __DIR__.'/../vendor/bundles',
     'Ornicar'          => __DIR__.'/../vendor/bundles',
     'Redpanda'         => __DIR__.'/../vendor/bundles',
     'Doctrine\\Common' => __DIR__.'/../vendor/doctrine-common/lib',
@@ -17,7 +18,14 @@ $loader->registerNamespaces(array(
     'Doctrine'         => __DIR__.'/../vendor/doctrine/lib',
     'Monolog'          => __DIR__.'/../vendor/monolog/src',
     'Assetic'          => __DIR__.'/../vendor/assetic/src',
+    'Goutte'           => __DIR__.'/../vendor/goutte/src',
+    'Zend'             => __DIR__.'/../vendor/zend/library',
     'Metadata'         => __DIR__.'/../vendor/metadata/src',
+    'Behat\\Behat'     => __DIR__.'/../vendor/behat/behat/src',
+    'Behat\\Gherkin'   => __DIR__.'/../vendor/behat/gherkin/src',
+    'Behat\\BehatBundle' => __DIR__.'/../vendor/bundles',
+    'Behat\\Mink'      => __DIR__.'/../vendor/behat/mink/src',
+    'Behat\\MinkBundle' => __DIR__.'/../vendor/bundles',
 ));
 $loader->registerPrefixes(array(
     'Twig_Extensions_' => __DIR__.'/../vendor/twig-extensions/lib',
