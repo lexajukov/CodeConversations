@@ -82,3 +82,23 @@
 
 [php-git-repo]
     git=http://github.com/ornicar/php-git-repo.git
+
+[behat]
+    git=http://github.com/Behat/Behat.git
+    target=/behat/behat
+
+[mink]
+    git=http://github.com/Behat/Mink.git
+    target=/behat/mink
+
+[gherkin]
+    git=https://github.com/Behat/Gherkin.git
+    target=/behat/gherkin
+
+[BehatBundle]
+    git=http://github.com/Behat/BehatBundle.git
+    target=/bundles/Behat/BehatBundle
+
+[MinkBundle]
+    git=http://github.com/Behat/MinkBundle.git
+    target=/bundles/Behat/MinkBundle
