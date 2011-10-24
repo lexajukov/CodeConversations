@@ -66,6 +66,10 @@ Add a symlink in your local web directory to the public directory of CodeConvers
 	$  cd /var/www
 	$  sudo ln -s /path/to/CodeConversations/web codeconversations
 
+Make sure that apache can write to the cache and log directories
+
+	$  sudo chmod -R 777 app/cache app/logs
+
 At this point, the code should be live.  Verify this by visiting `http://localhost/codeconversations` in the browser to
 ensure that you get a login prompt.
 
