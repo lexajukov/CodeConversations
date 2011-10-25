@@ -33,7 +33,7 @@ class SynchronizeCommand extends BaseCommand
         if ($projectName = $input->getArgument('name')) {
             $projects = array($projectManager->findProjectBy(array('name'=>$projectName)));
         } else {
-            $projects = $projectManager->findProjects();
+            $projects = $projectManager->findProjectBy(array());
         }
 
         if (empty($projects)) {
