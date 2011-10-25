@@ -36,7 +36,7 @@ class ProjectController extends Controller
     public function dropdownMenuAction()
     {
         return array(
-            'projects' => $this->getProjectManager()->findProjects()
+            'projects' => $this->getProjectManager()->findProjectBy(array(), array('name' => 'ASC'))
         );
     }
 

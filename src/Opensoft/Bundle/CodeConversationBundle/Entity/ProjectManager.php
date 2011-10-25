@@ -60,17 +60,9 @@ class ProjectManager extends BaseProjectManager
      * @param array $criteria
      * @return \Opensoft\Bundle\CodeConversationBundle\Entity\Project
      */
-    public function findProjectBy(array $criteria)
+    public function findProjectBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
     {
-        return $this->entityRepository->findBy($criteria);
-    }
-
-    /**
-     * @return \Opensoft\Bundle\CodeConversationBundle\Entity\Project[]
-     */
-    public function findProjects()
-    {
-        return $this->entityRepository->findAll();
+        return $this->entityRepository->findBy($criteria, $orderBy, $limit, $offset);
     }
 
     /**

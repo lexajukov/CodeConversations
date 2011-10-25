@@ -29,12 +29,7 @@ interface ProjectManagerInterface
      * @param array $criteria
      * @return ProjectInterface
      */
-    public function findProjectBy(array $criteria);
-
-    /**
-     * @return ProjectInterface[]
-     */
-    public function findProjects();
+    public function findProjectBy(array $criteria, array $orderBy = null, $limit = null, $offset = null);
 
     /**
      * @param ProjectInterface $project

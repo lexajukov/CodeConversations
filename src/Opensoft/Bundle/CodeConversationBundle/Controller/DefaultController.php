@@ -19,7 +19,7 @@ class DefaultController extends Controller
         $stream = $activityManager->findStreamBy(array(), array('createdAt' => 'DESC'), 50);
 
         return array(
-            'projects' => $this->getProjectManager()->findProjects(),
+            'projects' => $this->getProjectManager()->findProjectBy(array(), array('name' => 'ASC')),
             'siteStream' => $stream
         );
     }
