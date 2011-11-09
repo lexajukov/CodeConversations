@@ -7,7 +7,6 @@ namespace Opensoft\Bundle\CodeConversationBundle\Entity;
 
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestManager as BasePullRequestManager;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestInterface;
-use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
 use Symfony\Component\Validator\Constraint;
 use Doctrine\ORM\EntityManager;
 
@@ -34,7 +33,6 @@ class PullRequestManager extends BasePullRequestManager
     protected $repository;
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepo
      * @param \Doctrine\ORM\EntityManager $em
      * @param string $class
      */

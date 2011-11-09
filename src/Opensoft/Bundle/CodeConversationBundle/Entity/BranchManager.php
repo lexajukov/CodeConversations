@@ -34,7 +34,6 @@ class BranchManager extends BaseBranchManager
     protected $repository;
 
     /**
-     * @param \Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface $sourceCodeRepo
      * @param \Doctrine\ORM\EntityManager $em
      * @param string $class
      */

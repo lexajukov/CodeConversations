@@ -5,7 +5,6 @@
 
 namespace Opensoft\Bundle\CodeConversationBundle\Model;
 
-use Opensoft\Bundle\CodeConversationBundle\SourceCode\RepositoryInterface;
 use Redpanda\Bundle\ActivityStreamBundle\Streamable\StreamableInterface;
 
 /**
