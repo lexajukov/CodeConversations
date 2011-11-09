@@ -99,7 +99,7 @@ abstract class BaseCommand extends ContainerAwareCommand
                 }
 
                 $branch = $branchManager->createBranch();
-                $branch->setName(str_replace($remote->getName().'/', '', $newBranch));
+                $branch->setName(substr($newBranch, strlen($remote->getName().'/')));
                 $branch->setRemote($remote);
                 $branch->setTip($repo->getTip($newBranch));
 
