@@ -24,6 +24,11 @@ security:
                 provider: fos_userbundle
             logout:       true
             anonymous:    true
+            remember_me:
+                key:      7869O<6U3nI~C1I # random
+                lifetime: 604800 # 7 days
+                path:     /
+                domain:   ~
 
     access_control:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
