@@ -23,4 +23,14 @@ interface UserInterface extends BaseUserInterface
      * @return string
      */
     public function getGitAlias();
+
+    /**
+     * @return string
+     */
+    public function setGravatar($gravatar);
+
+    /**
+     * @return string
+     */
+    public function getGravatar();
 }

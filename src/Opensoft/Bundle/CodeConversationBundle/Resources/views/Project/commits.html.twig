@@ -22,7 +22,7 @@
                                 <div class="pull-left">
                                     {% if git_author_exists(commit.authorName) %}
                                         {% set user = git_author(commit.authorName) %}
-                                        <img style="margin: 0px 0px -4px 0px; padding-right: 6px;" src="{{ gravatar(user.email, 40) }}" />
+                                        <img style="margin: 0px 0px -4px 0px; padding-right: 6px;" src="{{ gravatar(user.gravatar, 40) }}" />
                                     {% else %}
                                         <img style="margin: 0px 0px -4px 0px; padding-right: 6px;" src="{{ gravatar(commit.authorEmail, 40) }}" />
                                     {% endif %}

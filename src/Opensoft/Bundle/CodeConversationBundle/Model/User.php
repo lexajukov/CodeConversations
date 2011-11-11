@@ -26,10 +26,31 @@ class User extends BaseUser implements UserInterface, StreamableInterface
      */
     protected $gitAlias;
 
+    /**
+     * @var string
+     */
+    protected $gravatar;
+
     public function __construct()
     {
         parent::__construct();
         // your own logic
+    }
+
+    /**
+     * @param string $gravatar
+     */
+    public function setGravatar($gravatar)
+    {
+        $this->gravatar = $gravatar;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGravatar()
+    {
+        return $this->gravatar;
     }
 
     /**
@@ -47,6 +68,8 @@ class User extends BaseUser implements UserInterface, StreamableInterface
     {
         return $this->gitAlias;
     }
+
+    
 
     /**
      * Return an array for the form
@@ -67,6 +90,4 @@ class User extends BaseUser implements UserInterface, StreamableInterface
             )
         );
     }
-
-
 }

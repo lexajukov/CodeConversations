@@ -12,6 +12,8 @@
 
         <field name="gitAlias" type="string" nullable="true" />
 
+        <field name="gravatar" type="string" nullable="true" />
+
     </entity>
 
 </doctrine-mapping>

@@ -42,7 +42,8 @@ class ProfileFormType extends BaseType
         $builder
             ->add('username')
             ->add('email', 'email')
-            ->add('gitAlias')
+            ->add('gitAlias', null, array('label' => 'Git Alias', 'required' => false))
+            ->add('gravatar', null, array('required' => false))
         ;
     }
 }

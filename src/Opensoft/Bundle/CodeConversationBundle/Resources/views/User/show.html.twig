@@ -6,12 +6,12 @@
         <h2>Profile</h2>
         <p>{{ user.gitAlias }}</p>
 
-        <img src="{{ gravatar(user.email) }}" alt="My gravatar image" />
+        <img src="{{ gravatar(user.gravatar) }}" alt="My gravatar image" />
         <p>Show more user data here that other people should see...</p>
 
         {% if user.username == app.user.username %}
             <div class="actions">
-                <a class="btn primary" href="{{ path('fos_user_profile_edit') }}">Edit my profile</a>
+                <a class="btn primary" href="{{ path('fos_user_profile_edit') }}">Manage my profile</a>
             </div>
         {% endif %}
 

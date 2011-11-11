@@ -1,5 +1,3 @@
-{#{% form_theme form theme %}#}
-
 {% form_theme form 'OpensoftCodeConversationBundle:Form:fields.html.twig' %}
 
 <form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="fos_user_profile_edit">
@@ -24,6 +22,18 @@
             <div class="input">
                 {{ form_widget(form.user.gitAlias) }}
                 <span class="help-block">The git author name to map to</span>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <label for="fos_user_profile_form_user_gravatar">Avatar
+                {% if form.user.gravatar.get('value') %}
+                    <img src="{{ gravatar(form.user.gravatar.get('value')) }}" alt="My gravatar image" />
+                {% endif %}
+            </label>
+            <div class="input">
+                {{ form_widget(form.user.gravatar) }}
+                <span class="help-block">If you have an avatar at <a href="http://gravatar.com">gravatar.com</a>, specify your gravatar email address</span>
             </div>
         </div>
 
