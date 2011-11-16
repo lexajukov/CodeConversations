@@ -1,6 +1,6 @@
-{% if fullDiff.fileDiffs|length > 40 %}
-    <p>More than 40 diffs... will kill twig...</p>
-{% else %}
+{#{% if fullDiff.fileDiffs|length > 40 %}#}
+    {#<p>More than 40 diffs... will kill twig...</p>#}
+{#{% else %}#}
     {% set i = 0 %}
     {% for diff in fullDiff.filediffs %}
         <div>
@@ -82,5 +82,5 @@
         </div>
         {% set i = i + 1 %}
     {% endfor %}
-{% endif %}
+{#{% endif %}#}
 
