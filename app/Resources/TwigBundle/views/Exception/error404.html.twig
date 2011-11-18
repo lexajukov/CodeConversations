@@ -1,0 +1,18 @@
+{% extends 'OpensoftCodeConversationBundle::layout.html.twig' %}
+
+{% block title %}An Error Occurred: {{ status_text }}{% endblock %}
+
+{% block content %}
+
+<div class="hero-unit">
+    <h1>four o' four</h1>
+
+    <p>
+        We can't seem to find this page.  Try checking the URL in your browser.
+    </p>
+
+    <br />
+    <a class="btn primary" href="{{ path('opensoft_codeconversation_default_homepage') }}">Bring me somewhere safe &raquo;</a>
+</div>
+
+{% endblock %}

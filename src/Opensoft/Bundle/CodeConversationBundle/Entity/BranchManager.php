@@ -57,7 +57,7 @@ class BranchManager extends BaseBranchManager
     }
 
 
-    public function findBranchByProjectNameAndRemoteNameAndBranchName($projectName, $remoteName, $branchName)
+    public function findBranchByProjectNameAndRemoteNameAndBranchName($projectName, $remoteName, $branchName, $enabled = true)
     {
         return $this->repository->createQueryBuilder('b')
                 ->join('b.remote', 'r')
@@ -65,9 +65,11 @@ class BranchManager extends BaseBranchManager
                 ->where('r.name = :remoteName')
                 ->andWhere('p.name = :projectName')
                 ->andWhere('b.name = :branchName')
+                ->andWhere('b.enabled = :enabled')
                 ->setParameter('branchName', $branchName)
                 ->setParameter('remoteName', $remoteName)
                 ->setParameter('projectName', $projectName)
+                ->setParameter('enabled', $enabled)
                 ->getQuery()
                 ->getOneOrNullResult();
     }

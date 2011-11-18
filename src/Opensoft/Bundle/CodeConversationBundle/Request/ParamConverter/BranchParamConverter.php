@@ -55,7 +55,7 @@ class BranchParamConverter implements ParamConverterInterface
         $branch = $this->branchManager->findBranchByProjectNameAndRemoteNameAndBranchName($projectName, $remoteName, $branchName);
 
         if (null === $branch) {
-            throw new NotFoundHttpException(sprintf('Branch with name "%s" was not found for project "%s%', $branchName, $projectName));
+            throw new NotFoundHttpException(sprintf('Branch with name "%s" was not found for project "%s"', $branchName, $projectName));
         }
 
         $request->attributes->set($configuration->getName(), $branch);

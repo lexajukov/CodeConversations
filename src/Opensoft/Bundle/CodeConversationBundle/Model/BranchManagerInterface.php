@@ -31,11 +31,12 @@ interface BranchManagerInterface
     public function findEnabledBranchesByProject(ProjectInterface $project);
 
     /**
-     * @param string $projectName
-     * @param string $remoteName
-     * @param string $branchName
+     * @param string  $projectName
+     * @param string  $remoteName
+     * @param string  $branchName
+     * @param boolean $enabled
      */
-    public function findBranchByProjectNameAndRemoteNameAndBranchName($projectName, $remoteName, $branchName);
+    public function findBranchByProjectNameAndRemoteNameAndBranchName($projectName, $remoteName, $branchName, $enabled = true);
 
     /**
      * @param BranchInterface $branch

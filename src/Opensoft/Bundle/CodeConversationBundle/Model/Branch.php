@@ -137,13 +137,20 @@ class Branch implements BranchInterface
      */
     public function getAbsolutePathParams()
     {
-        return array(
-            'route' => 'opensoft_codeconversation_project_commits_1',
-            'parameters' => array(
-                'projectName' => $this->getRemote()->getProject()->getName(),
-                'branchName' => $this->getName(),
-            )
-        );
+        // only show real link for enabled branches
+        if ($this->enabled) {
+            $path = array(
+                'route' => 'opensoft_codeconversation_project_commits_1',
+                'parameters' => array(
+                    'projectName' => $this->getRemote()->getProject()->getName(),
+                    'branchName' => $this->getName(),
+                )
+            );
+        } else {
+            $path = array();
+        }
+
+        return $path;
     }
 
     public function __toString()
