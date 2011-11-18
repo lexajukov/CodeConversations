@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    {% render 'OpensoftCodeConversationBundle:Project:header' with {'project': project, 'branch': branch} %}
+    {% render 'OpensoftCodeConversationBundle:Project:header' with {'project': project, 'branch': branch, 'active': 'files'} %}
 
     {% include 'OpensoftCodeConversationBundle::commit.html.twig' with {'commit': recentCommit} %}
 

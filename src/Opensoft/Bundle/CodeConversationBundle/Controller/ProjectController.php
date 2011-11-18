@@ -44,7 +44,7 @@ class ProjectController extends Controller
      * @Route("/project-header/{projectName}/tree/{branchName}")
      * @Template()
      */
-    public function headerAction(ProjectInterface $project, BranchInterface $branch = null)
+    public function headerAction(ProjectInterface $project, BranchInterface $branch = null, $active = null)
     {
         if (null === $branch) {
             $branch = $project->getDefaultRemote()->getHeadBranch();
@@ -59,6 +59,7 @@ class ProjectController extends Controller
         return array(
             'project' => $project,
             'branch' => $branch,
+            'active' => $active,
             'enabledBranches' => $branchManager->findEnabledBranchesByProject($project),
             'openPullRequests' => $openPullRequests,
         );
