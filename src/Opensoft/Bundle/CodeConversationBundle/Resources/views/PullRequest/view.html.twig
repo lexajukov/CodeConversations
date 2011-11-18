@@ -109,17 +109,20 @@
 
         </div>
 
-        <div id="commits">
-            {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': commits} %}
+        <div id="commits" class="row">
+            <div class="span16">
+                {% include 'OpensoftCodeConversationBundle::commit-table.html.twig' with {'commits': commits} %}
+            </div>
         </div>
 
 
-        <div id="full-diff">
-
-            {% if fullDiff %}
-                {% include 'OpensoftCodeConversationBundle::diffs-table.html.twig' with {'fullDiff': fullDiff} %}
-                {% include 'OpensoftCodeConversationBundle::diffs-full.html.twig' with {'fullDiff': fullDiff} %}
-            {% endif %}
+        <div id="full-diff" class="row">
+            <div class="span16">
+                {% if fullDiff %}
+                    {% include 'OpensoftCodeConversationBundle::diffs-table.html.twig' with {'fullDiff': fullDiff} %}
+                    {% include 'OpensoftCodeConversationBundle::diffs-full.html.twig' with {'fullDiff': fullDiff} %}
+                {% endif %}
+            </div>
         </div>
     </div>
 
