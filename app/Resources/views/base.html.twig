@@ -81,7 +81,7 @@
 
           {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
               <div class="pull-right">
-                <span class="brand"><a href=" {{ path('opensoft_codeconversation_user_show', {'usernameCanonical': app.user.username}) }}">{{ app.user.username }}</a></span>
+                <span class="brand"><a href=" {{ path('opensoft_codeconversation_user_show', {'usernameCanonical': app.user.usernameCanonical}) }}">{{ app.user.username }}</a></span>
                 <a style="margin-top: 5px;" href="{{ path('fos_user_security_logout') }}" class="btn primary">Sign out</a>
               </div>
           {% else %}
