@@ -10,6 +10,7 @@ if (!in_array(@$_SERVER['REMOTE_ADDR'], array(
     '127.0.0.1',
     '10.1.6.90', // richard windows
     '10.1.161.19', // richard vegas windows
+    '192.168.1.75', // richard home windows
     '::1',
 ))) {
     header('HTTP/1.0 403 Forbidden');
