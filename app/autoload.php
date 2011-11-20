@@ -30,6 +30,7 @@ $loader->registerNamespaces(array(
 $loader->registerPrefixes(array(
     'Twig_Extensions_' => __DIR__.'/../vendor/twig-extensions/lib',
     'Twig_'            => __DIR__.'/../vendor/twig/lib',
+    'PHPGit_'          => __DIR__.'/../vendor/php-git-repo/lib',
 ));
 
 // intl
@@ -54,7 +55,4 @@ AnnotationRegistry::registerFile(__DIR__.'/../vendor/doctrine/lib/Doctrine/ORM/M
 // the lazy loading of the init file (which is expensive)
 require_once __DIR__.'/../vendor/swiftmailer/lib/classes/Swift.php';
 Swift::registerAutoload(__DIR__.'/../vendor/swiftmailer/lib/swift_init.php');
-
-// Require php-git-repo
-require_once(__DIR__.'/../vendor/php-git-repo/lib/PHPGit/PHPGit_Repository.php');
 
