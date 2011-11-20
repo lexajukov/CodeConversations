@@ -122,3 +122,7 @@
 [MopaBootstrapBundle]
     git=http://github.com/phiamo/MopaBootstrapBundle.git
     target=/bundles/Mopa/BootstrapBundle
+
+[twitter-bootstrap]
+    git=http://github.com/twitter/bootstrap
+    version=v1.4.0
