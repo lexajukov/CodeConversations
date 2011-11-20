@@ -90,6 +90,9 @@ ornicar_gravatar: ~
 redpanda_activity_stream:
     db_driver: orm
 
+sonata_admin:
+    title: Opensoft Code Conversations
+
 services:
  twig.extension.text:
      class: Twig_Extensions_Extension_Text
