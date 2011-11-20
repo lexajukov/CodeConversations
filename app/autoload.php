@@ -12,6 +12,7 @@ $loader->registerNamespaces(array(
     'Knp'              => __DIR__.'/../vendor/bundles',
     'Elao'             => __DIR__.'/../vendor/bundles',
     'Ornicar'          => __DIR__.'/../vendor/bundles',
+    'Mopa'             => __DIR__.'/../vendor/bundles',
     'Redpanda'         => __DIR__.'/../vendor/bundles',
     'Doctrine\\Common' => __DIR__.'/../vendor/doctrine-common/lib',
     'Doctrine\\DBAL'   => __DIR__.'/../vendor/doctrine-dbal/lib',
