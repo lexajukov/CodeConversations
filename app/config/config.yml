@@ -77,6 +77,10 @@ fos_user:
             validation_groups:  [Profile]
     template:
         theme:  OpensoftCodeConversationBundle:Form:fields.html.twig
+twig:
+    form:
+        resources:
+            - 'MopaBootstrapBundle:Form:fields.html.twig'
 
 knp_time: ~      # Enable the helper for use in templates
 
