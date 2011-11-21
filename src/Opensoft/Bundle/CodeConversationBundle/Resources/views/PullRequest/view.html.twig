@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    {% render 'OpensoftCodeConversationBundle:Project:header' with {'project': project} %}
+    {% render 'OpensoftCodeConversationBundle:Project:header' with {'project': project, 'active': 'pull_requests'} %}
 
     <!-- /base sha1: "{{ pullRequest.mergeBase }}" -->
     <!-- /head sha1: "{{ pullRequest.headBranch.tip }}"-->
