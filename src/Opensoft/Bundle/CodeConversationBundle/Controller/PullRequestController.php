@@ -3,8 +3,6 @@
 namespace Opensoft\Bundle\CodeConversationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Opensoft\Bundle\CodeConversationBundle\Model\PullRequestManagerInterface;
@@ -30,7 +28,6 @@ class PullRequestController extends Controller
     }
 
     /**
-     * @Route("/{projectName}/pulls/new")
      * @Template()
      */
     public function createAction(ProjectInterface $project)
@@ -77,7 +74,6 @@ class PullRequestController extends Controller
     }
 
     /**
-     * @Route("/{projectName}/pulls")
      * @Template()
      */
     public function listAction(ProjectInterface $project)
@@ -101,7 +97,6 @@ class PullRequestController extends Controller
     }
 
     /**
-     * @Route("/{projectName}/pull/{pullId}")
      * @Template()
      */
     public function viewAction(ProjectInterface $project, PullRequestInterface $pullRequest)

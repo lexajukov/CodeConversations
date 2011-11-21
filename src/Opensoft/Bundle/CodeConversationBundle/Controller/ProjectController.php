@@ -3,8 +3,6 @@
 namespace Opensoft\Bundle\CodeConversationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Opensoft\Bundle\CodeConversationBundle\Form\Type\PullRequestFormType;
@@ -30,7 +28,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project")
      * @Template()
      */
     public function dropdownMenuAction()
@@ -41,7 +38,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/project-header/{projectName}/tree/{branchName}")
      * @Template()
      */
     public function headerAction(ProjectInterface $project, BranchInterface $branch = null, $active = null)
@@ -66,8 +62,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{projectName}/redirect")
-     * @Method("POST")
+     *
      */
     public function redirectAction(ProjectInterface $project)
     {
@@ -79,8 +74,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{projectName}")
-     * @Route("/{projectName}/tree/{branchName}")
      * @Template()
      */
     public function showAction(ProjectInterface $project, BranchInterface $branch = null)
@@ -113,8 +106,6 @@ class ProjectController extends Controller
         );
     }
     /**
-     * @Route("/{projectName}/commits")
-     * @Route("/{projectName}/tree/{branchName}/commits")
      * @Template()
      */
     public function commitsAction(ProjectInterface $project, BranchInterface $branch = null)
@@ -139,7 +130,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{projectName}/activity")
      * @Template()
      */
     public function activityAction(ProjectInterface $project)
@@ -157,7 +147,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{projectName}/commit/{sha1}")
      * @Template()
      */
     public function viewCommitAction(ProjectInterface $project, $sha1)
@@ -177,7 +166,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{projectName}/commit/{sha1}/{filepath}", requirements={"filepath" = ".+"})
      * @Template("OpensoftCodeConversationBundle:Project:show.html.twig")
      */
     public function fileAction(ProjectInterface $project, $sha1, $filepath, RemoteInterface $remote = null, BranchInterface $branch = null)
@@ -206,7 +194,6 @@ class ProjectController extends Controller
 
 
     /**
-     * @Route("/{projectName}/tree/{branchName}/{filepath}", requirements={"filepath" = ".+"})
      * @Template("OpensoftCodeConversationBundle:Project:show.html.twig")
      */
     public function treeAction(ProjectInterface $project, BranchInterface $branch = null, $filepath = null)
@@ -229,7 +216,6 @@ class ProjectController extends Controller
     }
 
     /**
-     * @Route("/{projectName}/blob/{branchName}/{filepath}", requirements={"filepath" = ".+"})
      * @Template("OpensoftCodeConversationBundle:Project:show.html.twig")
      */
     public function blobAction(ProjectInterface $project, BranchInterface $branch = null, $filepath)

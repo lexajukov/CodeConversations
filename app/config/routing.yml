@@ -24,6 +24,5 @@ fos_user_change_password:
     prefix: /change-password
 
 OpensoftCodeConversationBundle:
-    resource: "@OpensoftCodeConversationBundle/Controller/"
-    type:     annotation
+    resource: "@OpensoftCodeConversationBundle/Resources/config/routing/routes.yml"
     prefix:   /
