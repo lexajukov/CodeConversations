@@ -239,6 +239,28 @@ class PullRequest implements PullRequestInterface
     }
 
     /**
+     * @return array
+     */
+    public static function getStatusList()
+    {
+        return array(
+            self::STATUS_OPEN => 'open',
+            self::STATUS_CLOSED => 'closed',
+            self::STATUS_MERGED => 'merged',
+        );
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getStatusCode()
+    {
+        $status = self::getStatusList();
+
+        return isset($status[$this->getStatus()]) ? $status[$this->getStatus()] : null;
+    }
+
+    /**
      * @param string $title
      */
     public function setTitle($title)

@@ -87,6 +87,13 @@ class Branch implements BranchInterface
         return $this->remote;
     }
 
+    /**
+     * @return ProjectInterface
+     */
+    public function getProject()
+    {
+        return $this->remote->getProject();
+    }
 
     /**
      * @param \Boolean $enabled

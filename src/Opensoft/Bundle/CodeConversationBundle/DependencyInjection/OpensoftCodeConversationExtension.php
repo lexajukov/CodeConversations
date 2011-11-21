@@ -24,7 +24,7 @@ class OpensoftCodeConversationExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
-        foreach (array('services', 'twig', 'form', 'validator', 'notification') as $file) {
+        foreach (array('services', 'twig', 'form', 'validator', 'notification', 'admin') as $file) {
             $loader->load($file.'.xml');
         }
     }

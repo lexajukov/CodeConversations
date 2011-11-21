@@ -23,6 +23,10 @@ class AppKernel extends Kernel
             new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
             new Redpanda\Bundle\ActivityStreamBundle\RedpandaActivityStreamBundle(),
             new Mopa\BootstrapBundle\MopaBootstrapBundle(),
+            new Sonata\AdminBundle\SonataAdminBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+            new Sonata\jQueryBundle\SonatajQueryBundle(),
             new Opensoft\Bundle\CodeConversationBundle\OpensoftCodeConversationBundle(),
         );
 

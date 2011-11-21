@@ -45,6 +45,11 @@ interface BranchInterface extends StreamableInterface
     public function getRemote();
 
     /**
+     * @return ProjectInterface
+     */
+    public function getProject();
+
+    /**
      * @param \Boolean $enabled
      */
     public function setEnabled($enabled);

@@ -137,5 +137,8 @@ class Remote implements RemoteInterface
         return $this->username;
     }
 
-
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }

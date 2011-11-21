@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="opensoft_codeconversation.admin.user.class">Opensoft\Bundle\CodeConversationBundle\Admin\UserAdmin</parameter>
+        <parameter key="opensoft_codeconversation.admin.project.class">Opensoft\Bundle\CodeConversationBundle\Admin\ProjectAdmin</parameter>
+        <parameter key="opensoft_codeconversation.admin.remote.class">Opensoft\Bundle\CodeConversationBundle\Admin\RemoteAdmin</parameter>
+        <parameter key="opensoft_codeconversation.admin.branch.class">Opensoft\Bundle\CodeConversationBundle\Admin\BranchAdmin</parameter>
+        <parameter key="opensoft_codeconversation.admin.pull_request.class">Opensoft\Bundle\CodeConversationBundle\Admin\PullRequestAdmin</parameter>
+        <parameter key="opensoft_codeconversation.admin.pull_request_comment.class">Opensoft\Bundle\CodeConversationBundle\Admin\PullRequestCommentAdmin</parameter>
+        <parameter key="opensoft_codeconversation.admin.commit_comment.class">Opensoft\Bundle\CodeConversationBundle\Admin\CommitCommentAdmin</parameter>
+    </parameters>
+
+    <services>
+        <!-- Admin services -->
+        <service id="opensoft_codeconversation.admin.user" class="%opensoft_codeconversation.admin.user.class%">
+            <tag name="sonata.admin" manager_type="orm" group="Users" label="User"/>
+
+            <argument />
+            <argument>Opensoft\Bundle\CodeConversationBundle\Entity\User</argument>
+            <argument />
+            
+            <call method="setUserManager">
+                <argument type='service' id='fos_user.user_manager' />
+            </call>
+        </service>
+
+        <service id="opensoft_codeconversation.admin.project" class="%opensoft_codeconversation.admin.project.class%">
+            <tag name="sonata.admin" manager_type="orm" group="Projects" label="Project"/>
+
+            <argument />
+            <argument>Opensoft\Bundle\CodeConversationBundle\Entity\Project</argument>
+            <argument />
+        </service>
+
+        <service id="opensoft_codeconversation.admin.remote" class="%opensoft_codeconversation.admin.remote.class%">
+            <tag name="sonata.admin" manager_type="orm" group="Projects" label="Remotes"/>
+
+            <argument />
+            <argument>Opensoft\Bundle\CodeConversationBundle\Entity\Remote</argument>
+            <argument />
+        </service>
+
+        <service id="opensoft_codeconversation.admin.branch" class="%opensoft_codeconversation.admin.branch.class%">
+            <tag name="sonata.admin" manager_type="orm" group="Projects" label="Branches"/>
+
+            <argument />
+            <argument>Opensoft\Bundle\CodeConversationBundle\Entity\Branch</argument>
+            <argument />
+        </service>
+
+        <service id="opensoft_codeconversation.admin.pull_request" class="%opensoft_codeconversation.admin.pull_request.class%">
+            <tag name="sonata.admin" manager_type="orm" group="Projects" label="Pull Requests"/>
+
+            <argument />
+            <argument>Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest</argument>
+            <argument />
+        </service>
+
+        <service id="opensoft_codeconversation.admin.pull_request_comment" class="%opensoft_codeconversation.admin.pull_request_comment.class%">
+            <tag name="sonata.admin" manager_type="orm" group="Comments" label="Pull Request Comments"/>
+
+            <argument />
+            <argument>Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment</argument>
+            <argument />
+        </service>
+
+        <service id="opensoft_codeconversation.admin.commit_comment" class="%opensoft_codeconversation.admin.commit_comment.class%">
+            <tag name="sonata.admin" manager_type="orm" group="Comments" label="Commit Comments"/>
+
+            <argument />
+            <argument>Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment</argument>
+            <argument />
+        </service>
+        
+    </services>
+</container>
