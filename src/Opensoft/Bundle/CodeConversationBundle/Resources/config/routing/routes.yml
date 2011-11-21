@@ -1,0 +1,92 @@
+
+opensoft_codeconversation_default_homepage:
+    pattern: /
+    defaults: { _controller: OpensoftCodeConversationBundle:Default:homepage }
+
+opensoft_codeconversation_default_about:
+    pattern: /about
+    defaults: { _controller: OpensoftCodeConversationBundle:Default:about }
+
+opensoft_codeconversation_project_dropdownmenu:
+    pattern: /project
+    defaults: { _controller: OpensoftCodeConversationBundle:Project:dropdownMenu }
+
+opensoft_codeconversation_project_header:
+    pattern: /project-header/{projectName}/tree/{branchName}
+    defaults: { _controller: OpensoftCodeConversationBundle:Project:header }
+
+opensoft_codeconversation_user_show:
+    pattern: /user/{usernameCanonical}
+    defaults: { _controller: OpensoftCodeConversationBundle:User:show }
+
+opensoft_codeconversation_project_show:
+    pattern: /{projectName}
+    defaults: { _controller: OpensoftCodeConversationBundle:Project:show }
+
+opensoft_codeconversation_project_show_1:
+    pattern: /{projectName}/tree/{branchName}
+    defaults: { _controller: OpensoftCodeConversationBundle:Project:show }
+
+opensoft_codeconversation_project_redirect:
+    pattern: /{projectName}/redirect
+    defaults: { _controller: OpensoftCodeConversationBundle:Project:redirect }
+    requirements:
+        _method: POST
+
+opensoft_codeconversation_project_commits:
+    pattern: /{projectName}/commits
+    defaults: { _controller: OpensoftCodeConversationBundle:Project:commits }
+
+opensoft_codeconversation_project_commits_1:
+    pattern: /{projectName}/tree/{branchName}/commits
+    defaults: { _controller: OpensoftCodeConversationBundle:Project:commits }
+
+opensoft_codeconversation_project_activity:
+    pattern: /{projectName}/activity
+    defaults: { _controller: OpensoftCodeConversationBundle:Project:activity }
+
+opensoft_codeconversation_project_viewcommit:
+    pattern: /{projectName}/commit/{sha1}
+    defaults: { _controller: OpensoftCodeConversationBundle:Project:viewCommit }
+
+opensoft_codeconversation_comment_postcommitcomment:
+    pattern: /{projectName}/commit/{sha1}/comment/new
+    defaults: { _controller: OpensoftCodeConversationBundle:Comment:postCommitComment }
+    requirements:
+        _method: POST
+
+opensoft_codeconversation_project_file:
+    pattern: /{projectName}/commit/{sha1}/{filepath}
+    defaults: { _controller: OpensoftCodeConversationBundle:Project:file }
+    requirements:
+        filepath: ".+"
+
+opensoft_codeconversation_project_tree:
+    pattern: /{projectName}/tree/{branchName}/{filepath}
+    defaults: { _controller: OpensoftCodeConversationBundle:Project:tree }
+    requirements:
+        filepath: ".+"
+
+opensoft_codeconversation_project_blob:
+    pattern: /{projectName}/blob/{branchName}/{filepath}
+    defaults: { _controller: OpensoftCodeConversationBundle:Project:blob }
+    requirements:
+        filepath: ".+"
+
+opensoft_codeconversation_pullrequest_list:
+    pattern: /{projectName}/pulls
+    defaults: { _controller: OpensoftCodeConversationBundle:PullRequest:list }
+
+opensoft_codeconversation_pullrequest_create:
+    pattern: /{projectName}/pulls/new
+    defaults: { _controller: OpensoftCodeConversationBundle:PullRequest:create }
+
+opensoft_codeconversation_pullrequest_view:
+    pattern: /{projectName}/pull/{pullId}
+    defaults: { _controller: OpensoftCodeConversationBundle:PullRequest:view }
+
+opensoft_codeconversation_comment_postprcomment:
+    pattern: /{projectName}/pull/{pullId}/comment/new
+    defaults: { _controller: OpensoftCodeConversationBundle:Comment:postPrComment }
+    requirements:
+        _method: POST

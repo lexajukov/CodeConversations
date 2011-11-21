@@ -3,8 +3,6 @@
 namespace Opensoft\Bundle\CodeConversationBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Opensoft\Bundle\CodeConversationBundle\Model\ProjectInterface;
@@ -22,8 +20,6 @@ use Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment;
 class CommentController extends Controller
 {
     /**
-     * @Route("/{projectName}/pull/{pullId}/comment/new")
-     * @Method("POST")
      * @ParamConverter("pullRequest", class="Opensoft\Bundle\CodeConversationBundle\Model\PullRequestInterface")
      * @Template("OpensoftCodeConversationBundle:Default:viewPullRequest")
      */
@@ -116,8 +112,6 @@ class CommentController extends Controller
 
 
     /**
-     * @Route("/{projectName}/commit/{sha1}/comment/new")
-     * @Method("POST")
      * @Template("OpensoftCodeConversationBundle:Default:viewComment")
      */
     public function postCommitCommentAction(ProjectInterface $project, $sha1)

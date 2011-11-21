@@ -33,6 +33,5 @@ _sonata_admin:
     prefix: /admin
 
 OpensoftCodeConversationBundle:
-    resource: "@OpensoftCodeConversationBundle/Controller/"
-    type:     annotation
+    resource: "@OpensoftCodeConversationBundle/Resources/config/routing/routes.yml"
     prefix:   /
