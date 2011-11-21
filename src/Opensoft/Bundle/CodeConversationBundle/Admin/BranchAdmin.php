@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
 
 /**
  *
@@ -30,11 +31,27 @@ class BranchAdmin extends Admin
     public function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id', null, array('identifier' => true))
+            ->add('project')
+            ->add('remote')
             ->add('name')
             ->add('tip')
-            ->add('enabled')
+            ->add('enabled', 'boolean')
+            ->add('_action', 'actions', array(
+                'actions' => array(
+                    'view' => array(),
+                    'edit' => array(),
+                    'delete' => array(),
+                )
+            ))
+        ;
+    }
+
+
+    protected function configureDatagridFilters(DatagridMapper $datagrid)
+    {
+        $datagrid
             ->add('remote')
+            ->add('enabled')
         ;
     }
 

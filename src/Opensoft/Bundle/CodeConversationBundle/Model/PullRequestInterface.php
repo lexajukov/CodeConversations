@@ -110,6 +110,16 @@ interface PullRequestInterface extends StreamableInterface
     public function getStatus();
 
     /**
+     * @return string|null
+     */
+    public function getStatusCode();
+
+    /**
+     * @return array
+     */
+    public static function getStatusList();
+
+    /**
      * @param string $title
      */
     public function setTitle($title);

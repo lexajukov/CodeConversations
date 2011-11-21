@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
 
 /**
  *
@@ -30,10 +31,24 @@ class PullRequestCommentAdmin extends Admin
     public function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id', null, array('identifier' => true))
-            ->add('content')
-            ->add('createdAt')
+            ->addIdentifier('id')
+            ->add('pullRequest')
             ->add('author')
+            ->add('createdAt')
+            ->add('_action', 'actions', array(
+                'actions' => array(
+                    'view' => array(),
+                    'edit' => array(),
+                    'delete' => array(),
+                )
+            ))
+        ;
+    }
+
+
+    protected function configureDatagridFilters(DatagridMapper $datagrid)
+    {
+        $datagrid
             ->add('pullRequest')
         ;
     }

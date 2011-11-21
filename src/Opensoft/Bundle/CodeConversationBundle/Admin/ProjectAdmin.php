@@ -30,11 +30,17 @@ class ProjectAdmin extends Admin
     public function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id', null, array('identifier' => true))
-            ->add('name')
+            ->addIdentifier('name')
             ->add('remotes')
             ->add('pullRequests')
             ->add('defaultRemote')
+            ->add('_action', 'actions', array(
+                'actions' => array(
+                    'view' => array(),
+                    'edit' => array(),
+                    'delete' => array(),
+                )
+            ))
         ;
     }
 

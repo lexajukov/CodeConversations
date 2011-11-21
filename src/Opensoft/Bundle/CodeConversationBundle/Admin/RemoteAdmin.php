@@ -33,26 +33,33 @@ class RemoteAdmin extends Admin
     public function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id', null, array('identifier' => true))
+            ->add('project')
+//            ->addIdentifier('id')
             ->add('name')
             ->add('url')
-            ->add('username')
-            ->add('password')
+//            ->add('username')
+//            ->add('password')
             ->add('branches')
-            ->add('project')
             ->add('headBranch')
+            ->add('_action', 'actions', array(
+                'actions' => array(
+                    'view' => array(),
+                    'edit' => array(),
+                    'delete' => array(),
+                )
+            ))
         ;
     }
 
     public function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name')
-            ->add('url')
-            ->add('username')
-            ->add('password')
-            ->add('branches')
             ->add('project')
+            ->add('name')
+            ->add('url', 'text')
+            ->add('username', 'text', array('required' => false))
+            ->add('password', 'text', array('required' => false))
+//            ->add('branches')
             ->add('headBranch')
         ;
     }

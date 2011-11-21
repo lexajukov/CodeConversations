@@ -30,11 +30,17 @@ class CommitCommentAdmin extends Admin
     public function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id', null, array('identifier' => true))
-            ->add('content')
-            ->add('createdAt')
-            ->add('author')
+            ->addIdentifier('id')
             ->add('commitSha1')
+            ->add('author')
+            ->add('createdAt')
+            ->add('_action', 'actions', array(
+                'actions' => array(
+                    'view' => array(),
+                    'edit' => array(),
+                    'delete' => array(),
+                )
+            ))
         ;
     }
 

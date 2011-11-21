@@ -17,53 +17,64 @@
     <services>
         <!-- Admin services -->
         <service id="opensoft_codeconversation.admin.user" class="%opensoft_codeconversation.admin.user.class%">
-            <tag name="sonata.admin" manager_type="orm" group="sonata_user" label="user"/>
+            <tag name="sonata.admin" manager_type="orm" group="User Administration" label="User"/>
 
             <argument />
             <argument>Opensoft\Bundle\CodeConversationBundle\Entity\User</argument>
-            <argument>OpensoftCodeConversationBundle:UserAdmin</argument>
+            <argument />
+            
+            <call method="setUserManager">
+                <argument type='service' id='fos_user.user_manager' />
+            </call>
         </service>
+
         <service id="opensoft_codeconversation.admin.project" class="%opensoft_codeconversation.admin.project.class%">
-            <tag name="sonata.admin" manager_type="orm" group="sonata_user" label="project"/>
+            <tag name="sonata.admin" manager_type="orm" group="Projects" label="Project"/>
 
             <argument />
             <argument>Opensoft\Bundle\CodeConversationBundle\Entity\Project</argument>
-            <argument>OpensoftCodeConversationBundle:ProjectAdmin</argument>
+            <argument />
         </service>
+
         <service id="opensoft_codeconversation.admin.remote" class="%opensoft_codeconversation.admin.remote.class%">
-            <tag name="sonata.admin" manager_type="orm" group="sonata_user" label="remote"/>
+            <tag name="sonata.admin" manager_type="orm" group="Projects" label="Remotes"/>
 
             <argument />
             <argument>Opensoft\Bundle\CodeConversationBundle\Entity\Remote</argument>
-            <argument>OpensoftCodeConversationBundle:RemoteAdmin</argument>
+            <argument />
         </service>
+
         <service id="opensoft_codeconversation.admin.branch" class="%opensoft_codeconversation.admin.branch.class%">
-            <tag name="sonata.admin" manager_type="orm" group="sonata_user" label="branch"/>
+            <tag name="sonata.admin" manager_type="orm" group="Projects" label="Branches"/>
 
             <argument />
             <argument>Opensoft\Bundle\CodeConversationBundle\Entity\Branch</argument>
-            <argument>OpensoftCodeConversationBundle:BranchAdmin</argument>
+            <argument />
         </service>
+
         <service id="opensoft_codeconversation.admin.pull_request" class="%opensoft_codeconversation.admin.pull_request.class%">
-            <tag name="sonata.admin" manager_type="orm" group="sonata_user" label="pull_request"/>
+            <tag name="sonata.admin" manager_type="orm" group="Projects" label="Pull Requests"/>
 
             <argument />
             <argument>Opensoft\Bundle\CodeConversationBundle\Entity\PullRequest</argument>
-            <argument>OpensoftCodeConversationBundle:PullRequestAdmin</argument>
+            <argument />
         </service>
+
         <service id="opensoft_codeconversation.admin.pull_request_comment" class="%opensoft_codeconversation.admin.pull_request_comment.class%">
-            <tag name="sonata.admin" manager_type="orm" group="sonata_user" label="pull_request_comment"/>
+            <tag name="sonata.admin" manager_type="orm" group="Comments" label="Pull Request Comments"/>
 
             <argument />
             <argument>Opensoft\Bundle\CodeConversationBundle\Entity\PullRequestComment</argument>
-            <argument>OpensoftCodeConversationBundle:PullRequestCommentAdmin</argument>
+            <argument />
         </service>
+
         <service id="opensoft_codeconversation.admin.commit_comment" class="%opensoft_codeconversation.admin.commit_comment.class%">
-            <tag name="sonata.admin" manager_type="orm" group="sonata_user" label="commit_comment"/>
+            <tag name="sonata.admin" manager_type="orm" group="Comments" label="Commit Comments"/>
 
             <argument />
             <argument>Opensoft\Bundle\CodeConversationBundle\Entity\CommitComment</argument>
-            <argument>OpensoftCodeConversationBundle:CommitCommentAdmin</argument>
+            <argument />
         </service>
+        
     </services>
 </container>
