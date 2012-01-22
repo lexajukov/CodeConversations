@@ -65,11 +65,11 @@
     target=/bundles/FOS/UserBundle
 
 [KnpMarkdownBundle]
-    git=http://github.com/knplabs/KnpMarkdownBundle.git
+    git=http://github.com/KnpLabs/KnpMarkdownBundle.git
     target=/bundles/Knp/Bundle/MarkdownBundle
 
 [KnpTimeBundle]
-    git=http://github.com/knplabs/KnpTimeBundle.git
+    git=http://github.com/KnpLabs/KnpTimeBundle.git
     target=/bundles/Knp/Bundle/TimeBundle
 
 [GravatarBundle]
@@ -140,9 +140,9 @@
     target=/bundles/Sonata/jQueryBundle
 
 [MenuBundle]
-    git=http://github.com/knplabs/KnpMenuBundle.git
+    git=http://github.com/KnpLabs/KnpMenuBundle.git
     target=/bundles/Knp/Bundle/MenuBundle
 
 [KnpMenu]
-    git=https://github.com/knplabs/KnpMenu.git
+    git=https://github.com/KnpLabs/KnpMenu.git
     target=/knp/menu
