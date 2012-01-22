@@ -44,7 +44,7 @@ there is huge demand)
 Installation
 =============
 
-Check out the code by calling `$ git clone git:CodeConversations.git`.
+Check out the code by calling `$ git clone http://github.com/opensoft/CodeConversations.git`.
 
 Install the vendor dependencies
 
